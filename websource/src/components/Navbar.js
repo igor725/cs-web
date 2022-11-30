@@ -1,33 +1,46 @@
-import React, {useState} from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import './styles/Navbar.css'
-import { Link } from 'react-router-dom'
-import DarkModeToggle from "react-dark-mode-toggle";
+import { Link, useLocation } from 'react-router-dom'
+import { DarkModeToggle } from "react-dark-mode-toggle-2";
+import { useNavigate } from 'react-router-dom';
 
-let prev_elem;
-function changeColor(e){
-    let elem = e.target
-    elem.classList.add("red");
-    prev_elem && prev_elem !== elem && prev_elem.classList.remove("red");
-    prev_elem = elem;
-}
 
-const Navbar = () => {
-    const [isDarkMode, setIsDarkMode] = useState(() => false);
-    return(
-        <div className = "navbar">
-            <h3 style={{cursor: "default"}}>CServer Webadmin</h3>
-            <div className="buttons" onClick={changeColor}>
+let prev_colored
+const Navbar = props => {
+    const DARKMODE_STATE = (window.localStorage.getItem('DARKMODE_STATE') === 'true') || false
+    const [isDarkMode, setIsDarkMode] = useState(DARKMODE_STATE);
+
+    window.localStorage.setItem('DARKMODE_STATE', isDarkMode);
+
+    const navigate = useNavigate()
+    const currentLocation = useLocation().pathname;
+
+    useEffect(() => {
+        if (prev_colored) {
+            prev_colored.classList.remove("red");
+        }
+        var els = document.querySelectorAll(`a[href='${currentLocation}']`)[0];
+        if (els !== undefined) {
+            els.classList.add("red");
+            prev_colored = els;
+        }
+    });
+
+    return (
+        <div className="navbar">
+            <h3 style={{ cursor: "pointer" }} onClick={useCallback(() => navigate('/', { replace: true }), [navigate])}>CServer Webadmin</h3>
+            <div className="buttons">
                 <Link to='/'> Home </Link>
                 <Link to='/cfgeditor'> CFG Editor </Link>
                 <Link to='/luaconsole'> Lua Console </Link>
                 <Link to='/pluginmanager'> Plugin Manager</Link>
-                <div className='night_btn'>
-                    <DarkModeToggle
-                        onChange={setIsDarkMode}
-                        checked={isDarkMode}
-                        size={50}
-                    />
-                </div>
+                <DarkModeToggle
+                    onChange={() => {setIsDarkMode(!isDarkMode); props.setTheme()}}
+                    isDarkMode={isDarkMode} 
+
+                    className='night_btn'
+                    size={50}
+                />
             </div>
         </div>
     )

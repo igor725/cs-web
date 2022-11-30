@@ -1,0 +1,6 @@
+.homeMenu{
+    min-height: 100vw;
+}
+.darkmode .homeMenu{
+    background: rgb(36, 36, 36);
+}
