@@ -1,0 +1,41 @@
+body{
+    padding:0;
+    margin: 0 auto;
+}
+.night_btn{
+    display: flex;
+    margin-right:15px;
+    margin-left: auto;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+.navbar {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    width: 100%;
+    display: grid;
+    grid-gap: 10px;
+    background: rgb(42, 44, 39);
+    grid-template-columns: 0fr 1fr;
+}
+.navbar a{
+    text-decoration: none;
+}
+.navbar .buttons a {
+    color: white;
+    width: fit-content;
+    padding-left: 10px;
+    padding-right: 10px;
+    display: flex;
+    align-items: center;
+}
+.navbar .buttons a:hover, .red{
+    background: red;
+}
+.navbar h3{
+    margin-left: 15px;
+    white-space: nowrap;
+    color: rgb(200, 238, 127);
+}
+.navbar .buttons{
+    display: inline-flex;
+}
