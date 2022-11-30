@@ -14,7 +14,7 @@ Plugin_SetVersion(1);
 enum _HttpStatus {
 	CHS_INITIAL,
 	CHS_REQUEST,
-	CHS_UPGRADED,
+	CHS_UPGRADING,
 	CHS_HEADERS,
 	CHS_BODY,
 	CHS_ERROR,
@@ -38,32 +38,6 @@ static struct _WebState {
 	Socket fd;
 	AListField *clients;
 } WebState;
-
-static void evtpoststart(void *p) {
-	(void)p;
-	WebState.fd = Socket_New();
-	struct sockaddr_in ssa;
-	if(Socket_SetAddr(&ssa, "0.0.0.0", 8887) < 0) {
-		Socket_Close(WebState.fd);
-		WL(Error, "Failed to set socket address");
-		return;
-	}
-
-	if(!Socket_SetNonBlocking(WebState.fd, true)) {
-		Socket_Close(WebState.fd);
-		WL(Error, "Failed to set non-blocking option");
-		return;
-	}
-
-	if(!Socket_Bind(WebState.fd, &ssa)) {
-		Socket_Close(WebState.fd);
-		WL(Error, "Failed to bind port 8887");
-		return;
-	}
-
-	WebState.alive = true;
-	WL(Info, "Listener started on *:8887");
-}
 
 static inline cs_bool checkhttp(cs_char *buffer) {
 	if(!Memory_Compare((void *)buffer, (void *)"GET /", 5)) return false;
@@ -182,11 +156,11 @@ THREAD_FUNC(WebThread) {
 							}
 							hc->wsh->proto = "cserver-cpl";
 							hc->wsh->maxpaylen = 32 * 1024;
-							hc->state = CHS_UPGRADED;
+							hc->state = CHS_UPGRADING;
 						} else hc->state = CHS_REQUEST;
 					}
 					break;
-				case CHS_UPGRADED:
+				case CHS_UPGRADING:
 					while(WebSock_Tick(hc->wsh, &hc->nb)) {
 						if(hc->wsh->paylen > 0) {
 							//WL(Debug, "New websocket frame: %s", hc->wsh->payload);
@@ -273,9 +247,37 @@ THREAD_FUNC(WebThread) {
 					break;
 			}
 		}
+
+		if(WebState.stopped && WebState.clients == NULL) break;
 	}
 
 	return 0;
+}
+
+static void evtpoststart(void *p) {
+	(void)p;
+	WebState.fd = Socket_New();
+	struct sockaddr_in ssa;
+	if(Socket_SetAddr(&ssa, "0.0.0.0", 8887) < 0) {
+		Socket_Close(WebState.fd);
+		WL(Error, "Failed to set socket address");
+		return;
+	}
+
+	if(!Socket_SetNonBlocking(WebState.fd, true)) {
+		Socket_Close(WebState.fd);
+		WL(Error, "Failed to set non-blocking option");
+		return;
+	}
+
+	if(!Socket_Bind(WebState.fd, &ssa)) {
+		Socket_Close(WebState.fd);
+		WL(Error, "Failed to bind port 8887");
+		return;
+	}
+
+	WebState.alive = true;
+	WL(Info, "Listener started on *:8887");
 }
 
 cs_bool Plugin_Load(void) {
