@@ -66,17 +66,25 @@ static void evtpoststart(void *p) {
 }
 
 static inline cs_bool checkhttp(cs_char *buffer) {
+	if(!Memory_Compare((void *)buffer, (void *)"GET /", 5)) return false;
 	cs_char *fs = String_LastChar(buffer, ' ');
 	if(!fs) return false; *fs++ = '\0';
-	return String_Compare(fs, "HTTP/1.1");
+	if(String_Compare(fs, "HTTP/1.1")) {
+		fs = String_FirstChar(buffer, '?');
+		if(fs) *fs = '\0';
+		return true;
+	}
+
+	return false;
 }
 
 static inline cs_str getcodestr(cs_uint32 code) {
 	switch(code) {
+		case 101: return "Switching Protocols";
 		case 200: return "OK";
-		case 400: return "Bad request";
-		case 404: return "Not found";
-		case 500: return "Internal server error";
+		case 400: return "Bad Request";
+		case 404: return "Not Found";
+		case 500: return "Internal Server Error";
 		default: return "Unknown";
 	}
 }
@@ -87,7 +95,7 @@ static inline void applyheaders(NetBuffer *nb, cs_uint32 code, cs_int32 len, cs_
 
 	if(!type) type = "application/octet-stream";
 	cs_str codestr = getcodestr(code);
-	if(code >= 400) len = (cs_int32)String_Length(codestr);
+	if(code != 200) len = (cs_int32)String_Length(codestr);
 	cs_int32 sz = String_FormatBuf(
 		NULL, 0, http, code, codestr, type,
 		len, code == 200 ? "" : codestr
@@ -132,6 +140,10 @@ THREAD_FUNC(WebThread) {
 		struct sockaddr_in ssa;
 		Socket fdc;
 		while((fdc = Socket_Accept(WebState.fd, &ssa)) != -1) {
+			if(!Socket_IsLocal(ssa.sin_addr.s_addr)) {
+				Socket_Close(fdc);
+				continue;
+			}
 			struct _HttpClient *hc = Memory_Alloc(1, sizeof(struct _HttpClient));
 			NetBuffer_Init(&hc->nb, fdc);
 			hc->ssa = ssa;
@@ -158,7 +170,7 @@ THREAD_FUNC(WebThread) {
 			if(WebState.stopped)
 				hc->state = CHS_CLOSING;
 
-			cs_char buffer[128] = {0}, path[64] = "webdata/";
+			cs_char buffer[128] = {0}, path[64] = "webdata/.";
 			switch(hc->state) {
 				case CHS_INITIAL:
 					if(NetBuffer_AvailRead(&hc->nb) >= 8) {
@@ -196,7 +208,7 @@ THREAD_FUNC(WebThread) {
 
 							default:
 								if(checkhttp(buffer)) {
-									String_Append(path, 64, String_FirstChar(buffer, ' ') + 2);
+									String_Append(path, 64, String_FirstChar(buffer, ' ') + 1);
 									if(*(String_LastChar(path, '/') + 1) == '\0')
 										String_Append(path, 64, "index.html");
 									if(String_FindSubstr(path, "..")) {
