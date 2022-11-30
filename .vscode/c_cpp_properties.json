@@ -1,0 +1,46 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/../core/src"
+            ],
+            "defines": [
+                "CORE_BUILD_PLUGIN"
+            ],
+            "cStandard": "c11",
+            "cppStandard": "c++14",
+            "intelliSenseMode": "linux-clang-arm"
+        },
+        {
+            "name": "Win64",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/../core/src"
+            ],
+            "defines": [
+                "_DEBUG",
+                "CORE_BUILD_PLUGIN"
+            ],
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "windows-msvc-x64"
+        },
+        {
+            "name": "Win32",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/../core/src"
+            ],
+            "defines": [
+                "_DEBUG",
+                "CORE_BUILD_PLUGIN"
+            ],
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "windows-msvc-x86"
+        }
+    ],
+    "version": 4
+}
