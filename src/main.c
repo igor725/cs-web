@@ -9,7 +9,7 @@
 
 Plugin_SetVersion(1);
 
-#define WL(I, T, ...) Log_##I(T,  ##__VA_ARGS__)
+#define WL(I, T, ...) Log_##I("WebPanel: " T,  ##__VA_ARGS__)
 
 enum _HttpStatus {
 	CHS_INITIAL,
@@ -105,64 +105,6 @@ static inline cs_str guessmime(cs_str path) {
 
 	return "application/octet-stream";
 }
-
-/*
-	* Client -> Server
-	A - 
-	B - Ban player
-	C - Console command
-	D - 
-	E - 
-	F - 
-	G - 
-	H - 
-	I - 
-	J - 
-	K - Kick Player
-	L - 
-	M - 
-	N - 
-	O - Op/Deop player
-	P - Plugin control
-	Q - 
-	R - 
-	S - Switch state
-	T - 
-	U - 
-	V - 
-	W -
-	X -
-	Y -
-	Z - 
-
-	* Server -> Client
-	A - 
-	B - Ban player
-	C - Console command
-	D - 
-	E - 
-	F - 
-	G - 
-	H - 
-	I - State info
-	J - 
-	K - Kick Player
-	L - 
-	M - 
-	N - Notification
-	O - Op/Deop player
-	P - Plugin control response
-	Q - 
-	R - 
-	S - 
-	T - 
-	U - 
-	V - 
-	W - 
-	X - 
-	Y - 
-	Z - 
-*/
 
 static void sendwebsockmsg(struct _HttpClient *hc, cs_str msg) {
 	cs_uint32 len = (cs_uint32)String_Length(msg);
