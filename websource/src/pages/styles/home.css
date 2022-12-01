@@ -1,6 +1,30 @@
 .homeMenu{
-    min-height: 100vw;
+    /* min-height: 100vw; */
+    overflow: hidden;
 }
-.darkmode .homeMenu{
-    background: rgb(36, 36, 36);
+::-webkit-scrollbar{
+    display: none;
 }
+::-webkit-scrollbar {
+    width: 6px;
+    display: unset;
+}
+
+.darkmode ::-webkit-scrollbar-track{
+    background: #222;
+}
+::-webkit-scrollbar-track {
+    background: rgb(139, 139, 139);
+    border-radius: 12px;
+}
+.darkmode ::-webkit-scrollbar-thumb{
+    background-color: #555;
+    border: 3px solid #666;
+}
+::-webkit-scrollbar-thumb {
+    background-color: rgb(71, 71, 71);
+    border: 3px solid rgb(71, 71, 71);
+    border-radius: 12px;
+}
+
+::-webkit-scrollbar-corner { background: #222}

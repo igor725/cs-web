@@ -12,10 +12,9 @@ const Pages = () => {
             <Layout>
                 <Routes>
                     <Route exact path="/" element={<Home />}/>
-                    <Route exact path="/cfgeditor" element={<CFGeditor />}/>
-                    {/* <Route path="/play" element={<Play />}/>
-                    <Route path="/experimental" element={<Experimental />}/>
-                    <Route path="/files" element={<Files />}/> */}
+                    <Route exact path="/configeditor" element={<CFGeditor />}/>
+                    <Route exact path="/console" element={<CFGeditor />}/>
+                    <Route exact path="/pluginmanager" element={<CFGeditor />}/>
                 </Routes>
             </Layout>
         </BrowserRouter>

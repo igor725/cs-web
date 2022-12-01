@@ -31,8 +31,8 @@ const Navbar = props => {
             <h3 style={{ cursor: "pointer" }} onClick={useCallback(() => navigate('/', { replace: true }), [navigate])}>CServer Webadmin</h3>
             <div className="buttons">
                 <Link to='/'> Home </Link>
-                <Link to='/cfgeditor'> CFG Editor </Link>
-                <Link to='/luaconsole'> Lua Console </Link>
+                <Link to='/console'> Console </Link>
+                <Link to='/configeditor'> Config Editor </Link>
                 <Link to='/pluginmanager'> Plugin Manager</Link>
                 <DarkModeToggle
                     onChange={() => {setIsDarkMode(!isDarkMode); props.setTheme()}}
