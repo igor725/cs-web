@@ -14,7 +14,7 @@ export function CWAP(){
     let [sockerUrl, lastMessage, sendMessage] = WSC;
 
     function getAnswer(){
-        return lastMessage
+        return lastMessage && lastMessage.data.text().then(data => console.log(data))
     }
 
     function sendAuth(password){

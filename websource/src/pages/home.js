@@ -6,7 +6,7 @@ import {CWAP} from '../components/CWAP/CWAP';
 const Home = () => {
     const cwap = CWAP()
     const [sendAuth, getAnswer, banPlayer, kickPlayer, opPlayer, deopPlayer, switchState] = cwap
-    // console.log(getAnswer())
+    console.log(getAnswer())
     return(
         <div className='homeMenu'>
             <PlayersList />
