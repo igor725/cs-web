@@ -19,23 +19,23 @@ export function CWAP(){
 
     function sendAuth(password){
         const hash = MD5.generate(password);
-        sendMessage(`A\x00${hash}`)
+        sendMessage(`A${hash}\x00`)
     }
     function banPlayer(name, reason, seconds){
         const ban_props = `${name}\x00${reason}\x00${seconds}`
-        sendMessage(`B\x00${ban_props}`)
+        sendMessage(`B${ban_props}\x00`)
     }
     function kickPlayer(name){
-        sendMessage(`K\x00${name}`)
+        sendMessage(`K${name}\x00`)
     }
     function opPlayer(name){
-        sendMessage(`O\x00${name}1`)
+        sendMessage(`O${name}\x001\x00`)
     }
     function deopPlayer(name){
-        sendMessage(`O\x00${name}0`)
+        sendMessage(`O${name}\x000\x00`)
     }
     function switchState(path){
-        sendMessage(`S\x00${state_paths[path]}`)
+        sendMessage(`S${state_paths[path]}\x00`)
     }
 
     return ([sendAuth, getAnswer, banPlayer, kickPlayer, opPlayer, deopPlayer, switchState])

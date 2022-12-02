@@ -22,6 +22,31 @@ enum _HttpStatus {
 	CHS_CLOSED
 };
 
+enum _WsState {
+	WSS_INVALID,
+	WSS_HOME,
+	WSS_CONSOLE,
+	WSS_CFGEDIT,
+	WSS_PLUGINS,
+
+	WSS_MAXVAL
+};
+
+static enum _WsState ustate(cs_char s) {
+	switch (s) {
+		case 'H': return WSS_HOME;
+		case 'R': return WSS_CONSOLE;
+		case 'C': return WSS_CFGEDIT;
+		case 'E': return WSS_PLUGINS;
+		default:  return WSS_INVALID;
+	}
+}
+
+struct _CplState {
+	enum _WsState wsstate;
+	cs_bool authed;
+};
+
 struct _HttpClient {
 	enum _HttpStatus state;
 	struct sockaddr_in ssa;
@@ -30,13 +55,18 @@ struct _HttpClient {
 	cs_file file;
 	NetBuffer nb;
 	WebSock *wsh;
+	struct _CplState *cpls;
 };
 
 static struct _WebState {
 	cs_bool stopped, alive;
+	Mutex *mutex;
 	Thread thread;
 	Socket fd;
 	AListField *clients;
+
+	cs_uint32 ustates[WSS_MAXVAL];
+	cs_byte pwhash[33];
 } WebState;
 
 static inline cs_bool checkhttp(cs_char *buffer) {
@@ -106,24 +136,81 @@ static inline cs_str guessmime(cs_str path) {
 	return "application/octet-stream";
 }
 
-static void sendwebsockmsg(struct _HttpClient *hc, cs_str msg) {
-	cs_uint32 len = (cs_uint32)String_Length(msg);
-	cs_char *buf = NetBuffer_StartWrite(&hc->nb, len);
-	String_Copy(buf, len, msg);
+static void sendsockmsg(struct _HttpClient *hc, void *msg, cs_uint32 len) {
+	Memory_Copy(NetBuffer_StartWrite(&hc->nb, len), msg, len);
 	NetBuffer_EndWrite(&hc->nb, len);
 }
 
-static void handlewebsockmsg(struct _HttpClient *hc) {
-	cs_char *data = hc->wsh->payload;
-	switch (*data++) {
-		case 'C':
-			sendwebsockmsg(hc, "NNot yet supported!\0");
-			break;
-
-		default:
-			sendwebsockmsg(hc, "NFailed to handle unknown message.\0");
-			break;
+static void bcastsockmsg(enum _WsState state, void *msg, cs_uint32 len) {
+	Mutex_Lock(WebState.mutex);
+	AListField *tmp;
+	List_Iter(tmp, WebState.clients) {
+		struct _HttpClient *hc = AList_GetValue(tmp).ptr;
+		if(hc->cpls && hc->cpls->wsstate == state)
+			sendsockmsg(hc, msg, len);
 	}
+	Mutex_Unlock(WebState.mutex);
+}
+
+static cs_int32 readint(cs_byte **data) {
+	cs_int32 i = String_StrToLong((cs_str)*data, (cs_char **)data, 10);
+	(*data)++; return i;
+}
+
+static cs_str readstr(cs_byte **data) {
+	cs_str ret = (cs_char *)*data;
+	*data += String_Length(ret) + 1;
+	return ret;
+}
+
+static void handlewebsockmsg(struct _HttpClient *hc) {
+	cs_byte *data = (cs_byte *)hc->wsh->payload;
+	while(hc->state < CHS_CLOSING && (data - (cs_byte *)hc->wsh->payload) < hc->wsh->paylen) {
+		// if(!hc->cpls->authed) {
+		// 	if(*data != 'A') {
+		// 		sendsockmsg(hc, "NYou need to log in first!\0", 27);
+		// 		break;
+		// 	}
+
+		// 	if(Memory_Compare(WebState.pwhash, data + 1, 32))
+		// 		sendsockmsg(hc, "AOK\0", 4);
+		// 	else sendsockmsg(hc, "AFAIL\0", 6);
+
+		// 	data += 33;
+		// 	continue;
+		// }
+
+		switch (*data++) {
+			case 'B':
+				WL(Debug, "Ban: Name: %s, Reason: %s, Duration %d", readstr(&data), readstr(&data), readint((&data)));
+				break;
+
+			case 'K':
+				WL(Debug, "Kick: Name: %s", readstr(&data));
+				break;
+			
+			case 'O':
+				WL(Debug, "Player %s %s", readstr(&data), readint(&data) > 0 ? "opped" : "deopped");
+				break;
+
+			case 'S':
+				WebState.ustates[hc->cpls->wsstate]--;
+				hc->cpls->wsstate = ustate(*readstr(&data));
+				if (hc->cpls->wsstate == WSS_INVALID) {
+					hc->state = CHS_CLOSING;
+					break;
+				}
+				WebState.ustates[hc->cpls->wsstate]++;
+				WL(Debug, "State changed to %s", hc->cpls->wsstate);
+				break;
+
+			default:
+				sendsockmsg(hc, "NFailed to handle unknown message.\0", 35);
+				data += hc->wsh->paylen;
+				break;
+		}
+	}
+
 }
 
 THREAD_FUNC(WebThread) {(void)param;
@@ -131,6 +218,7 @@ THREAD_FUNC(WebThread) {(void)param;
 		Thread_Sleep(60);
 		if (!WebState.alive) continue;
 
+		Mutex_Lock(WebState.mutex);
 		struct sockaddr_in ssa;
 		Socket fdc;
 		while ((fdc = Socket_Accept(WebState.fd, &ssa)) != -1) {
@@ -140,6 +228,8 @@ THREAD_FUNC(WebThread) {(void)param;
 			}
 			struct _HttpClient *hc = Memory_Alloc(1, sizeof(struct _HttpClient));
 			NetBuffer_Init(&hc->nb, fdc);
+			hc->state = CHS_INITIAL;
+			hc->cpls = NULL;
 			hc->ssa = ssa;
 			hc->code = 200;
 			AList_AddField(&WebState.clients, hc);
@@ -153,6 +243,10 @@ THREAD_FUNC(WebThread) {(void)param;
 				NetBuffer_ForceClose(&hc->nb);
 				AList_Remove(&WebState.clients, tmp);
 				if (hc->file) File_Close(hc->file);
+				if (hc->wsh) {
+					if (hc->cpls) WebState.ustates[hc->cpls->wsstate]--;
+					Memory_Free(hc->wsh);
+				}
 				Memory_Free(hc);
 				//WL(Debug, "Client closed!");
 				break;
@@ -169,13 +263,15 @@ THREAD_FUNC(WebThread) {(void)param;
 				case CHS_INITIAL:
 					if (NetBuffer_AvailRead(&hc->nb) >= 8) {
 						if (String_CaselessCompare2(NetBuffer_PeekRead(&hc->nb, 8), "GET /ws ", 8)) {
-							hc->wsh = Memory_TryAlloc(1, sizeof(WebSock));
+							hc->wsh = Memory_TryAlloc(1, sizeof(WebSock) + sizeof(struct _CplState));
 							if (!hc->wsh) {
 								hc->state = CHS_CLOSING;
 								break;
 							}
+							hc->cpls = (void *)((cs_char *)hc->wsh + sizeof(WebSock));
 							hc->wsh->proto = "cserver-cpl";
 							hc->wsh->maxpaylen = 32 * 1024;
+							hc->cpls->wsstate = WSS_HOME;
 							hc->state = CHS_UPGRADING;
 						} else hc->state = CHS_REQUEST;
 					}
@@ -267,6 +363,7 @@ THREAD_FUNC(WebThread) {(void)param;
 
 		if (WebState.stopped && WebState.clients == NULL) break;
 	}
+	Mutex_Unlock(WebState.mutex);
 
 	return 0;
 }
@@ -296,15 +393,30 @@ static void evtpoststart(void *p) {(void)p;
 	WL(Info, "Listener started on *:8887");
 }
 
+static void evtonlog(void *param) {
+	if(WebState.clients) {
+		
+	}
+}
+
+Event_DeclareBunch(events) {
+	EVENT_BUNCH_ADD('v', EVT_POSTSTART, evtpoststart),
+	EVENT_BUNCH_ADD('v', EVT_ONLOG, evtonlog),
+
+	EVENT_BUNCH_END
+};
+
 cs_bool Plugin_Load(void) {
+	WebState.mutex = Mutex_Create();
 	WebState.thread = Thread_Create(WebThread, NULL, false);
-	return Event_RegisterVoid(EVT_POSTSTART, evtpoststart);
+	return Event_RegisterBunch(events);
 }
 
 cs_bool Plugin_Unload(cs_bool force) {
-	Event_Unregister(EVT_POSTSTART, (void *)evtpoststart);
+	Event_UnregisterBunch(events);
 	WebState.stopped = true;
 	if (!force) Thread_Join(WebState.thread);
 	Socket_Close(WebState.fd);
+	Mutex_Free(WebState.mutex);
 	return true;
 }
