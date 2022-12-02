@@ -12,14 +12,16 @@ const state_paths = {
 export function CWAP(){
     const WSC = WebSocket();
     let [sockerUrl, lastMessage, sendMessage] = WSC;
-
-    function getAnswer(){
-        return lastMessage && lastMessage.data.text().then(data => console.log(data))
+    async function getAnswer(){
+        if (lastMessage){
+            return await lastMessage.data.text()
+        }
     }
-
     function sendAuth(password){
-        const hash = MD5.generate(password);
-        sendMessage(`A${hash}\x00`)
+        // const hash = MD5.generate(password);
+        // sendMessage(`A${hash}\x00`)
+        sendMessage(`Ahuihuihuihuihuihuihuihuihuihuihu\x00`)
+        // return (getAnswer())
     }
     function banPlayer(name, reason, seconds){
         const ban_props = `${name}\x00${reason}\x00${seconds}`
@@ -37,6 +39,15 @@ export function CWAP(){
     function switchState(path){
         sendMessage(`S${state_paths[path]}\x00`)
     }
-    // return ()
-    return ([sendAuth, getAnswer, banPlayer, kickPlayer, opPlayer, deopPlayer, switchState])
+    return ({
+        sendAuth: sendAuth,
+        getAnswer: getAnswer,
+        banPlayer: banPlayer,
+        kickPlayer: kickPlayer,
+        opPlayer: opPlayer,
+        deopPlayer: deopPlayer,
+        switchState: switchState
+    })
 }
+
+export default CWAP

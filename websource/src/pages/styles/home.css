@@ -1,6 +1,9 @@
 .homeMenu{
+    margin-top:20px;
     /* min-height: 100vw; */
-    overflow: hidden;
+    display: grid;
+    grid-gap: 70px;
+    grid-template-columns: 1fr 0fr;
 }
 ::-webkit-scrollbar{
     display: none;
@@ -10,7 +13,7 @@
     display: unset;
 }
 
-.darkmode ::-webkit-scrollbar-track{
+.darkmode::-webkit-scrollbar-track{
     background: #222;
 }
 ::-webkit-scrollbar-track {

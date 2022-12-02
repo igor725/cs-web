@@ -10,14 +10,14 @@
     color: rgb(194, 194, 194);
 }
 .lightmode .playersOnline{
-    background: black;
+    border: 1px solid rgb(230, 230, 230);
+    background: rgb(221, 221, 221);
 }
 
-
 .playersOnline {
-    margin-top: 20px;
-
     display: grid;
+    justify-self: end;
+    margin-right: 30px;
     grid-template-rows: 0fr 1fr;
     width: 300px;
     border: 1px solid rgb(56, 56, 56);
@@ -42,7 +42,9 @@
 .playersOnline ul div li{
     margin-bottom: 8px;
 }
-
+.lightmode ul li::before{
+    color: green !important;
+}
 .playersOnline ul li::before {
     content: "\2022";
     /* Add content: \2022 is the CSS Code/unicode for a bullet */

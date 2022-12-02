@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 
 export const WebSocket = () => {
@@ -6,13 +6,16 @@ export const WebSocket = () => {
     const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {protocols: "cserver-cpl"});
 
     const connectionStatus = {
-        [ReadyState.CONNECTING]: 'Connecting',
-        [ReadyState.OPEN]: 'Open',
-        [ReadyState.CLOSING]: 'Closing',
-        [ReadyState.CLOSED]: 'Closed',
-        [ReadyState.UNINSTANTIATED]: 'Uninstantiated',
+        [ReadyState.CONNECTING]: 'yellow',
+        [ReadyState.OPEN]: 'yellowgreen',
+        [ReadyState.CLOSING]: 'red',
+        [ReadyState.CLOSED]: 'red',
+        [ReadyState.UNINSTANTIATED]: 'black',
     }[readyState];
-    // console.log(connectionStatus)
+    useEffect(()=>{
+        document.getElementsByClassName("websocketStatus")[0].title += `: ${ReadyState[readyState]}`
+        document.getElementsByClassName("websocketStatus")[0].style.background = connectionStatus
+    })
     return ([socketUrl, lastMessage, sendMessage])
 }
 export default WebSocket

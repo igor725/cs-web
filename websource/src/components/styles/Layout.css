@@ -1,7 +1,12 @@
 .lightmode{
-    background: darkcyan;
+    background: rgb(246, 246, 246);
+    /* background-color: #fff; */
 }
 
 .darkmode{
     background: rgb(36, 36, 36)
+}
+.lightmode, .darkmode{
+    overflow: hidden;
+    height: 90vh;
 }

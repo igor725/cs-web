@@ -1,0 +1,133 @@
+.worlds{
+    border: 1px solid rgb(56, 56, 56);
+    margin-left: 20px;
+    border-radius: 12px;
+    height: 650px;
+    max-height: 330px;
+    max-width: 865px;
+    min-width: 75%;
+    justify-self: center;
+    background: rgb(46, 46, 46);
+    overflow-y: hidden;
+}
+.lightmode .worlds{
+    border: 1px solid rgb(230, 230, 230);
+    background: rgb(228, 228, 228);
+}
+.lightmode .worlds h3{
+    color: black;
+}
+.worlds_list::-webkit-scrollbar {
+    height: 10px;
+    display: unset;
+}
+.worlds_list::-webkit-scrollbar-thumb {
+    background-color: rgb(71, 71, 71);
+    border: 0px solid rgb(71, 71, 71);
+    /* border-radius: 12px; */
+}
+.worlds_list {
+    grid-auto-flow: column;
+    overflow: auto;
+    display: grid;
+    grid-gap: 33px;
+    padding: 25px;
+    max-width: 100%;
+}
+.lightmode #wName{
+    background: black;
+    color: white;
+}
+#wName{
+    margin: 0 auto;
+    width: 250px;
+    border-radius: 35px;
+    background: #00fff3;
+    color: black;
+    word-wrap: break-word;
+    margin-bottom: 8px;
+}
+.worldCart {
+    letter-spacing: 0.635px;
+    margin-top: 30px;
+}
+.worldCart table {
+    margin: 0px 31%;
+    border-spacing: 4px;
+    border-collapse: separate;
+}
+.lightmode .worldCart table th{
+    color: black !important;
+}
+.worldCart table th{
+    color: rgb(179, 179, 179);
+}
+.extend{
+    max-height: 560px;
+    transition: max-height 1s ease-out;
+}
+.close{
+    transition: max-height 1s ease-in;
+    max-height: 330px;
+}
+.world h2 {
+    margin: 0;
+    margin-top: -83%;
+    z-index: 2;
+    position: relative;
+    width: 100%;
+    text-align: center;
+    overflow-wrap: break-word;
+}
+.worldBG{
+    position: relative;
+    background-image: url("/world_template.png");
+    /* position: fixed; */
+    background-size: cover;
+    -webkit-filter: blur(4px);
+    -moz-filter: blur(4px);
+    -o-filter: blur(4px);
+    -ms-filter: blur(4px);
+    filter: blur(4px);
+    height: 100%;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    display: block;
+}
+.world:hover{
+    color:white;
+    transition: 0.5s;
+    cursor: pointer;
+    box-shadow: 0 1px 12px rgba(0,0,0, 1);
+}
+.worldBG:hover{
+    transition: 0.5s;
+    -webkit-filter: blur(6px);
+    -moz-filter: blur(6px);
+    -o-filter: blur(6px);
+    -ms-filter: blur(6px);
+    filter: blur(6px);
+}
+.world{
+    background-color: transparent;
+    box-shadow: 0 1px 12px rgba(0,0,0, 0.5);
+    border-radius: 16px;
+    width: 150px;
+    height: 200px;
+    margin: 0 auto;
+}
+.worlds h3{
+    text-align: center;
+    color: white;
+    font-size:22px;
+    margin:6px;
+    font-weight:600;
+}
+.worlds hr{
+    color: black;
+    border: none;
+    width: 95%;
+    height: 1px;
+    background: #838383;
+}

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import PlayerDropdown from './PlayerList/PlayerDropdown';
 import './styles/PlayersList.css'
 
@@ -36,7 +36,6 @@ const PlayersList = () => {
             prev_player && prev_player.classList.remove("show")
         }
     })
-    const player = <li><b>Player</b> in world <b>WORLD</b></li>
     return(
         <div className='playersOnline'>
             <div>
@@ -45,7 +44,7 @@ const PlayersList = () => {
             </div>
             <ul id="plist">
                 <PlayerDropdown showMenu={showMenu} world="Tets">KEK</PlayerDropdown>
-                {/* <PlayerDropdown showMenu={showMenu}>KEK1</PlayerDropdown>
+                <PlayerDropdown showMenu={showMenu}>KEK1</PlayerDropdown>
                 <PlayerDropdown showMenu={showMenu}>KEK2</PlayerDropdown>
                 <PlayerDropdown showMenu={showMenu}>KEK3</PlayerDropdown>
                 <PlayerDropdown showMenu={showMenu}>KEK4</PlayerDropdown>
@@ -60,7 +59,7 @@ const PlayersList = () => {
                 <PlayerDropdown showMenu={showMenu}>KEK02</PlayerDropdown>
                 <PlayerDropdown showMenu={showMenu}>KEK03</PlayerDropdown>
                 <PlayerDropdown showMenu={showMenu}>KEK04</PlayerDropdown>
-                <PlayerDropdown showMenu={showMenu}>KEK05</PlayerDropdown> */}
+                <PlayerDropdown showMenu={showMenu}>KEK05</PlayerDropdown>
 
             </ul>
         </div>

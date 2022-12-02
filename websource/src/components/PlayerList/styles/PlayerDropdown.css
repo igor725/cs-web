@@ -9,18 +9,29 @@
 }
 
 .ban, .kick {
-    width: 55px;
+    width: 65px;
     /* background-color: red; */
     color: white;
     border: none;
-    border-radius: 3px;
-    height: 24px;
+    border-radius: 5px;
+    height: 25px;
+    font-size: 14px;
+    border: 1px solid red;
+    background: transparent;
+    transition: all 0.35s ease-in 0s;
 }
-.ban, .kick{
-    background-color: violet
-}
+
 .playerDropdown button:hover {
-    background-color: rgb(189, 0, 189)
+    background-color: red
+}
+.lightmode button:hover{
+    background-color: rgb(2, 0, 107);
+}
+.lightmode .ban, .lightmode .kick{
+    border:0px;
+}
+.lightmode .playerMenu{
+    background-color: rgb(4, 0, 255);
 }
 .playerMenu {
     height: 25px;

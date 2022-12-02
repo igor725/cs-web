@@ -1,19 +1,23 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './styles/home.css'
 import PlayersList from '../components/PlayersList';
-import {CWAP} from '../components/CWAP/CWAP';
+import CWAP from '../components/CWAP/CWAP';
+import Worlds from '../components/Worlds';
 
 const Home = () => {
-    const cwap = CWAP()
-    const [sendAuth, getAnswer, banPlayer, kickPlayer, opPlayer, deopPlayer, switchState] = cwap
-    console.log(getAnswer())
+    let cwap = CWAP()
+    cwap.getAnswer().then((data)=>console.log(data))
     return(
         <div className='homeMenu'>
+            <Worlds/>
+            {/* <Stats/> */}
             <PlayersList />
-            <button onClick={()=>sendAuth("1211")}>SEND AUTH</button>
-            <button onClick={()=>opPlayer("AetherSmoke")}>SEND OP</button>
-            <button onClick={()=>banPlayer("igor1", "loh", "1337228")}>SEND KICK</button>
-            <button onClick={()=>switchState("/home")}>SEND SWITCH STATE</button>
+            {/* <button onClick={()=>{
+                cwap.sendAuth("huihuihuihuihuihuihuihuihuihuihu");
+        }}>SEND AUTH</button>
+            <button onClick={()=>cwap.opPlayer("AetherSmoke")}>SEND OP</button>
+            <button onClick={()=>cwap.banPlayer("igor1", "loh", "1337228")}>SEND KICK</button>
+            <button onClick={()=>cwap.switchState("/home")}>SEND SWITCH STATE</button> */}
         </div>
     )
 }
