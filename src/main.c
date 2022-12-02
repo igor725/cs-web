@@ -182,15 +182,21 @@ static void handlewebsockmsg(struct _HttpClient *hc) {
 
 		switch (*data++) {
 			case 'B':
-				WL(Debug, "Ban: Name: %s, Reason: %s, Duration %d", readstr(&data), readstr(&data), readint((&data)));
+				WL(Debug, "Ban:");
+				WL(Debug, "\tName: %s", readstr(&data));
+				WL(Debug, "\tReason: %s", readstr(&data));
+				WL(Debug, "\tDuration %d", readint((&data)));
 				break;
 
 			case 'K':
-				WL(Debug, "Kick: Name: %s", readstr(&data));
+				WL(Debug, "Kick:");
+				WL(Debug, "\tName: %s", readstr(&data));
 				break;
 			
 			case 'O':
-				WL(Debug, "Player %s %s", readstr(&data), readint(&data) > 0 ? "opped" : "deopped");
+				WL(Debug, "OP/DeOP");
+				WL(Debug, "\tName: %s", readstr(&data));
+				WL(Debug, "\tStatus: %s", readint(&data) > 0 ? "opped" : "deopped");
 				break;
 
 			case 'S':
@@ -201,7 +207,7 @@ static void handlewebsockmsg(struct _HttpClient *hc) {
 					break;
 				}
 				WebState.ustates[hc->cpls->wsstate]++;
-				WL(Debug, "State changed to %s", hc->cpls->wsstate);
+				WL(Debug, "State changed to %d", hc->cpls->wsstate);
 				break;
 
 			default:
@@ -233,7 +239,7 @@ THREAD_FUNC(WebThread) {(void)param;
 			hc->ssa = ssa;
 			hc->code = 200;
 			AList_AddField(&WebState.clients, hc);
-			//WL(Debug, "New client! %d:%d", ssa.sin_addr, ssa.sin_port);
+			WL(Debug, "New client! %d:%d", ssa.sin_addr, ssa.sin_port);
 		}
 
 		AListField *tmp;
@@ -248,7 +254,7 @@ THREAD_FUNC(WebThread) {(void)param;
 					Memory_Free(hc->wsh);
 				}
 				Memory_Free(hc);
-				//WL(Debug, "Client closed!");
+				WL(Debug, "Client closed!");
 				break;
 			}
 
@@ -280,8 +286,10 @@ THREAD_FUNC(WebThread) {(void)param;
 					while (WebSock_Tick(hc->wsh, &hc->nb))
 						if (hc->wsh->paylen > 0)
 							handlewebsockmsg(hc);
-					if (WebSock_GetErrorCode(hc->wsh) != WEBSOCK_ERROR_CONTINUE)
+					if (WebSock_GetErrorCode(hc->wsh) != WEBSOCK_ERROR_CONTINUE) {
+						WL(Error, "WebSocket error: %s", WebSock_GetError(hc->wsh));
 						hc->state = CHS_CLOSING;
+					}
 					break;
 				case CHS_REQUEST:
 						switch (NetBuffer_ReadLine(&hc->nb, buffer, 144)) {
@@ -330,7 +338,7 @@ THREAD_FUNC(WebThread) {(void)param;
 									hc->state = CHS_BODY;
 									break;
 								}
-								//WL(Debug, "Header: %s", buffer);
+								// WL(Debug, "Header: %s", buffer);
 								break;
 						}
 
