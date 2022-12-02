@@ -37,6 +37,6 @@ export function CWAP(){
     function switchState(path){
         sendMessage(`S${state_paths[path]}\x00`)
     }
-
+    // return ()
     return ([sendAuth, getAnswer, banPlayer, kickPlayer, opPlayer, deopPlayer, switchState])
 }
