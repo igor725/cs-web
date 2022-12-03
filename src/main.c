@@ -88,6 +88,7 @@ static inline cs_str getcodestr(cs_uint32 code) {
 		case 200: return "OK";
 		case 400: return "Bad Request";
 		case 404: return "Not Found";
+		case 414: return "Request-URI Too Long";
 		case 500: return "Internal Server Error";
 		default: return "Unknown";
 	}
@@ -152,6 +153,13 @@ static cs_str readstr(cs_byte **data) {
 	return ret;
 }
 
+static cs_uint32 readargc(cs_byte *data, cs_uint16 len) {
+	cs_uint32 argc = 0;
+	for (; len > 1; len--)
+		if (*data++ == '\0') argc++;
+	return argc;
+}
+
 static void genpacket(NetBuffer *nb, cs_str fmt, ...) {
 	va_list args;
 	va_start(args, fmt);
@@ -160,7 +168,7 @@ static void genpacket(NetBuffer *nb, cs_str fmt, ...) {
 	cs_int32 size;
 
 	while (*fmt != '\0') {
-		switch (*fmt++) {
+		switch (*fmt) {
 			case 'i':
 				tempi = va_arg(args, cs_int32);
 				if ((size = String_FormatBuf(NULL, 0, "%d", tempi)) > 0) {
@@ -183,26 +191,32 @@ static void genpacket(NetBuffer *nb, cs_str fmt, ...) {
 				NetBuffer_EndWrite(nb, 1);
 				break;
 		}
+
+		++fmt;
 	}
 	va_end(args);
 }
 
 static void handlewebsockmsg(struct _HttpClient *hc) {
 	cs_byte *data = (cs_byte *)hc->wsh->payload;
-	while(hc->state < CHS_CLOSING && (data - (cs_byte *)hc->wsh->payload) < hc->wsh->paylen) {
-		if(!hc->cpls->authed) {
-			if(*data != 'A') {
-				sendsockmsg(hc, "NYou need to log in first!\0", 27);
+	while (hc->state < CHS_CLOSING && (data - (cs_byte *)hc->wsh->payload) < hc->wsh->paylen) {
+		if (!hc->cpls->authed) {
+			if (*data != 'A') {
+				genpacket(&hc->nb, "Nss", "E", "You need to log in first");
 				break;
 			}
 
-			if(Memory_Compare(WebState.pwhash, data + 1, 32)) {
+			if (hc->wsh->paylen < 34) {
+				genpacket(&hc->nb, "Nss", "E", "Invalid auth packet received");
+				break;
+			}
+
+			if (Memory_Compare(WebState.pwhash, data + 1, 32)) {
 				sendsockmsg(hc, "AOK\0", 4);
 				hc->cpls->authed = true;
-
 			} else sendsockmsg(hc, "AFAIL\0", 6);
 
-			data += 33;
+			data += 34;
 			continue;
 		}
 
@@ -213,7 +227,12 @@ static void handlewebsockmsg(struct _HttpClient *hc) {
 				break;
 
 			case 'C':
-				genpacket(&hc->nb, "Css", "E", "Not implemented yet");
+				genpacket(&hc->nb, "Cs", "Not implemented yet");
+				break;
+
+			case 'F':
+				for(cs_int32 i = 0; i < 5; i++)
+					genpacket(&hc->nb, "Nss", "W", "Fuck!!");
 				break;
 
 			case 'K':
@@ -238,17 +257,15 @@ static void handlewebsockmsg(struct _HttpClient *hc) {
 				break;
 
 			default:
-				sendsockmsg(hc, "NFailed to handle unknown message.\0", 35);
+				genpacket(&hc->nb, "Nss", "E", "Failed to handle unknown message");
 				data += hc->wsh->paylen;
 				break;
 		}
 	}
-
 }
 
 THREAD_FUNC(WebThread) {(void)param;
 	while (true) {
-		Thread_Sleep(60);
 		if (!WebState.alive) continue;
 
 		Mutex_Lock(WebState.mutex);
@@ -324,8 +341,13 @@ THREAD_FUNC(WebThread) {(void)param;
 								break;
 
 							case -1:
+								hc->code = 414;
+								hc->state = CHS_ERROR;
+								break;
+
 							case 0:
-								hc->state = CHS_CLOSING;
+								hc->code = 400;
+								hc->state = CHS_ERROR;
 								break;
 
 							default:
@@ -356,15 +378,14 @@ THREAD_FUNC(WebThread) {(void)param;
 							case -2: break;
 
 							case -1:
-							case 0:
 								hc->state = CHS_CLOSING;
 								break;
 
+							case 0:
+								hc->state = CHS_BODY;
+								break;
+
 							default:
-								if (*buffer == '\0') {
-									hc->state = CHS_BODY;
-									break;
-								}
 								// WL(Debug, "Header: %s", buffer);
 								break;
 						}
@@ -398,6 +419,7 @@ THREAD_FUNC(WebThread) {(void)param;
 
 		Mutex_Unlock(WebState.mutex);
 		if (WebState.stopped && WebState.clients == NULL) break;
+		Thread_Sleep(60);
 	}
 
 	return 0;
@@ -428,14 +450,8 @@ static void evtpoststart(void *p) {(void)p;
 	WL(Info, "Listener started on *:8887");
 }
 
-static cs_str ltype(cs_byte flag) {
-	if (flag & LOG_WARN) return "W";
-	if (flag & LOG_ERROR) return "E";
-	return "I";
-}
-
 static void evtonlog(void *param) {
-	if(WebState.clients) {
+	if (WebState.clients) {
 		LogBuffer *lb = param;
 		if (lb->flag & LOG_DEBUG) return;
 
@@ -444,7 +460,7 @@ static void evtonlog(void *param) {
 		List_Iter(tmp, WebState.clients) {
 			struct _HttpClient *hc = AList_GetValue(tmp).ptr;
 			if (!hc->cpls || hc->cpls->wsstate != WSS_CONSOLE) continue;
-			genpacket(&hc->nb, "Css", ltype(lb->flag), lb->data);
+			genpacket(&hc->nb, "Cs", lb->data);
 		}
 		Mutex_Unlock(WebState.mutex);
 	}
