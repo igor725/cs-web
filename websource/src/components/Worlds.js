@@ -141,7 +141,7 @@ const Worlds = props => {
                     <h3 id="wName">Players</h3>
                     <ul className='plist' id="pList2">
                         { players.map((player)=>{
-                           return <PlayerDropdown>{player}</PlayerDropdown>
+                           return <PlayerDropdown cwap={props.cwap}>{player}</PlayerDropdown>
                         })}
                     </ul>
                 </div>

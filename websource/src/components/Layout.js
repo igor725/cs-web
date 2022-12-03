@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import "./styles/Layout.css"
 import Navbar from './Navbar';
@@ -15,6 +15,10 @@ const Layout = ({ CWAP, children }) => {
             root.className = "lightmode"
         }
     }
+    useEffect(()=>{
+        // console.log(1)
+        CWAP.switchState(window.location.pathname)
+    }, [])
     return (
         <React.Fragment>
             <div className="layout-container">

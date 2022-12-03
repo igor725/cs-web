@@ -30,7 +30,7 @@ export function showMenu(e) {
     prev_player = playerEl
 }
 
-const PlayersList = () => {
+const PlayersList = ({ cwap }) => {
     useEffect(() => {
         const listElement = document.getElementById("plist")
         listElement.onscroll = (e) => {
@@ -44,23 +44,23 @@ const PlayersList = () => {
                 <hr />
             </div>
             <ul id="plist">
-                <PlayerDropdown world="Tets">KEK</PlayerDropdown>
-                <PlayerDropdown>KEK1</PlayerDropdown>
-                <PlayerDropdown>KEK2</PlayerDropdown>
-                <PlayerDropdown>KEK3</PlayerDropdown>
-                <PlayerDropdown>KEK4</PlayerDropdown>
-                <PlayerDropdown>KEK5</PlayerDropdown>
-                <PlayerDropdown>KEK6</PlayerDropdown>
-                <PlayerDropdown>KEK7</PlayerDropdown>
-                <PlayerDropdown>KEK8</PlayerDropdown>
-                <PlayerDropdown>KEK9</PlayerDropdown>
-                <PlayerDropdown>KEK0</PlayerDropdown>
-                <PlayerDropdown>KEK00</PlayerDropdown>
-                <PlayerDropdown>KEK01</PlayerDropdown>
-                <PlayerDropdown>KEK02</PlayerDropdown>
-                <PlayerDropdown>KEK03</PlayerDropdown>
-                <PlayerDropdown>KEK04</PlayerDropdown>
-                <PlayerDropdown>KEK05</PlayerDropdown>
+                <PlayerDropdown cwap={cwap} world="Tets">KEK</PlayerDropdown>
+                <PlayerDropdown cwap={cwap} >KEK1</PlayerDropdown>
+                <PlayerDropdown cwap={cwap} >KEK2</PlayerDropdown>
+                <PlayerDropdown cwap={cwap} >KEK3</PlayerDropdown>
+                <PlayerDropdown cwap={cwap} >KEK4</PlayerDropdown>
+                <PlayerDropdown cwap={cwap} >KEK5</PlayerDropdown>
+                <PlayerDropdown cwap={cwap} >KEK6</PlayerDropdown>
+                <PlayerDropdown cwap={cwap} >KEK7</PlayerDropdown>
+                <PlayerDropdown cwap={cwap} >KEK8</PlayerDropdown>
+                <PlayerDropdown cwap={cwap} >KEK9</PlayerDropdown>
+                <PlayerDropdown cwap={cwap} >KEK0</PlayerDropdown>
+                <PlayerDropdown cwap={cwap} >KEK00</PlayerDropdown>
+                <PlayerDropdown cwap={cwap} >KEK01</PlayerDropdown>
+                <PlayerDropdown cwap={cwap} >KEK02</PlayerDropdown>
+                <PlayerDropdown cwap={cwap} >KEK03</PlayerDropdown>
+                <PlayerDropdown cwap={cwap} >KEK04</PlayerDropdown>
+                <PlayerDropdown cwap={cwap} >KEK05</PlayerDropdown>
 
             </ul>
         </div>

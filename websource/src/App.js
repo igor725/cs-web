@@ -1,5 +1,5 @@
-import Pages from './pages';
 import React from 'react';
+import Pages from './pages';
 import CWAP from './components/CWAP/CWAP';
 
 function App() {

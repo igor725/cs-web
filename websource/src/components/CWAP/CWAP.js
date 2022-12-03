@@ -1,5 +1,6 @@
 import { toast } from 'react-toastify';
 import { MD5 } from "md5-js-tools";
+import { writeInConsole } from '../../pages/console';
 import WebSocket from './WebSocketConnection'
 
 
@@ -21,7 +22,7 @@ function sendNotification(type, text) {;
 }
 
 export function processCommand(data) {
-    // console.log(data)
+    console.log("RAW DATA: ",data)
     let data_splitted = data.split("\x00")
 
     while(data_splitted.length > 0) {
@@ -39,7 +40,7 @@ export function processCommand(data) {
                 break
             case 'C':
                 let msg = data_splitted[0].substring(1)
-                console.log("console line:",msg)
+                writeInConsole(msg)
                 data_splitted.shift()
                 break
             case "E":
@@ -169,8 +170,8 @@ function CWAP() {
         const hash = MD5.generate(password);
         sendMessage(`A${hash}\x00`);
     }
-    function banPlayer(name, reason, seconds) {
-        const ban_props = `${name}\x00${reason}\x00${seconds}`;
+    function banPlayer(name) {
+        const ban_props = `${name}\x00Banned by WebAdmin\x000`;
         sendMessage(`B${ban_props}\x00`);
     }
     function kickPlayer(name) {
@@ -181,6 +182,9 @@ function CWAP() {
     }
     function deopPlayer(name) {
         sendMessage(`O${name}\x000\x00`);
+    }
+    function sendConsole(value){
+        sendMessage(`C${value}`)
     }
     function switchState(path) {
         sendMessage(`S${state_paths[path]}\x00`);
@@ -193,6 +197,7 @@ function CWAP() {
         opPlayer: opPlayer,
         deopPlayer: deopPlayer,
         switchState: switchState,
+        sendConsole: sendConsole,
         _sendMessage: sendMessage
     })
 }

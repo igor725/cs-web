@@ -35,6 +35,23 @@ body{
     color: green !important;
     border: 1px solid #b3b3b3;
 }
+
+@keyframes color {
+    0% {
+      background: rgba(255, 0, 0, 0);
+    }
+    50% {
+        background: yellow;
+    }
+    100% {
+        background: rgba(255, 0, 0, 0);
+    }
+}
+.reconnecting{
+    animation-name: color;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+}
 .navbar a{
     text-decoration: none;
 }

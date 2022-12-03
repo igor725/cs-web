@@ -6,7 +6,7 @@ import Worlds from '../components/Worlds';
 const Home = ({ CWAP }) => {
     return (
         <div className='homeMenu'>
-            <Worlds worlds={
+            <Worlds cwap = {CWAP} worlds={
                 [
                     {
                         "name": "world", 
@@ -21,11 +21,11 @@ const Home = ({ CWAP }) => {
                 ]
             } />
             {/* <Stats/> */}
-            <PlayersList />
+            <PlayersList cwap={CWAP}/>
             <div className="stat">
                 <button onClick={() => CWAP.sendAuth("test")}>SEND AUTH</button>
                 <button onClick={() => CWAP.opPlayer("AetherSmoke")}>SEND OP</button>
-                <button onClick={() => CWAP.banPlayer("igor1", "loh", "1337228")}>SEND KICK</button>
+                <button onClick={() => CWAP.banPlayer("igor1")}>SEND KICK</button>
                 <button onClick={() => CWAP.switchState("/")}>SEND SWITCH STATE</button>
                 <button onClick={() => CWAP._sendMessage("F")}>SEND FUCK</button>
             </div>

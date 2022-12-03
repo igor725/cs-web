@@ -14,8 +14,8 @@ const PlayerDropdown = props => {
                         <b style={{cursor: "pointer", color: isAdmin ? "red":""}} className="dropbtn" name={playerName}>{playerName}</b> in world <b>{playerWorld}</b>
                 </p>
                 <div className="playerMenu">
-                    <button className='ban' style={{cursor: isAdmin ? "":"pointer"}} {...isAdmin && {disabled: true}}> Ban </button>
-                    <button className='kick' style={{cursor: isAdmin ? "":"pointer"}} {...isAdmin && {disabled: true}}> Kick </button>
+                    <button className='ban' onClick={()=> props.cwap.banPlayer(playerName)} style={{cursor: isAdmin ? "":"pointer"}} {...isAdmin && {disabled: true}}> Ban </button>
+                    <button className='kick' onClick={() => props.cwap.kickPlayer(playerName)} style={{cursor: isAdmin ? "":"pointer"}} {...isAdmin && {disabled: true}}> Kick </button>
                 </div>
             </li>
         </div>
