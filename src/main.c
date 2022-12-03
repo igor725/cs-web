@@ -396,9 +396,9 @@ THREAD_FUNC(WebThread) {(void)param;
 			}
 		}
 
+		Mutex_Unlock(WebState.mutex);
 		if (WebState.stopped && WebState.clients == NULL) break;
 	}
-	Mutex_Unlock(WebState.mutex);
 
 	return 0;
 }
@@ -464,10 +464,10 @@ cs_bool Plugin_Load(void) {
 	return Event_RegisterBunch(events);
 }
 
-cs_bool Plugin_Unload(cs_bool force) {
+cs_bool Plugin_Unload(cs_bool force) {(void)force;
 	Event_UnregisterBunch(events);
 	WebState.stopped = true;
-	if (!force) Thread_Join(WebState.thread);
+	Thread_Join(WebState.thread);
 	Socket_Close(WebState.fd);
 	Mutex_Free(WebState.mutex);
 	return true;

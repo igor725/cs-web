@@ -81,7 +81,7 @@
 }
 .worldBG{
     position: relative;
-    background-image: url("/world_template.png");
+    background-image: url("/public/world_template.png");
     /* position: fixed; */
     background-size: cover;
     -webkit-filter: blur(4px);
