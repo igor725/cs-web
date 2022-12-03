@@ -23,12 +23,11 @@ const Home = ({ CWAP }) => {
             {/* <Stats/> */}
             <PlayersList />
             <div className="stat">
-                <button onClick={() => {
-                    CWAP.sendAuth("test");
-                }}>SEND AUTH</button>
-                <button onClick={() => { CWAP.opPlayer("AetherSmoke") }}>SEND OP</button>
+                <button onClick={() => CWAP.sendAuth("test")}>SEND AUTH</button>
+                <button onClick={() => CWAP.opPlayer("AetherSmoke")}>SEND OP</button>
                 <button onClick={() => CWAP.banPlayer("igor1", "loh", "1337228")}>SEND KICK</button>
                 <button onClick={() => CWAP.switchState("/")}>SEND SWITCH STATE</button>
+                <button onClick={() => CWAP._sendMessage("F")}>SEND FUCK</button>
             </div>
         </div>
     )

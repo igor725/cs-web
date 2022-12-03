@@ -1,10 +1,7 @@
 import React from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-
 import Layout from '../components/Layout'
-
 import CFGeditor from './cfgeditor'
-
 import Home from './home'
 
 const Pages = ({ cwap }) => {

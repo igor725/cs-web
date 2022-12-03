@@ -9,18 +9,20 @@ const state_paths = {
     "/console": "R",
     "/pluginmanager": "E"
 }
-// ПРОБЕЛ !!! \x00
+
 const notyType = {
     "E": toast.error,
     "I": toast.info,
     "W": toast.warn
 }
+
 function sendNotification(data) {
     if (data.charAt(0).startsWith("N")) {
         const errMsg = data.slice(2, -1);
         notyType[data.charAt(1)](errMsg)
     }
 }
+
 export function processCommand(data) {
     console.log(data)
     switch (data.charAt(0)) {
@@ -31,16 +33,11 @@ export function processCommand(data) {
 function CWAP() {
     const [_gws, lastMessage, sendMessage] = WebSocket();
     // const gws = _gws();
-
+    
     function getAnswer() {
-        if (lastMessage) {
-            lastMessage.data.text().then((data) => {
-                processCommand(data)
-            })
-        }
         return lastMessage && lastMessage.data.text();
-
     }
+    // ПРОБЕЛ !!! \x00
     function sendAuth(password) {
         const hash = MD5.generate(password);
         sendMessage(`A${hash}\x00`);
@@ -68,7 +65,8 @@ function CWAP() {
         kickPlayer: kickPlayer,
         opPlayer: opPlayer,
         deopPlayer: deopPlayer,
-        switchState: switchState
+        switchState: switchState,
+        _sendMessage: sendMessage
     })
 }
 
