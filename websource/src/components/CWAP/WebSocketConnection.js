@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
-export const socketUrl = `ws://127.0.0.1:8887/ws`
 
-let LastMessage;
+// Я в ахуе что можно импортировать из файла, 
+// который импортирует из ЭТОГО файла
+import { processCommand } from './CWAP'
+
+export const socketUrl = `ws://127.0.0.1:8887/ws`
 
 let WebSocket = () => {
     const {
@@ -16,6 +19,11 @@ let WebSocket = () => {
         onOpen: () => {
             document.getElementsByClassName("websocketStatus")[0].title = `WebSocket connection: ${ReadyState[readyState]}`
             document.getElementsByClassName("websocketStatus")[0].style.background = connectionStatus
+        },
+        onMessage: (msg) => {
+            msg.data.text().then((data) => {
+                processCommand(data)
+            })
         },
         share: true,
         protocols: "cserver-cpl",

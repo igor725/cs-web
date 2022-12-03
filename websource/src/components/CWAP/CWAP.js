@@ -4,61 +4,61 @@ import WebSocket from './WebSocketConnection'
 
 
 const state_paths = {
-    "/":                "H", 
-    "/configeditor":    "C", 
-    "/console":         "R", 
-    "/pluginmanager":   "E"
+    "/": "H",
+    "/configeditor": "C",
+    "/console": "R",
+    "/pluginmanager": "E"
 }
 // ПРОБЕЛ !!! \x00
-function CWAP(){
-    const [wsc, lastMessage, sendMessage] = WebSocket();
-    const WSC = wsc();
-
-    function handleNotify(data){
-        if (data.charAt(0).startsWith("N")){
-            const errMsg = data.slice(2, -1);
-            let sendNoty;
-            switch (data.charAt(1)){
-                case 'E':
-                    sendNoty = toast.error;
-                    break;
-                case 'I':
-                    sendNoty = toast.info;
-                    break;
-                case 'W':
-                    sendNoty = toast.warn;
-                    break;
-            }
-            sendNoty(errMsg);
-        }
+const notyType = {
+    "E": toast.error,
+    "I": toast.info,
+    "W": toast.warn
+}
+function sendNotification(data) {
+    if (data.charAt(0).startsWith("N")) {
+        const errMsg = data.slice(2, -1);
+        notyType[data.charAt(1)](errMsg)
     }
-    function getAnswer(){
-        if (lastMessage){
-            lastMessage.data.text().then((data)=>{
-                handleNotify(data);
+}
+export function processCommand(data) {
+    console.log(data)
+    switch (data.charAt(0)) {
+        case "N":
+            sendNotification(data);
+    }
+}
+function CWAP() {
+    const [_gws, lastMessage, sendMessage] = WebSocket();
+    // const gws = _gws();
+
+    function getAnswer() {
+        if (lastMessage) {
+            lastMessage.data.text().then((data) => {
+                processCommand(data)
             })
         }
         return lastMessage && lastMessage.data.text();
 
     }
-    function sendAuth(password){
+    function sendAuth(password) {
         const hash = MD5.generate(password);
         sendMessage(`A${hash}\x00`);
     }
-    function banPlayer(name, reason, seconds){
+    function banPlayer(name, reason, seconds) {
         const ban_props = `${name}\x00${reason}\x00${seconds}`;
         sendMessage(`B${ban_props}\x00`);
     }
-    function kickPlayer(name){
+    function kickPlayer(name) {
         sendMessage(`K${name}\x00`);
     }
-    function opPlayer(name){
+    function opPlayer(name) {
         sendMessage(`O${name}\x001\x00`);
     }
-    function deopPlayer(name){
+    function deopPlayer(name) {
         sendMessage(`O${name}\x000\x00`);
     }
-    function switchState(path){
+    function switchState(path) {
         sendMessage(`S${state_paths[path]}\x00`);
     }
     return ({

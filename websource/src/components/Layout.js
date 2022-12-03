@@ -20,7 +20,7 @@ const Layout = ({ CWAP, children }) => {
             <div className="layout-container">
                 <Navbar CWAP = {CWAP} setTheme = {setTheme}/>
             </div>
-            <ToastContainer theme='dark'/>
+            <ToastContainer theme={(window.localStorage.getItem('DARKMODE_STATE') === 'true') || false ? "dark":"light"}/>
             <div id='main' className={(window.localStorage.getItem('DARKMODE_STATE') === 'true') || false ? "darkmode" : "lightmode"}>
                 {children}
             </div>
