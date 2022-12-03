@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import "./styles/Layout.css"
 import Navbar from './Navbar';
@@ -7,7 +7,6 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Layout = ({ CWAP, children }) => {
-    const [isUpdate, setUpdate] = useState(0)
     function setTheme() {
         const root = document.getElementById("main")
         if (!(window.localStorage.getItem('DARKMODE_STATE') === 'true') || false){

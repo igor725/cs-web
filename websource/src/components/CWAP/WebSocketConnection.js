@@ -37,8 +37,3 @@ let WebSocket = () => {
     return ([getWebSocket, lastMessage, sendMessage])
 }
 export default WebSocket;
-//     let socketUrl = '1'
-//     // const [socketUrl, setSocketUrl] = useState(`ws://127.0.0.1:8887/ws`);
-//     const { sendMessage, lastMessage, readyState } = useWebSocket(`ws://127.0.0.1:8887/ws`, {protocols: "cserver-cpl"});
-//     console.log(lastMessage)
-//     return ([socketUrl, lastMessage, sendMessage])

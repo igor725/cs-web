@@ -10,8 +10,6 @@ const state_paths = {
     "/pluginmanager":   "E"
 }
 // ПРОБЕЛ !!! \x00
-let prev_data;
-let streaks = 0;
 function CWAP(){
     const [wsc, lastMessage, sendMessage] = WebSocket();
     const WSC = wsc();
@@ -20,7 +18,6 @@ function CWAP(){
         if (data.charAt(0).startsWith("N")){
             const errMsg = data.slice(2, -1);
             let sendNoty;
-            console.log(data.charAt(1));
             switch (data.charAt(1)){
                 case 'E':
                     sendNoty = toast.error;
