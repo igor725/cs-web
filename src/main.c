@@ -141,17 +141,6 @@ static void sendsockmsg(struct _HttpClient *hc, void *msg, cs_uint32 len) {
 	NetBuffer_EndWrite(&hc->nb, len);
 }
 
-static void bcastsockmsg(enum _WsState state, void *msg, cs_uint32 len) {
-	Mutex_Lock(WebState.mutex);
-	AListField *tmp;
-	List_Iter(tmp, WebState.clients) {
-		struct _HttpClient *hc = AList_GetValue(tmp).ptr;
-		if(hc->cpls && hc->cpls->wsstate == state)
-			sendsockmsg(hc, msg, len);
-	}
-	Mutex_Unlock(WebState.mutex);
-}
-
 static cs_int32 readint(cs_byte **data) {
 	cs_int32 i = String_StrToLong((cs_str)*data, (cs_char **)data, 10);
 	(*data)++; return i;
@@ -163,40 +152,78 @@ static cs_str readstr(cs_byte **data) {
 	return ret;
 }
 
+static void genpacket(NetBuffer *nb, cs_str fmt, ...) {
+	va_list args;
+	va_start(args, fmt);
+	cs_str temps;
+	cs_int32 tempi;
+	cs_int32 size;
+
+	while (*fmt != '\0') {
+		switch (*fmt++) {
+			case 'i':
+				tempi = va_arg(args, cs_int32);
+				if ((size = String_FormatBuf(NULL, 0, "%d", tempi)) > 0) {
+					NetBuffer_EndWrite(nb, String_FormatBuf(
+						NetBuffer_StartWrite(nb, size + 1),
+						size + 1, "%d", tempi
+					) + 1);
+				}
+				break;
+			case 's':
+				temps = va_arg(args, cs_str);
+				size = (cs_int32)(String_Length(temps) + 1);
+				NetBuffer_EndWrite(nb, (cs_int32)String_Copy(NetBuffer_StartWrite(
+					nb, (cs_uint32)size), (cs_int32)size, temps
+				) + 1);
+				break;
+
+			default:
+				*NetBuffer_StartWrite(nb, 1) = *fmt;
+				NetBuffer_EndWrite(nb, 1);
+				break;
+		}
+	}
+	va_end(args);
+}
+
 static void handlewebsockmsg(struct _HttpClient *hc) {
 	cs_byte *data = (cs_byte *)hc->wsh->payload;
 	while(hc->state < CHS_CLOSING && (data - (cs_byte *)hc->wsh->payload) < hc->wsh->paylen) {
-		// if(!hc->cpls->authed) {
-		// 	if(*data != 'A') {
-		// 		sendsockmsg(hc, "NYou need to log in first!\0", 27);
-		// 		break;
-		// 	}
+		if(!hc->cpls->authed) {
+			if(*data != 'A') {
+				sendsockmsg(hc, "NYou need to log in first!\0", 27);
+				break;
+			}
 
-		// 	if(Memory_Compare(WebState.pwhash, data + 1, 32))
-		// 		sendsockmsg(hc, "AOK\0", 4);
-		// 	else sendsockmsg(hc, "AFAIL\0", 6);
+			if(Memory_Compare(WebState.pwhash, data + 1, 32)) {
+				sendsockmsg(hc, "AOK\0", 4);
+				hc->cpls->authed = true;
 
-		// 	data += 33;
-		// 	continue;
-		// }
+			} else sendsockmsg(hc, "AFAIL\0", 6);
+
+			data += 33;
+			continue;
+		}
 
 		switch (*data++) {
 			case 'B':
-				WL(Debug, "Ban:");
-				WL(Debug, "\tName: %s", readstr(&data));
-				WL(Debug, "\tReason: %s", readstr(&data));
-				WL(Debug, "\tDuration %d", readint((&data)));
+				genpacket(&hc->nb, "Bsi", readstr(&data), 1);
+				readstr(&data); readint(&data);
+				break;
+
+			case 'C':
+				genpacket(&hc->nb, "Css", "E", "Not implemented yet");
 				break;
 
 			case 'K':
-				WL(Debug, "Kick:");
-				WL(Debug, "\tName: %s", readstr(&data));
+				readstr(&data);
+				genpacket(&hc->nb, "Psi", "R", 1);
 				break;
 			
 			case 'O':
-				WL(Debug, "OP/DeOP");
-				WL(Debug, "\tName: %s", readstr(&data));
-				WL(Debug, "\tStatus: %s", readint(&data) > 0 ? "opped" : "deopped");
+				readstr(&data); readint(&data);
+				genpacket(&hc->nb, "Psii", "O", 1, 1);
 				break;
 
 			case 'S':
@@ -401,9 +428,25 @@ static void evtpoststart(void *p) {(void)p;
 	WL(Info, "Listener started on *:8887");
 }
 
+static cs_str ltype(cs_byte flag) {
+	if (flag & LOG_WARN) return "W";
+	if (flag & LOG_ERROR) return "E";
+	return "I";
+}
+
 static void evtonlog(void *param) {
 	if(WebState.clients) {
-		
+		LogBuffer *lb = param;
+		if (lb->flag & LOG_DEBUG) return;
+
+		AListField *tmp;
+		Mutex_Lock(WebState.mutex);
+		List_Iter(tmp, WebState.clients) {
+			struct _HttpClient *hc = AList_GetValue(tmp).ptr;
+			if (!hc->cpls || hc->cpls->wsstate != WSS_CONSOLE) continue;
+			genpacket(&hc->nb, "Css", ltype(lb->flag), lb->data);
+		}
+		Mutex_Unlock(WebState.mutex);
 	}
 }
 
@@ -415,6 +458,7 @@ Event_DeclareBunch(events) {
 };
 
 cs_bool Plugin_Load(void) {
+	String_Copy((cs_char *)WebState.pwhash, 33, "098f6bcd4621d373cade4e832627b4f6");
 	WebState.mutex = Mutex_Create();
 	WebState.thread = Thread_Create(WebThread, NULL, false);
 	return Event_RegisterBunch(events);
