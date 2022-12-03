@@ -8,6 +8,7 @@
     justify-self: center;
     background: rgb(46, 46, 46);
     overflow-y: hidden;
+    transition: 1s;
 }
 
 .worldCart_players {
@@ -24,7 +25,6 @@
     box-shadow: 4px 4px 23px 33px rgba(0, 0, 0, 0.2) inset !important;
 }
 .worlds:hover {
-    transition: 1s;
     box-shadow: 0px 6px 18px 5px rgba(0, 0, 0, 0.75);
     -webkit-box-shadow: 0px 6px 18px 5px rgba(0, 0, 0, 0.75);
     -moz-box-shadow: 0px 6px 18px 5px rgba(0, 0, 0, 0.75);
@@ -109,7 +109,7 @@
 
 .extend {
     max-height: 560px;
-    transition: max-height 1s ease-out;
+    transition: 1s;;
 }
 
 .close {
@@ -146,18 +146,19 @@
     color: white;
     cursor: pointer;
 }
-
+.world, .worldBG{
+    transition-duration: 1.2s;
+}
 .world:hover .worldBG{
     cursor: pointer;
     box-shadow: 0 1px 12px rgba(0, 0, 0, 1);
-    transition: 1s;
     -webkit-filter: blur(4px);
     -moz-filter: blur(4px);
     -o-filter: blur(4px);
     -ms-filter: blur(4px);
     filter: blur(4px);
+    /* transition-duration: 1.2s; */
 }
-
 .world {
     background-color: transparent;
     box-shadow: 0 1px 12px rgba(0, 0, 0, 0.5);

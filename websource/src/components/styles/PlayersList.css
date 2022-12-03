@@ -14,12 +14,12 @@
     background: rgb(221, 221, 221);
 }
 .playersOnline:hover{
-    transition: 1s;
     box-shadow: 0px 6px 18px 5px rgba(0,0,0,0.75);
     -webkit-box-shadow: 0px 6px 18px 5px rgba(0,0,0,0.75);
     -moz-box-shadow: 0px 6px 18px 5px rgba(0,0,0,0.75);
 }
 .playersOnline {
+    transition: 1s;
     display: grid;
     justify-self: end;
     margin-right: 30px;

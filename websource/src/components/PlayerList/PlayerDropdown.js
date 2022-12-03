@@ -7,7 +7,7 @@ const PlayerDropdown = props => {
     const playerWorld = props.world
     const isAdmin = props.isAdmin || false
     return(
-        <div className="playerDropdown">
+        <div className="playerDropdown" name={playerName}>
             <li>
                 <p style={{display: 'contents'}} 
                 onClick={showMenu}>

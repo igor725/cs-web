@@ -25,7 +25,7 @@ const Worlds = props => {
             worldsInfo.push(props)
         }
         return (
-            <div className='world' style={{ zIndex: props.pos }}>
+            <div className='world' name={props.name} style={{ zIndex: props.pos }}>
                 <div className={props.status == "unloaded" ? 'worldBG blurry':'worldBG'}></div>
                 <h2>{props.name}</h2>
             </div>
@@ -80,9 +80,9 @@ const Worlds = props => {
             <hr />
             <div className='worlds_list' onClick={(e)=>{
                 let wName = expand(e);
-                worldsInfo.map((world) => {
+                worldsInfo.forEach((world) => {
                     if (world.name == wName) {
-                        world.players.map((player)=>{
+                        world.players.forEach((player)=>{
                             players.push(player)
                         })
                         name = wName
