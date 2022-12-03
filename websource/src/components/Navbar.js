@@ -4,9 +4,15 @@ import { Link, useLocation } from 'react-router-dom'
 import { DarkModeToggle } from "react-dark-mode-toggle-2";
 import { useNavigate } from 'react-router-dom';
 
-
 let prev_colored
 const Navbar = props => {
+    function sendSwitch(e){
+        const target = e.target
+        if (target.tagName == "A"){
+            const path = target.getAttribute("href");
+            props.CWAP.switchState(path)
+        }
+    }
     const DARKMODE_STATE = (window.localStorage.getItem('DARKMODE_STATE') === 'true') || false
     const [isDarkMode, setIsDarkMode] = useState(DARKMODE_STATE);
 
@@ -30,7 +36,7 @@ const Navbar = props => {
         <div className={((window.localStorage.getItem('DARKMODE_STATE') === 'true') || false) ? "navbar":"navbar light"}>
             <div style={{width:"4px", background: "red"}} title="WebSocket connection: "className='websocketStatus'/>
             <h3 style={{ cursor: "pointer" }} onClick={useCallback(() => navigate('/', { replace: true }), [navigate])}>CServer Webadmin</h3>
-            <div className="buttons">
+            <div className="buttons" onClick={sendSwitch}>
                 <Link to='/'> Home </Link>
                 <Link to='/console'> Console </Link>
                 <Link to='/configeditor'> Config Editor </Link>

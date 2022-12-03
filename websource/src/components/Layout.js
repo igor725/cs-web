@@ -1,24 +1,28 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+
 import "./styles/Layout.css"
 import Navbar from './Navbar';
 
-const Layout = ({ children }) => {
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+const Layout = ({ CWAP, children }) => {
     const [isUpdate, setUpdate] = useState(0)
     function setTheme() {
-        const navbar = document.getElementsByClassName("navbar")[0]
-        setUpdate(isUpdate + 1)
+        const root = document.getElementById("main")
         if (!(window.localStorage.getItem('DARKMODE_STATE') === 'true') || false){
-            navbar.classList.add("dark")
+            root.className = "darkmode"
         } else{
-            navbar.classList.remove('dark')
+            root.className = "lightmode"
         }
     }
     return (
         <React.Fragment>
             <div className="layout-container">
-                <Navbar setTheme={setTheme} />
+                <Navbar CWAP = {CWAP} setTheme = {setTheme}/>
             </div>
-            <div className={isUpdate > 0 ? !(window.localStorage.getItem('DARKMODE_STATE') === 'true') || false ? "darkmode" : "lightmode" : (window.localStorage.getItem('DARKMODE_STATE') === 'true') || false ? "darkmode" : "lightmode"} key={isUpdate}>
+            <ToastContainer theme='dark'/>
+            <div id='main' className={(window.localStorage.getItem('DARKMODE_STATE') === 'true') || false ? "darkmode" : "lightmode"}>
                 {children}
             </div>
         </React.Fragment>

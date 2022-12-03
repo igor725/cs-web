@@ -1,12 +1,18 @@
 import React, { useEffect } from 'react';
 import './styles/home.css'
 import PlayersList from '../components/PlayersList';
-import CWAP from '../components/CWAP/CWAP';
 import Worlds from '../components/Worlds';
 
-const Home = () => {
-    let cwap = CWAP()
-    // cwap.getAnswer().then((data)=>console.log(data))
+const Home = props => {
+    const cwap = props.CWAP
+    useEffect(()=>{
+        let answerPromise = cwap.getAnswer()
+        let answerText;
+        answerPromise && answerPromise.then((data)=>{
+            console.log(data)
+            answerText = data
+        })
+    })
     return (
         <div className='homeMenu'>
             <Worlds worlds={ 
@@ -17,12 +23,14 @@ const Home = () => {
             }/>
             {/* <Stats/> */}
             <PlayersList />
-            <button onClick={() => {
-                cwap.sendAuth("test");
-            }}>SEND AUTH</button>
-            <button onClick={() => cwap.opPlayer("AetherSmoke")}>SEND OP</button>
-            <button onClick={() => cwap.banPlayer("igor1", "loh", "1337228")}>SEND KICK</button>
-            <button onClick={() => cwap.switchState("/home")}>SEND SWITCH STATE</button>
+            <div className="stat">
+                <button onClick={() => {
+                    cwap.sendAuth("test");
+                }}>SEND AUTH</button>
+                <button onClick={() => {cwap.opPlayer("AetherSmoke")}}>SEND OP</button>
+                <button onClick={() => cwap.banPlayer("igor1", "loh", "1337228")}>SEND KICK</button>
+                <button onClick={() => cwap.switchState("/")}>SEND SWITCH STATE</button>
+            </div>
         </div>
     )
 }

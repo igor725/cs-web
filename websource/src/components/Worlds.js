@@ -24,7 +24,6 @@ const Worlds = props => {
         if (!worldsInfo.includes(props)){
             worldsInfo.push(props)
         }
-        console.log(props.status)
         return (
             <div className='world' style={{ zIndex: props.pos }}>
                 <div className={props.status == "unloaded" ? 'worldBG blurry':'worldBG'}></div>

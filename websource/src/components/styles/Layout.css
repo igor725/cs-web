@@ -8,5 +8,5 @@
 }
 .lightmode, .darkmode{
     overflow: hidden;
-    height: 90vh;
+    height: 100vh;
 }
