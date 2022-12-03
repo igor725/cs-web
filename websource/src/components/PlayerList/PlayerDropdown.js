@@ -1,6 +1,6 @@
 import React from 'react';
 import './styles/PlayerDropdown.css'
-
+import { showMenu } from '../PlayersList';
 
 const PlayerDropdown = props => {
     const playerName = props.children;
@@ -10,7 +10,7 @@ const PlayerDropdown = props => {
         <div className="playerDropdown">
             <li>
                 <p style={{display: 'contents'}} 
-                onClick={props.showMenu}>
+                onClick={showMenu}>
                         <b style={{cursor: "pointer", color: isAdmin ? "red":""}} className="dropbtn" name={playerName}>{playerName}</b> in world <b>{playerWorld}</b>
                 </p>
                 <div className="playerMenu">

@@ -13,7 +13,7 @@ export const WebSocket = () => {
         [ReadyState.UNINSTANTIATED]: 'black',
     }[readyState];
     useEffect(()=>{
-        document.getElementsByClassName("websocketStatus")[0].title += `: ${ReadyState[readyState]}`
+        document.getElementsByClassName("websocketStatus")[0].title = `WebSocket connection: ${ReadyState[readyState]}`
         document.getElementsByClassName("websocketStatus")[0].style.background = connectionStatus
     })
     return ([socketUrl, lastMessage, sendMessage])

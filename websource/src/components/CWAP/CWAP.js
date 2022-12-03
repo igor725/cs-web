@@ -18,10 +18,8 @@ export function CWAP(){
         }
     }
     function sendAuth(password){
-        // const hash = MD5.generate(password);
-        // sendMessage(`A${hash}\x00`)
-        sendMessage(`Ahuihuihuihuihuihuihuihuihuihuihu\x00`)
-        // return (getAnswer())
+        const hash = MD5.generate(password);
+        sendMessage(`A${hash}\x00`)
     }
     function banPlayer(name, reason, seconds){
         const ban_props = `${name}\x00${reason}\x00${seconds}`

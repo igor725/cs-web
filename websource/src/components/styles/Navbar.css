@@ -33,6 +33,7 @@ body{
 }
 .light .websocketStatus{
     color: green !important;
+    border: 1px solid #b3b3b3;
 }
 .navbar a{
     text-decoration: none;

@@ -13,7 +13,12 @@
     border: 1px solid rgb(230, 230, 230);
     background: rgb(221, 221, 221);
 }
-
+.playersOnline:hover{
+    transition: 1s;
+    box-shadow: 0px 6px 18px 5px rgba(0,0,0,0.75);
+    -webkit-box-shadow: 0px 6px 18px 5px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 6px 18px 5px rgba(0,0,0,0.75);
+}
 .playersOnline {
     display: grid;
     justify-self: end;
@@ -23,7 +28,7 @@
     border: 1px solid rgb(56, 56, 56);
     border-radius: 12px;
     padding: 10px;
-    height: 320px;
+    height: 310px;
 }
 
 .playersOnline h3 {
@@ -32,20 +37,20 @@
     text-align: center;
 }
 
-.playersOnline ul {
+.playersOnline ul, .plist {
     overflow-y: auto;
     list-style: none;
     padding: 0;
     padding-left: 15px;
 }
 
-.playersOnline ul div li{
+.playersOnline ul div li, .plist li{
     margin-bottom: 8px;
 }
 .lightmode ul li::before{
     color: green !important;
 }
-.playersOnline ul li::before {
+.playersOnline ul li::before, .plist li::before{
     content: "\2022";
     /* Add content: \2022 is the CSS Code/unicode for a bullet */
     color: greenyellow;

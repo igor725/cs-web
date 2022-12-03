@@ -28,7 +28,7 @@ const Navbar = props => {
 
     return (
         <div className={((window.localStorage.getItem('DARKMODE_STATE') === 'true') || false) ? "navbar":"navbar light"}>
-            <div style={{width:"4px", background: "red"}} title="WebSocket connection"className='websocketStatus'/>
+            <div style={{width:"4px", background: "red"}} title="WebSocket connection: "className='websocketStatus'/>
             <h3 style={{ cursor: "pointer" }} onClick={useCallback(() => navigate('/', { replace: true }), [navigate])}>CServer Webadmin</h3>
             <div className="buttons">
                 <Link to='/'> Home </Link>

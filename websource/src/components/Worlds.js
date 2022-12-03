@@ -1,124 +1,151 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import './styles/Worlds.css';
 import useHorizontalScroll from "./helpers/horizontalscroll"
+import PlayerDropdown from './PlayerList/PlayerDropdown';
+import { prev_player } from './PlayersList';
 
-// import world from '../public/world_template.png'
-let worldsInfo = []
-const World = props => {
-    const wName = props.name;
-    const wSize = props.size;
-    const wSeed = props.seed;
-    const wWeather = props.weather;
-    const wTexturePack = props.texturepack;
-    const wSpawn = props.spawn;
-    const wIsLoaded = props.loaded;
-    worldsInfo.push(props)
-
-    return(
-        <div className='world' style={{zIndex: props.pos}}>
-            <div className='worldBG'></div>
-            <h2>{wName}</h2>
-        </div>
-    )
-}
 let worldOpened;
 let worldOpenedName;
+
+let status;
+let size;
+let spawn;
+let name
+let seed;
+let textures;
+let weather;
+let players = [];
+
 const Worlds = props => {
+    let worldsInfo = []
+    const [, updateState] = React.useState();
+    const forceUpdate = React.useCallback(() => updateState({}), []);
+    const World = props => {
+        if (!worldsInfo.includes(props)){
+            worldsInfo.push(props)
+        }
+        console.log(props.status)
+        return (
+            <div className='world' style={{ zIndex: props.pos }}>
+                <div className={props.status == "unloaded" ? 'worldBG blurry':'worldBG'}></div>
+                <h2>{props.name}</h2>
+            </div>
+        )
+    }
+
+    useEffect(() => {
+        const listElement = document.getElementById("pList2")
+        listElement.onscroll = (e) => {
+            prev_player && prev_player.classList.remove("show")
+        }
+    })
     const scrollRef = useHorizontalScroll();
     const worldsEl = document.getElementsByClassName("worlds")[0]
-
-    const wName_el = document.getElementById("wName")
-    const wSeed_el = document.getElementById("wSeed")
-    const wSize_el = document.getElementById("wSize")
-    const wWeather_el = document.getElementById("wWeather")
-    const wTexturePack_el = document.getElementById("wTexturePack")
-    const wSpawn_el = document.getElementById("wSpawn")
-    const wIsLoaded_el = document.getElementById("wIsLoaded")
-
-    function closeExpand(worldsEl){
+    function closeExpand(worldsEl) {
         worldsEl.classList.remove("extend")
         worldsEl.classList.add("close")
     }
-    function writeInfo(wName){
-        worldsInfo.forEach((world)=>{
-            if (world.name == wName){
-                wName_el.innerHTML = wName
-                wSize_el.innerHTML = world.wSize
-                wSeed_el.innerHTML = world.wSeed
-                wWeather_el.innerHTML = world.wWeather
-                wTexturePack_el.innerHTML = world.wTexturePack
-                wSpawn_el.innerHTML = world.wSpawn
-                wIsLoaded_el.innerHTML = world.wIsLoaded
-            }
-        })
-    }
-    function expand(e){
-        if (e.target.className == "worldBG" || e.target.tagName == "H2"){
+    function expand(e) {
+        if (e.target.className == "worldBG" || e.target.tagName == "H2") {
             const wName = e.target.tagName == "H2" ? e.target.innerHTML : e.target.parentElement.childNodes[1].innerHTML
-            if (worldOpened){
-                if( worldOpenedName !== wName){
-                    closeExpand(worldsEl)
-                    setTimeout(()=>{
+            players = []
+            if (worldOpened) {
+                if (worldOpenedName !== wName) {
+                    closeExpand(worldsEl);
+                    setTimeout(() => {
                         worldsEl.classList.remove("close")
                         worldOpened = true
                         worldOpenedName = wName
+                        forceUpdate();
                         worldsEl.classList.add("extend")
-                        writeInfo(wName)
                     }, 1500)
                 }
-                closeExpand(worldsEl)
-                setTimeout(()=>{
+                closeExpand(worldsEl);
+                setTimeout(() => {
                     worldsEl.classList.remove("close")
                 }, 1300)
                 worldOpened = undefined
                 worldOpenedName = undefined
-            } else{
+            } else {
+                forceUpdate();
                 worldsEl.classList.add("extend")
-                writeInfo(wName)
                 worldOpened = true
                 worldOpenedName = wName
             }
+            return wName;
         }
     }
-    return(
+    return (
         <div className='worlds'>
             <h3>Worlds</h3>
-            <hr/>
-            <div className='worlds_list' onClick={expand} ref={scrollRef}>
-                <World name="world" pos={1}/>
-                <World name="world2"pos={2}/>
-                <World name="world3"pos={3}/>
-                <World name="world4"pos={4}/>
-                <World name="world5"pos={5}/>
+            <hr />
+            <div className='worlds_list' onClick={(e)=>{
+                let wName = expand(e);
+                worldsInfo.map((world) => {
+                    if (world.name == wName) {
+                        world.players.map((player)=>{
+                            players.push(player)
+                        })
+                        name = wName
+                        size = world.size
+                        seed = world.seed
+                        weather = world.weather
+                        spawn = world.spawn
+                        status = world.status
+                        if (world.texturepack) {
+                            textures = `<a href='${world.texturepack}'>LINK</a>`
+                        } else {
+                            textures = "Default"
+                        }
+                    }
+                })
+            }} ref={scrollRef}>
+                {
+                    props.worlds.map((world, pos)=>{
+                        return <World {...world} pos={pos+1} />
+                    })
+                }
             </div>
             <div className='worldCart'>
-                <h3 id="wName">World Name</h3>
-                <table>
-                    <tr>
-                        <th style={{textAlign: "right"}}>Loaded: </th>
-                        <th id="wIsLoaded"></th>
-                    </tr>
-                    <tr>
-                        <th style={{textAlign: "right"}}>Size: </th>
-                        <th id="wSize"></th>
-                    </tr>
-                    <tr>
-                        <th style={{textAlign: "right"}}>Seed: </th>
-                        <th id="wSeed"></th>
-                    </tr>
-                    <tr>
-                        <th style={{textAlign: "right"}}>Weather: </th>
-                        <th id="wWeather"></th>
-                    </tr>
-                    <tr>
-                        <th style={{textAlign: "right"}}>Texture Pack: </th>
-                        <th id="wTexturePack"></th>
-                    </tr>
-                    <tr>
-                        <th style={{textAlign: "right"}}>Spawn coords: </th>
-                        <th id="wSpawn"></th>
-                    </tr>
-                </table>
+                <div className='worldCart_info'>
+                    <h3 id="wName">{name}</h3>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <th style={{ textAlign: "right" }}>Status: </th>
+                                <th id="wStatus" style={{ textAlign: "left" }}>{status}</th>
+                            </tr>
+                            <tr>
+                                <th style={{ textAlign: "right" }}>Size: </th>
+                                <th id="wSize" style={{ textAlign: "left" }}>{size}</th>
+                            </tr>
+                            <tr>
+                                <th style={{ textAlign: "right" }}>Spawn: </th>
+                                <th id="wSpawn" style={{ textAlign: "left" }}>{spawn}</th>
+                            </tr>
+                            <tr>
+                                <th style={{ textAlign: "right" }}>Seed: </th>
+                                <th id="wSeed" style={{ textAlign: "left" }}>{seed}</th>
+                            </tr>
+                            <tr>
+                                <th style={{ textAlign: "right" }}>Textures: </th>
+                                <th id="wTexturePack" style={{ textAlign: "left" }}>{textures}</th>
+                            </tr>
+                            <tr>
+                                <th style={{ textAlign: "right" }}>Weather: </th>
+                                <th id="wWeather" style={{ textAlign: "left" }}>{weather}</th>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div className='worldCart_players'>
+                    <h3 id="wName">Players</h3>
+                    <ul className='plist' id="pList2">
+                        { players.map((player)=>{
+                           return <PlayerDropdown>{player}</PlayerDropdown>
+                        })}
+                    </ul>
+                </div>
             </div>
         </div>
     )

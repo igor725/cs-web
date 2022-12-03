@@ -1,10 +1,10 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import PlayerDropdown from './PlayerList/PlayerDropdown';
 import './styles/PlayersList.css'
 
-let prev_player;
-window.onclick = function(event) {
-    if (!event.target.matches('.dropbtn')){
+export let prev_player;
+window.onclick = function (event) {
+    if (!event.target.matches('.dropbtn')) {
         var dropdowns = document.getElementsByClassName("playerMenu");
         var i;
         for (i = 0; i < dropdowns.length; i++) {
@@ -13,16 +13,17 @@ window.onclick = function(event) {
                 openDropdown.classList.remove('show');
             }
         }
-    }{
-        if (prev_player){
+    } {
+        if (prev_player) {
             prev_player.style.left = event.clientX + "px"
             prev_player.style.top = event.clientY + "px"
         }
     }
 }
-function showMenu(e){
+export function showMenu(e) {
     let playerEl = e.currentTarget.parentElement.childNodes[1]
-    if ((playerEl !== prev_player) && prev_player){
+    const playerName = playerEl.parentElement.childNodes[0].childNodes[0].getAttribute("name")
+    if ((playerEl !== prev_player) && prev_player) {
         prev_player.classList.remove("show")
     }
     playerEl.classList.toggle("show");
@@ -30,36 +31,36 @@ function showMenu(e){
 }
 
 const PlayersList = () => {
-    useEffect(()=>{
+    useEffect(() => {
         const listElement = document.getElementById("plist")
-        listElement.onscroll = (e) =>{
+        listElement.onscroll = (e) => {
             prev_player && prev_player.classList.remove("show")
         }
     })
-    return(
+    return (
         <div className='playersOnline'>
             <div>
                 <h3>Current online</h3>
-                <hr/>
+                <hr />
             </div>
             <ul id="plist">
-                <PlayerDropdown showMenu={showMenu} world="Tets">KEK</PlayerDropdown>
-                <PlayerDropdown showMenu={showMenu}>KEK1</PlayerDropdown>
-                <PlayerDropdown showMenu={showMenu}>KEK2</PlayerDropdown>
-                <PlayerDropdown showMenu={showMenu}>KEK3</PlayerDropdown>
-                <PlayerDropdown showMenu={showMenu}>KEK4</PlayerDropdown>
-                <PlayerDropdown showMenu={showMenu}>KEK5</PlayerDropdown>
-                <PlayerDropdown showMenu={showMenu}>KEK6</PlayerDropdown>
-                <PlayerDropdown showMenu={showMenu}>KEK7</PlayerDropdown>
-                <PlayerDropdown showMenu={showMenu}>KEK8</PlayerDropdown>
-                <PlayerDropdown showMenu={showMenu}>KEK9</PlayerDropdown>
-                <PlayerDropdown showMenu={showMenu}>KEK0</PlayerDropdown>
-                <PlayerDropdown showMenu={showMenu}>KEK00</PlayerDropdown>
-                <PlayerDropdown showMenu={showMenu}>KEK01</PlayerDropdown>
-                <PlayerDropdown showMenu={showMenu}>KEK02</PlayerDropdown>
-                <PlayerDropdown showMenu={showMenu}>KEK03</PlayerDropdown>
-                <PlayerDropdown showMenu={showMenu}>KEK04</PlayerDropdown>
-                <PlayerDropdown showMenu={showMenu}>KEK05</PlayerDropdown>
+                <PlayerDropdown world="Tets">KEK</PlayerDropdown>
+                <PlayerDropdown>KEK1</PlayerDropdown>
+                <PlayerDropdown>KEK2</PlayerDropdown>
+                <PlayerDropdown>KEK3</PlayerDropdown>
+                <PlayerDropdown>KEK4</PlayerDropdown>
+                <PlayerDropdown>KEK5</PlayerDropdown>
+                <PlayerDropdown>KEK6</PlayerDropdown>
+                <PlayerDropdown>KEK7</PlayerDropdown>
+                <PlayerDropdown>KEK8</PlayerDropdown>
+                <PlayerDropdown>KEK9</PlayerDropdown>
+                <PlayerDropdown>KEK0</PlayerDropdown>
+                <PlayerDropdown>KEK00</PlayerDropdown>
+                <PlayerDropdown>KEK01</PlayerDropdown>
+                <PlayerDropdown>KEK02</PlayerDropdown>
+                <PlayerDropdown>KEK03</PlayerDropdown>
+                <PlayerDropdown>KEK04</PlayerDropdown>
+                <PlayerDropdown>KEK05</PlayerDropdown>
 
             </ul>
         </div>
