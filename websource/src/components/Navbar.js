@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import './styles/Navbar.css';
 import { Link, useLocation } from 'react-router-dom';
 import { DarkModeToggle } from 'react-dark-mode-toggle-2';
-import { useNavigate } from 'react-router-dom';
+import { closeWorld } from './Worlds';
 
 let prev_colored;
 const Navbar = props => {
@@ -11,7 +11,6 @@ const Navbar = props => {
 
 	window.localStorage.setItem('DARKMODE_STATE', isDarkMode);
 
-	const navigate = useNavigate();
 	const currentLocation = useLocation().pathname;
 
 	useEffect(() => {
@@ -26,14 +25,17 @@ const Navbar = props => {
 	return (
 		<div className={((window.localStorage.getItem('DARKMODE_STATE') === 'true') || false) ? 'navbar' : 'navbar light'}>
 			<div style={{ width: '4px', background: 'red' }} title='WebSocket connection: ' className='websocketStatus' />
-			<h3 style={{ cursor: 'pointer' }} onClick={useCallback(() => navigate('/', { replace: true }), [navigate])}>CServer Webadmin</h3>
+			<h3 style={{ cursor: 'pointer' }}>CServer Webadmin</h3>
 			<div className='buttons' onClick={(e) => {
-					const target = e.target
-					if (target.tagName === 'A') {
-						const path = target.getAttribute('href');
-						props.CWAP.switchState(path);
+				const target = e.target
+				if (target.tagName === 'A') {
+					const path = target.getAttribute('href');
+					props.CWAP.switchState(path);
+					if (window.location.pathname != "/"){
+						closeWorld();
 					}
-				}}
+				}
+			}}
 			>
 				<Link to='/'> Home </Link>
 				<Link to='/console'> Console </Link>

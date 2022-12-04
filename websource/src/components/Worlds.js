@@ -16,8 +16,14 @@ let textures;
 let weather;
 let players = [];
 
+export let closeWorld = () =>{
+	worldOpened = false
+}
+
 const Worlds = props => {
+	let worldsEl
 	let worldsInfo = [];
+	const scrollRef = useHorizontalScroll()
 	const [, updateState] = React.useState();
 	const forceUpdate = React.useCallback(() => updateState({}), []);
 	const World = props => {
@@ -32,10 +38,9 @@ const Worlds = props => {
 
 	useEffect(() => {
 		const listElement = document.getElementById('pList2');
+		worldsEl = document.getElementsByClassName('worlds')[0];
 		listElement.onscroll = (e) => prev_player && prev_player.classList.remove('show');
 	});
-	const scrollRef = useHorizontalScroll();
-	const worldsEl = document.getElementsByClassName('worlds')[0];
 	const closeExpand = (worldsEl) => {
 		worldsEl.classList.remove('extend');
 		worldsEl.classList.add('close');

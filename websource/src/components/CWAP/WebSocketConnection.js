@@ -21,7 +21,6 @@ let WebSocket = () => {
 		sendMessage,
 		lastMessage,
 		readyState,
-		getWebSocket,
 	} = useWebSocket(socketUrl, {
 		onOpen: () => {
 			document.getElementsByClassName('websocketStatus')[0].title = `WebSocket connection: ${ReadyState[readyState]}`;

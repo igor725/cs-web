@@ -11,7 +11,7 @@ export let setTheme;
 const Layout = ({ CWAP, children }) => {
 	setTheme = () => {
 		const root = document.getElementById('main');
-		root.className = window.localStorage.getItem('DARKMODE_STATE') === 'true' ? 'darkmode' : 'lightmode';
+		root.className = window.localStorage.getItem('DARKMODE_STATE') === 'true' ? 'lightmode' : 'darkmode';
 	};
 
 	return (
