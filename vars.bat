@@ -1,6 +1,6 @@
 IF "%PLUGIN_INSTALL%"=="1" (
 	PUSHD %ROOT%\websource
-	npm run build
+	npm install && npm run build
 	IF NOT "!ERRORLEVEL!"=="0" (
 		ECHO Failed to build webdata
 		EXIT /B 1
