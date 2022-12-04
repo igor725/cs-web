@@ -1,7 +1,20 @@
 import React from 'react'
 import './styles/console.css'
 var Convert = require('ansi-to-html');
-var convert = new Convert();
+var convert = new Convert({
+    newline: true,
+    escapeXML: true,
+    colors: {
+        0: '#878787',
+        4: '#335fc2',
+        2: '#3db17c',
+        6: '#3c9dc9',
+        1: '#e7243c',
+        5: '#c35bc5',
+        3: '#e4e645',
+        7: '#e5e5e5',
+    }
+});
 
 let messages = [];
 export let writeInConsole = () => {};
@@ -9,20 +22,11 @@ export let writeInConsole = () => {};
 const Console = ({ CWAP }) => {
     const [, updateState] = React.useState();
     const forceUpdate = React.useCallback(() => updateState({}), []);
-    const escapeHtml = (unsafe) => {
-        return unsafe
-        .replaceAll("&", "&amp;")
-        .replaceAll("  ", "&emsp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-    };
 
     writeInConsole = (msg) => {
         const text = document.getElementById("console-out");
         messages.push(<div dangerouslySetInnerHTML={{
-            __html: convert.toHtml(escapeHtml(msg)).replace(/(?:\r\n|\r|\n)/g, "<br>")
+            __html: convert.toHtml(msg).replaceAll("  ", "&emsp;")
         }}></div>);
         forceUpdate();
         setTimeout(() => {
