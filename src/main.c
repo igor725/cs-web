@@ -268,6 +268,19 @@ static void handlewebsockmsg(struct _HttpClient *hc) {
 	}
 }
 
+static cs_str testurl(cs_str url) {
+	static cs_str const pages[] = {
+		"/console", "/configeditor",
+		"/pluginmanager", NULL
+	};
+
+	for (cs_int32 i = 0; pages[i]; i++)
+		if (String_FindSubstr(url, pages[i]))
+			return "/index.html";
+
+	return url;
+}
+
 THREAD_FUNC(WebThread) {(void)param;
 	while (true) {
 		if (!WebState.alive) continue;
@@ -356,7 +369,7 @@ THREAD_FUNC(WebThread) {(void)param;
 
 							default:
 								if (checkhttp(buffer)) {
-									String_Append(path, 128, String_FirstChar(buffer, ' ') + 1);
+									String_Append(path, 128, testurl(String_FirstChar(buffer, ' ') + 1));
 									if (*(String_LastChar(path, '/') + 1) == '\0')
 										String_Append(path, 128, "index.html");
 									if (String_FindSubstr(path, "..")) {

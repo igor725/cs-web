@@ -9,15 +9,14 @@ export let writeInConsole = () => {};
 const Console = ({ CWAP }) => {
     const [, updateState] = React.useState();
     const forceUpdate = React.useCallback(() => updateState({}), []);
-    writeInConsole = (msg) => {
-        const text = document.getElementById("console-out");
-        messages.push(<div dangerouslySetInnerHTML={{__html: convert.toHtml(msg).replace(/(?:\r\n|\r|\n)/g, '<br>')}}></div>);
-        forceUpdate();
-        setTimeout(() => {
-            text.scrollTop = text.scrollHeight;
-        }, 100);
-    }
-    function sendTo(e){
+    const escapeHtml = (unsafe) => {
+        return unsafe.replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    };
+    const sendTo = (e) => {
         const text = document.getElementById("console-out");
         if (e.key == "Enter") {
             const input_el = document.getElementById("console-in");
@@ -30,7 +29,19 @@ const Console = ({ CWAP }) => {
             }
         }
     }
-    return(
+
+    writeInConsole = (msg) => {
+        const text = document.getElementById("console-out");
+        messages.push(<div dangerouslySetInnerHTML={{
+            __html: convert.toHtml(escapeHtml(msg)).replace(/(?:\r\n|\r|\n)/g, '<br>')
+        }}></div>);
+        forceUpdate();
+        setTimeout(() => {
+            text.scrollTop = text.scrollHeight;
+        }, 100);
+    };
+
+    return (
         <div className='console'>
             <div className='console-top'>
                 <div className='console-exit'>
