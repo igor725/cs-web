@@ -200,6 +200,11 @@ static void genpacket(NetBuffer *nb, cs_str fmt, ...) {
 	va_end(args);
 }
 
+static cs_bool runcommand(cs_byte *cmd) {
+	WL(Info, "Executed a command: %s", cmd);
+	return Command_Handle((cs_char *)cmd, NULL);
+}
+
 static void handlewebsockmsg(struct _HttpClient *hc) {
 	cs_byte *data = (cs_byte *)hc->wsh->payload;
 	while (hc->state < CHS_CLOSING && (data - (cs_byte *)hc->wsh->payload) < hc->wsh->paylen) {
@@ -230,7 +235,7 @@ static void handlewebsockmsg(struct _HttpClient *hc) {
 				break;
 
 			case 'C':
-				if (!Command_Handle(readstr(&data), NULL))
+				if (!runcommand((cs_byte *)readstr(&data)))
 					genpacket(&hc->nb, "Cs", Sstor_Get("CMD_UNK"));
 				break;
 

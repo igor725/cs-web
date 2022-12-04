@@ -10,30 +10,19 @@ const Console = ({ CWAP }) => {
     const [, updateState] = React.useState();
     const forceUpdate = React.useCallback(() => updateState({}), []);
     const escapeHtml = (unsafe) => {
-        return unsafe.replaceAll('&', '&amp;')
-        .replaceAll('<', '&lt;')
-        .replaceAll('>', '&gt;')
-        .replaceAll('"', '&quot;')
-        .replaceAll("'", '&#039;');
+        return unsafe
+        .replaceAll("&", "&amp;")
+        .replaceAll("  ", "&emsp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
     };
-    const sendTo = (e) => {
-        const text = document.getElementById("console-out");
-        if (e.key == "Enter") {
-            const input_el = document.getElementById("console-in");
-            if (input_el.value.length > 0) {
-                messages.push(<div>{CWAP.sendConsole(input_el.value)}</div>);
-                input_el.value = "";
-                setTimeout(() => {
-                    text.scrollTop = text.scrollHeight;
-                }, 100);
-            }
-        }
-    }
 
     writeInConsole = (msg) => {
         const text = document.getElementById("console-out");
         messages.push(<div dangerouslySetInnerHTML={{
-            __html: convert.toHtml(escapeHtml(msg)).replace(/(?:\r\n|\r|\n)/g, '<br>')
+            __html: convert.toHtml(escapeHtml(msg)).replace(/(?:\r\n|\r|\n)/g, "<br>")
         }}></div>);
         forceUpdate();
         setTimeout(() => {
@@ -61,7 +50,19 @@ const Console = ({ CWAP }) => {
                 </div>
                 <div className='inputting-field'>
                     <p className='console-in-dot'> &gt; </p>
-                    <input name='input-mac' id='console-in' type='text' onKeyDown={sendTo} autocomplete="off"/>
+                    <input name='input-mac' id='console-in' type='text' onKeyDown={(e) => {
+                        const text = document.getElementById("console-out");
+                        if (e.key == "Enter") {
+                            const input_el = document.getElementById("console-in");
+                            if (input_el.value.length > 0) {
+                                messages.push(<div>{CWAP.sendConsole(input_el.value)}</div>);
+                                input_el.value = "";
+                                setTimeout(() => {
+                                    text.scrollTop = text.scrollHeight;
+                                }, 100);
+                            }
+                        }
+                    }} autocomplete="off"/>
                 </div>
             </div>
         </div>
