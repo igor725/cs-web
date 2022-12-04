@@ -68,6 +68,9 @@
     margin-top: 2px;
     margin-right: 5%;
 }
+.terminal-text:hover{
+    cursor: default;
+}
 .console-exit{
     padding-left:10px;
     display: grid;

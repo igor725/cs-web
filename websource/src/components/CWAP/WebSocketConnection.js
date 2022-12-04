@@ -25,6 +25,9 @@ let WebSocket = () => {
             document.getElementsByClassName("websocketStatus")[0].style.background = connectionStatus
             sendMessage("ATEST\x00")
         },
+        onError: (err) => {
+            toast.error(err)
+        },
         onMessage: (msg) => {
             msg.data.text().then((data) => {
                 processCommand(data)
@@ -33,7 +36,7 @@ let WebSocket = () => {
         share: true,
         protocols: "cserver-cpl",
         reconnectInterval: 5,
-        reconnectAttempts: 30,
+        reconnectAttempts: 15,
         onReconnectStop: (attempts) => {
             toast.error(`Unable to reconnect to a WebSocket.\nSeems like your server is down.\nRetiring after ${attempts} attempts`, {
                 position: "top-center",

@@ -3,6 +3,7 @@ import { MD5 } from "md5-js-tools";
 import "./styles/Auth.css"
 
 export let showAuth = () =>{}
+export let hideAuth = () => {}
 export let showAuthError = () => {}
 export let doAuthGood = () => {}
 export let hack_auth = (hash) => {}
@@ -15,24 +16,34 @@ const Auth = ({cwap}) =>{
         authWindow.style.display = "block"
     }
     showAuthError = () => {
+        showAuth()
         authError.innerHTML = "Wrong password"
     }
-    doAuthGood = () => {
+    hideAuth = () => {
         authWindow.style.display = "none";
-        console.log(pass_candidate)
         localStorage.setItem('USER_PASSWORD', pass_candidate)
+        cwap.switchState(window.location.pathname)
+    }
+    doAuthGood = () => {
+        hideAuth()
+        localStorage.setItem('USER_PASSWORD', pass_candidate)
+        cwap.switchState(window.location.pathname)
     }
     hack_auth = (hash) => {
-        cwap.sendAuth(hash)
-        cwap.switchState(window.location.pathname)
+        doLogin(hash)
     }
-    function doLogin(){
-        const password = document.getElementById("authPassword")
-        const hash = MD5.generate(password.value)
+    function doLogin(pass){
+        let hash
+        if (typeof(pass) !== "string"){
+            const password = document.getElementById("authPassword")
+            hash = MD5.generate(password.value)
+            password.value = ''
+        } else{
+            hash = pass
+        }
+        console.log(hash)
         cwap.sendAuth(hash)
-        cwap.switchState(window.location.pathname)
         pass_candidate = hash
-        password.value = ''
     }
     return(
         <div className='authWindowG'>

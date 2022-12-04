@@ -22,12 +22,17 @@ export let writeInConsole = () => {};
 const Console = ({ CWAP }) => {
     const [, updateState] = React.useState();
     const forceUpdate = React.useCallback(() => updateState({}), []);
-
+    function cleanup(){
+        if (messages.length > 99){
+            messages.shift()
+        }
+    }
     writeInConsole = (msg) => {
         const text = document.getElementById("console-out");
         messages.push(<div dangerouslySetInnerHTML={{
             __html: convert.toHtml(msg).replaceAll("  ", "&emsp;")
         }}></div>);
+        cleanup();
         forceUpdate();
         setTimeout(() => {
             text.scrollTop = text.scrollHeight;
@@ -56,10 +61,11 @@ const Console = ({ CWAP }) => {
                     <p className='console-in-dot'> &gt; </p>
                     <input name='input-mac' id='console-in' type='text' onKeyDown={(e) => {
                         const text = document.getElementById("console-out");
-                        if (e.key == "Enter") {
+                        if (e.key === "Enter") {
                             const input_el = document.getElementById("console-in");
                             if (input_el.value.length > 0) {
-                                messages.push(<div> > {CWAP.sendConsole(input_el.value)}</div>);
+                                messages.push(<div> &gt; {CWAP.sendConsole(input_el.value)}</div>);
+                                cleanup();
                                 input_el.value = "";
                                 setTimeout(() => {
                                     text.scrollTop = text.scrollHeight;

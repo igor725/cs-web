@@ -49,6 +49,13 @@
     font-weight: 100;
     color: rgb(255, 255, 255);
 }
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: rgba(255, 255, 255, 0.39);
+    opacity: 1; /* Firefox */
+}
+::-ms-input-placeholder { /* Microsoft Edge */
+    color: white;
+  }
 #authPassword {
     font-size: 18px;
     border-top: none;
@@ -56,6 +63,7 @@
     border-right: none;
     background: #ffffff00;
     color: white;
+    border-color: white;
     outline: none;
     margin-top: 45px;
 }

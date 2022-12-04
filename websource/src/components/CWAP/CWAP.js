@@ -1,7 +1,7 @@
 import { toast } from 'react-toastify';
 import { writeInConsole } from '../../pages/console';
 import WebSocket from './WebSocketConnection'
-import { doAuthGood, showAuth, showAuthError, hack_auth } from '../Auth';
+import { doAuthGood, showAuth, hideAuth, showAuthError, hack_auth } from '../Auth';
 
 const state_paths = {
     "/": "H",
@@ -44,6 +44,8 @@ export function processCommand(data) {
                     case 'OK':
                         if (!user_pass){
                             doAuthGood()
+                        } else{
+                            hideAuth()
                         }
                         break
                 }
