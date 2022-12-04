@@ -15,10 +15,6 @@ const Layout = ({ CWAP, children }) => {
             root.className = "lightmode"
         }
     }
-    useEffect(()=>{
-        // console.log(1)
-        CWAP.switchState(window.location.pathname)
-    }, [])
     return (
         <React.Fragment>
             <div className="layout-container">

@@ -24,11 +24,13 @@ const Auth = ({cwap}) =>{
     }
     hack_auth = (hash) => {
         cwap.sendAuth(hash)
+        cwap.switchState(window.location.pathname)
     }
     function doLogin(){
         const password = document.getElementById("authPassword")
         const hash = MD5.generate(password.value)
         cwap.sendAuth(hash)
+        cwap.switchState(window.location.pathname)
         pass_candidate = hash
         password.value = ''
     }

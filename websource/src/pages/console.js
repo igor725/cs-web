@@ -59,7 +59,7 @@ const Console = ({ CWAP }) => {
                         if (e.key == "Enter") {
                             const input_el = document.getElementById("console-in");
                             if (input_el.value.length > 0) {
-                                messages.push(<div>{CWAP.sendConsole(input_el.value)}</div>);
+                                messages.push(<div> > {CWAP.sendConsole(input_el.value)}</div>);
                                 input_el.value = "";
                                 setTimeout(() => {
                                     text.scrollTop = text.scrollHeight;

@@ -162,6 +162,7 @@ export function processCommand(data) {
                         let newWeather = data_splitted[2]
                         console.log("newWeather:",newWeather)
                         data_splitted.splice(0,2)
+                        break
                     case 'T':
                         let newTexturepack = data_splitted[2]
                         console.log("newTexturepack:",newTexturepack)
@@ -204,6 +205,7 @@ function CWAP() {
         return value;
     }
     function switchState(path) {
+        console.log("switch state to ",path)
         sendMessage(`S${state_paths[path]}\x00`);
     }
     return ({
