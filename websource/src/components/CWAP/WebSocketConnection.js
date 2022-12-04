@@ -23,6 +23,7 @@ let WebSocket = () => {
         onOpen: () => {
             document.getElementsByClassName("websocketStatus")[0].title = `WebSocket connection: ${ReadyState[readyState]}`
             document.getElementsByClassName("websocketStatus")[0].style.background = connectionStatus
+            sendMessage("ATEST\x00")
         },
         onMessage: (msg) => {
             msg.data.text().then((data) => {

@@ -1,8 +1,7 @@
 import { toast } from 'react-toastify';
-import { MD5 } from "md5-js-tools";
 import { writeInConsole } from '../../pages/console';
 import WebSocket from './WebSocketConnection'
-
+import { doAuthGood, showAuth, showAuthError, hack_auth } from '../Auth';
 
 const state_paths = {
     "/": "H",
@@ -30,6 +29,24 @@ export function processCommand(data) {
             case 'A':
                 let status = data_splitted[0].substring(1)
                 console.log("Auth:", status)
+                const user_pass = localStorage.getItem("USER_PASSWORD")
+                switch (status){
+                    case 'REQ':
+                        if (user_pass !== null) {
+                            hack_auth(user_pass)
+                        } else{
+                            showAuth()
+                        }
+                        break
+                    case 'FAIL':
+                        showAuthError()
+                        break
+                    case 'OK':
+                        if (!user_pass){
+                            doAuthGood()
+                        }
+                        break
+                }
                 data_splitted.shift()
                 break
             case 'B':
@@ -166,8 +183,7 @@ function CWAP() {
         return lastMessage && lastMessage.data.text();
     }
     // ПРОБЕЛ !!! \x00
-    function sendAuth(password) {
-        const hash = MD5.generate(password);
+    function sendAuth(hash) {
         sendMessage(`A${hash}\x00`);
     }
     function banPlayer(name) {
@@ -184,7 +200,7 @@ function CWAP() {
         sendMessage(`O${name}\x000\x00`);
     }
     function sendConsole(value){
-        sendMessage(`C${value}`);
+        sendMessage(`C${value}\x00`);
         return value;
     }
     function switchState(path) {
