@@ -1,50 +1,50 @@
 .playerDropdown {
-    display: contents;
+	display: contents;
 }
 
 .show {
-    display: grid !important;
-    grid-template-columns: 0fr 0fr;
-    position: absolute;
+	display: grid !important;
+	grid-template-columns: 0fr 0fr;
+	position: absolute;
 }
 
 .ban,
 .kick {
-    width: 65px;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 14px;
-    background: transparent;
-    transition: all 0.35s ease-in 0s;
-    height: 100%;
-    margin: 0;
-    padding: 0;
+	width: 65px;
+	color: white;
+	border: none;
+	border-radius: 5px;
+	font-size: 14px;
+	background: transparent;
+	transition: all 0.35s ease-in 0s;
+	height: 100%;
+	margin: 0;
+	padding: 0;
 }
 
 .playerDropdown button:hover {
-    background-color: red
+	background-color: red
 }
 
 .lightmode button:hover {
-    background-color: rgb(2, 0, 107);
+	background-color: rgb(2, 0, 107);
 }
 
 .lightmode .ban,
 .lightmode .kick {
-    border: 0px;
+	border: 0px;
 }
 
 .lightmode .playerMenu {
-    background-color: rgb(4, 0, 255);
+	background-color: rgb(4, 0, 255);
 }
 
 .playerMenu {
-    display: none;
-    background-color: #3e3e3e;
-    box-shadow: -1px 6px 36px 2px rgba(0, 0, 0, 0.75);
-    -webkit-box-shadow: -1px 6px 36px 2px rgba(0, 0, 0, 0.75);
-    -moz-box-shadow: -1px 6px 36px 2px rgba(0, 0, 0, 0.75);
-    border-radius: 8px;
-    height: 37px;
+	display: none;
+	background-color: #3e3e3e;
+	box-shadow: -1px 6px 36px 2px rgba(0, 0, 0, 0.75);
+	-webkit-box-shadow: -1px 6px 36px 2px rgba(0, 0, 0, 0.75);
+	-moz-box-shadow: -1px 6px 36px 2px rgba(0, 0, 0, 0.75);
+	border-radius: 8px;
+	height: 37px;
 }

@@ -1,73 +1,78 @@
 .darkmode .playersOnline {
-    background: rgb(46, 46, 46);
+	background: rgb(46, 46, 46);
 }
 
 .darkmode .playersOnline h3 {
-    color: rgb(157, 192, 75);
+	color: rgb(157, 192, 75);
 }
 
 .darkmode .playersOnline ul {
-    color: rgb(194, 194, 194);
+	color: rgb(194, 194, 194);
 }
-.lightmode .playersOnline{
-    border: 1px solid rgb(230, 230, 230);
-    background: rgb(221, 221, 221);
+
+.lightmode .playersOnline {
+	border: 1px solid rgb(230, 230, 230);
+	background: rgb(221, 221, 221);
 }
-.playersOnline:hover{
-    box-shadow: 0px 6px 18px 5px rgba(0,0,0,0.75);
-    -webkit-box-shadow: 0px 6px 18px 5px rgba(0,0,0,0.75);
-    -moz-box-shadow: 0px 6px 18px 5px rgba(0,0,0,0.75);
+
+.playersOnline:hover {
+	box-shadow: 0px 6px 18px 5px rgba(0,0,0,0.75);
+	-webkit-box-shadow: 0px 6px 18px 5px rgba(0,0,0,0.75);
+	-moz-box-shadow: 0px 6px 18px 5px rgba(0,0,0,0.75);
 }
+
 .playersOnline {
-    transition: 1s;
-    display: grid;
-    justify-self: end;
-    margin-right: 30px;
-    grid-template-rows: 0fr 1fr;
-    width: 300px;
-    border: 1px solid rgb(56, 56, 56);
-    border-radius: 12px;
-    padding: 10px;
-    height: 310px;
+	transition: 1s;
+	display: grid;
+	justify-self: end;
+	margin-right: 30px;
+	grid-template-rows: 0fr 1fr;
+	width: 300px;
+	border: 1px solid rgb(56, 56, 56);
+	border-radius: 12px;
+	padding: 10px;
+	height: 310px;
 }
 
 .playersOnline h3 {
-    color: black;
-    margin: 0 auto;
-    text-align: center;
+	color: black;
+	margin: 0 auto;
+	text-align: center;
 }
 
 .playersOnline ul, .plist {
-    overflow-y: auto;
-    list-style: none;
-    padding: 0;
-    padding-left: 15px;
+	overflow-y: auto;
+	list-style: none;
+	padding: 0;
+	padding-left: 15px;
 }
 
-.playersOnline ul div li, .plist li{
-    margin-bottom: 8px;
+.playersOnline ul div li, .plist li {
+	margin-bottom: 8px;
 }
-.lightmode ul li::before{
-    color: green !important;
+
+.lightmode ul li::before {
+	color: green !important;
 }
-.playersOnline ul li::before, .plist li::before{
-    content: "\2022";
-    /* Add content: \2022 is the CSS Code/unicode for a bullet */
-    color: greenyellow;
-    /* Change the color */
-    font-weight: bold;
-    /* If you want it to be bold */
-    display: inline-block;
-    /* Needed to add space between the bullet and the text */
-    width: 1em;
-    /* Also needed for space (tweak if needed) */
-    margin-left: -1em;
-    /* Also needed for space (tweak if needed) */
+
+.playersOnline ul li::before, .plist li::before {
+	content: "\2022";
+	/* Add content: \2022 is the CSS Code/unicode for a bullet */
+	color: greenyellow;
+	/* Change the color */
+	font-weight: bold;
+	/* If you want it to be bold */
+	display: inline-block;
+	/* Needed to add space between the bullet and the text */
+	width: 1em;
+	/* Also needed for space (tweak if needed) */
+	margin-left: -1em;
+	/* Also needed for space (tweak if needed) */
 }
 
 .playersOnline hr {
-    border: none;
-    width: 100%;
-    height: 1px;
-    background: #838383;
+	border: none;
+	width: 100%;
+	height: 1px;
+	background: #838383;
 }

@@ -1,15 +1,15 @@
 .reconnectBtn {
-    border: 0px;
-    padding-top: 0;
-    padding-bottom: 0;
-    font-weight: 600;
+	border: 0px;
+	padding-top: 0;
+	padding-bottom: 0;
+	font-weight: 600;
 }
 
 .darkBtn {
-    background: #ebebeb;
+	background: #ebebeb;
 }
 
 .lightBtn {
-    background: rgb(255, 38, 38);
-    color: white;
+	background: rgb(255, 38, 38);
+	color: white;
 }

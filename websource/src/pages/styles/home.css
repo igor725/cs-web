@@ -1,33 +1,40 @@
-.homeMenu{
-    margin-top:20px;
-    /* min-height: 100vw; */
-    display: grid;
-    grid-gap: 70px;
-    grid-template-columns: 1fr 0fr;
+.homeMenu {
+	margin-top:20px;
+	/* min-height: 100vw; */
+	display: grid;
+	grid-gap: 70px;
+	grid-template-columns: 1fr 0fr;
 }
+
 ::-webkit-scrollbar{
-    display: none;
+	display: none;
 }
+
 ::-webkit-scrollbar {
-    width: 6px;
-    display: unset;
+	width: 6px;
+	display: unset;
 }
 
 .darkmode::-webkit-scrollbar-track{
-    background: #222;
-}
-::-webkit-scrollbar-track {
-    background: rgb(139, 139, 139);
-    border-radius: 12px;
-}
-.darkmode ::-webkit-scrollbar-thumb{
-    background-color: #555;
-    border: 3px solid #666;
-}
-::-webkit-scrollbar-thumb {
-    background-color: rgb(71, 71, 71);
-    border: 3px solid rgb(71, 71, 71);
-    border-radius: 12px;
+	background: #222;
 }
 
-::-webkit-scrollbar-corner { background: #222}
+::-webkit-scrollbar-track {
+	background: rgb(139, 139, 139);
+	border-radius: 12px;
+}
+
+.darkmode ::-webkit-scrollbar-thumb{
+	background-color: #555;
+	border: 3px solid #666;
+}
+
+::-webkit-scrollbar-thumb {
+	background-color: rgb(71, 71, 71);
+	border: 3px solid rgb(71, 71, 71);
+	border-radius: 12px;
+}
+
+::-webkit-scrollbar-corner {
+	background: #222;
+}

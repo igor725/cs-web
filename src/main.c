@@ -166,9 +166,8 @@ static cs_uint32 readargc(cs_byte *data, cs_uint16 len) {
 static void genpacket(NetBuffer *nb, cs_str fmt, ...) {
 	va_list args;
 	va_start(args, fmt);
+	cs_int32 tempi, size;
 	cs_str temps;
-	cs_int32 tempi;
-	cs_int32 size;
 
 	while (*fmt != '\0') {
 		switch (*fmt) {
@@ -214,8 +213,15 @@ static void handlewebsockmsg(struct _HttpClient *hc) {
 				break;
 			}
 
+			if (hc->wsh->paylen == 6 && String_Compare((cs_str)data, "ATEST")) {
+				genpacket(&hc->nb, "As", *WebState.pwhash != '\0' ? "REQ" : "OK");
+				data += 6;
+				break;
+			}
+
 			if (hc->wsh->paylen < 34) {
 				genpacket(&hc->nb, "Nss", "E", "Invalid auth packet received");
+				data += 34;
 				break;
 			}
 
@@ -239,16 +245,11 @@ static void handlewebsockmsg(struct _HttpClient *hc) {
 					genpacket(&hc->nb, "Cs", Sstor_Get("CMD_UNK"));
 				break;
 
-			case 'F':
-				for(cs_int32 i = 0; i < 5; i++)
-					genpacket(&hc->nb, "Nss", "W", "Fuck!!");
-				break;
-
 			case 'K':
 				readstr(&data);
 				genpacket(&hc->nb, "Psi", "R", 1);
 				break;
-			
+
 			case 'O':
 				readstr(&data); readint(&data);
 				genpacket(&hc->nb, "Psii", "O", 1, 1);

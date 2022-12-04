@@ -1,76 +1,89 @@
-body{
-    padding:0;
-    margin: 0 auto;
+body {
+	padding:0;
+	margin: 0 auto;
 }
-.night_btn{
-    margin-right:15px;
-    margin-left: auto;
-    margin-top: auto;
-    margin-bottom: auto;
+
+.night_btn {
+	margin-right:15px;
+	margin-left: auto;
+	margin-top: auto;
+	margin-bottom: auto;
 }
+
 .navbar {
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    width: 100%;
-    display: grid;
-    grid-gap: 10px;
-    background: rgb(42, 44, 39);
-    grid-template-columns: 0fr 0fr 1fr;
+	font-family: Verdana, Geneva, Tahoma, sans-serif;
+	width: 100%;
+	display: grid;
+	grid-gap: 10px;
+	background: rgb(42, 44, 39);
+	grid-template-columns: 0fr 0fr 1fr;
 }
-.light{
-    background: #f6f6f6;
+
+.light {
+	background: #f6f6f6;
 }
+
 .light h3{
-    background: linear-gradient(45deg, #ff0000 33%, #0048a1 66%, #1bf700);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+	background: linear-gradient(45deg, #ff0000 33%, #0048a1 66%, #1bf700);
+	background-clip: text;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
 }
-.light .buttons a{
-    color: black !important;
-    font-weight:500;
-    border-radius: 4px;
-    border-top-left-radius: 0px;
-    border-top-right-radius: 0px;
+
+.light .buttons a {
+	color: black !important;
+	font-weight:500;
+	border-radius: 4px;
+	border-top-left-radius: 0px;
+	border-top-right-radius: 0px;
 }
-.light .websocketStatus{
-    color: green !important;
-    border: 1px solid #b3b3b3;
+
+.light .websocketStatus {
+	color: green !important;
+	border: 1px solid #b3b3b3;
 }
 
 @keyframes color {
-    0% {
-      background: rgba(255, 0, 0, 0);
-    }
-    50% {
-        background: yellow;
-    }
-    100% {
-        background: rgba(255, 0, 0, 0);
-    }
+	0% {
+	  background: rgba(255, 0, 0, 0);
+	}
+	50% {
+		background: yellow;
+	}
+	100% {
+		background: rgba(255, 0, 0, 0);
+	}
 }
-.reconnecting{
-    animation-name: color;
-    animation-duration: 2s;
-    animation-iteration-count: infinite;
+
+.reconnecting {
+	animation-name: color;
+	animation-duration: 2s;
+	animation-iteration-count: infinite;
 }
-.navbar a{
-    text-decoration: none;
+
+.navbar a {
+	text-decoration: none;
 }
+
 .navbar .buttons a {
-    color: white;
-    width: fit-content;
-    padding-left: 10px;
-    padding-right: 10px;
-    display: flex;
-    align-items: center;
+	color: white;
+	width: fit-content;
+	padding-left: 10px;
+	padding-right: 10px;
+	display: flex;
+	align-items: center;
 }
-.navbar .buttons a:hover, .red{
-    background: red;
+
+.navbar .buttons a:hover, .red {
+	background: red;
 }
-.navbar h3{
-    margin-left: 15px;
-    white-space: nowrap;
-    color: rgb(200, 238, 127);
+
+.navbar h3 {
+	margin-left: 15px;
+	white-space: nowrap;
+	color: rgb(200, 238, 127);
 }
-.navbar .buttons{
-    display: inline-flex;
+
+.navbar .buttons {
+	display: inline-flex;
 }

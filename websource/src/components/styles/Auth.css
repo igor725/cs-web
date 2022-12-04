@@ -1,124 +1,135 @@
-.authWindow{
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 350px;
-    height: 400px;
-    z-index: 999;
-    -webkit-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
+.authWindow {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	width: 350px;
+	height: 400px;
+	z-index: 999;
+	-webkit-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
 }
+
 .authWindowG{
-    display: none;
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    backdrop-filter: blur(6px);
-    z-index: 998;
-    background: rgba(46,46,46, 0.3)
+	display: none;
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	backdrop-filter: blur(6px);
+	z-index: 998;
+	background: rgba(46,46,46, 0.3)
 }
+
 .authWindowMain {
-    -webkit-backdrop-filter: blur(12px);
-    backdrop-filter: blur(12px);
-    background: #7a79ab70;
-    padding: 12px;
-    height: 100%;
-    align-items: center;
-    display: flex;
-    flex-direction: column;
+	-webkit-backdrop-filter: blur(12px);
+	backdrop-filter: blur(12px);
+	background: #7a79ab70;
+	padding: 12px;
+	height: 100%;
+	align-items: center;
+	display: flex;
+	flex-direction: column;
 }
+
 #userlogo {
-    font-size: 69px;
-    background: #ffffff38;
-    border-radius: 50%;
-    -webkit-backdrop-filter: blur(28px);
-    backdrop-filter: blur(28px);
-    width: 80px;
-    height: 80px;
-    text-align: center;
-    font-weight: 100;
-    margin-top: 35px;
+	font-size: 69px;
+	background: #ffffff38;
+	border-radius: 50%;
+	-webkit-backdrop-filter: blur(28px);
+	backdrop-filter: blur(28px);
+	width: 80px;
+	height: 80px;
+	text-align: center;
+	font-weight: 100;
+	margin-top: 35px;
 }
-#userlogo::before{
-    zoom: 0.9;
+
+#userlogo::before {
+	zoom: 0.9;
 }
-.authWindowMain h2{
-    margin: 0;
-    margin-top:28px;
-    font-size:24px;
-    font-weight: 100;
-    color: rgb(255, 255, 255);
+
+.authWindowMain h2 {
+	margin: 0;
+	margin-top:28px;
+	font-size:24px;
+	font-weight: 100;
+	color: rgb(255, 255, 255);
 }
+
 ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-    color: rgba(255, 255, 255, 0.39);
-    opacity: 1; /* Firefox */
+	color: rgba(255, 255, 255, 0.39);
+	opacity: 1; /* Firefox */
 }
+
 ::-ms-input-placeholder { /* Microsoft Edge */
-    color: white;
-  }
+	color: white;
+}
+
 #authPassword {
-    font-size: 18px;
-    border-top: none;
-    border-left: none;
-    border-right: none;
-    background: #ffffff00;
-    color: white;
-    border-color: white;
-    outline: none;
-    margin-top: 45px;
+	font-size: 18px;
+	border-top: none;
+	border-left: none;
+	border-right: none;
+	background: #ffffff00;
+	color: white;
+	border-color: white;
+	outline: none;
+	margin-top: 45px;
 }
-.loginBtn{
-    margin-top:10px;
-    width: 75px;
-    text-align: center;
+
+.loginBtn {
+	margin-top:10px;
+	width: 75px;
+	text-align: center;
 }
+
 #status {
-    height: 25px;
-    margin:0;
-    width: 223px;
-    color: #ff4141;
+	height: 25px;
+	margin:0;
+	width: 223px;
+	color: #ff4141;
 }
+
 .btn41-43 {
-    padding: 10px 25px;
-    font-family: "Roboto", sans-serif;
-    font-weight: 500;
-    background: transparent;
-    outline: none !important;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    position: relative;
-    display: inline-block;
-  }
-  
-  .btn-41 {
-    border: 2px solid rgb(255, 255, 255);
-    z-index: 1;
-    color: white;
-  }
-  
-  .btn-41:after {
-    position: absolute;
-    content: "";
-    width: 0;
-    height: 100%;
-    top: 0;
-    left: 0;
-    direction: rtl;
-    z-index: -1;
-    background: rgb(255, 255, 255);
-    transition: all 0.3s ease;
-  }
-  
-  .btn-41:hover {
-    color: rgb(0, 0, 0);
-  }
-  
-  .btn-41:hover:after {
-    left: auto;
-    right: 0;
-    width: 100%;
-  }
-  
-  .btn-41:active {
-    top: 2px;
-  }
+	padding: 10px 25px;
+	font-family: "Roboto", sans-serif;
+	font-weight: 500;
+	background: transparent;
+	outline: none !important;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	position: relative;
+	display: inline-block;
+}
+
+.btn-41 {
+	border: 2px solid rgb(255, 255, 255);
+	z-index: 1;
+	color: white;
+}
+
+.btn-41:after {
+	position: absolute;
+	content: "";
+	width: 0;
+	height: 100%;
+	top: 0;
+	left: 0;
+	direction: rtl;
+	z-index: -1;
+	background: rgb(255, 255, 255);
+	transition: all 0.3s ease;
+}
+
+.btn-41:hover {
+	color: rgb(0, 0, 0);
+}
+
+.btn-41:hover:after {
+	left: auto;
+	right: 0;
+	width: 100%;
+}
+
+.btn-41:active {
+	top: 2px;
+}
