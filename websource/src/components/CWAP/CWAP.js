@@ -184,7 +184,8 @@ function CWAP() {
         sendMessage(`O${name}\x000\x00`);
     }
     function sendConsole(value){
-        sendMessage(`C${value}`)
+        sendMessage(`C${value}`);
+        return value;
     }
     function switchState(path) {
         sendMessage(`S${state_paths[path]}\x00`);

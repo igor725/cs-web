@@ -3,11 +3,14 @@
 #include <websock.h>
 #include <platform.h>
 #include <netbuffer.h>
+#include <command.h>
+#include <strstor.h>
 #include <event.h>
 #include <list.h>
 #include <log.h>
 
 Plugin_SetVersion(1);
+Plugin_SetURL("https://github.com/igor725/cs-web");
 
 #define WL(I, T, ...) Log_##I("WebPanel: " T,  ##__VA_ARGS__)
 
@@ -227,7 +230,8 @@ static void handlewebsockmsg(struct _HttpClient *hc) {
 				break;
 
 			case 'C':
-				genpacket(&hc->nb, "Cs", "Not implemented yet");
+				if (!Command_Handle(readstr(&data), NULL))
+					genpacket(&hc->nb, "Cs", Sstor_Get("CMD_UNK"));
 				break;
 
 			case 'F':
