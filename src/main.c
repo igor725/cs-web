@@ -20,7 +20,7 @@ enum _HttpStatus {
 	CHS_REQUEST,
 	CHS_UPGRADING,
 	CHS_HEADERS,
-	CHS_BODY,
+	CHS_SENDFILE,
 	CHS_ERROR,
 	CHS_CLOSING,
 	CHS_CLOSED
@@ -49,6 +49,7 @@ static enum _WsState ustate(cs_char s) {
 struct _CplState {
 	enum _WsState wsstate;
 	cs_bool authed;
+	cs_char lasttc[13];
 };
 
 struct _HttpClient {
@@ -62,6 +63,8 @@ struct _HttpClient {
 	struct _CplState *cpls;
 };
 
+#define LOGLIST_SIZE 40
+
 static struct _WebState {
 	cs_bool stopped, alive;
 	Mutex *mutex;
@@ -69,9 +72,21 @@ static struct _WebState {
 	Socket fd;
 	AListField *clients;
 
+	struct _LogList {
+		cs_uint32 pos, cnt;
+		cs_str items[LOGLIST_SIZE];
+	} ll;
+
 	cs_uint32 ustates[WSS_MAXVAL];
 	cs_byte pwhash[33];
-} WebState;
+} WebState = {
+	.stopped = false,
+	.alive = false,
+	.clients = NULL,
+	.ll = {
+		.pos = 0, .cnt = 0, .items = {NULL}
+	}
+};
 
 static inline cs_bool checkhttp(cs_char *buffer) {
 	if (!Memory_Compare((void *)buffer, (void *)"GET /", 5)) return false;
@@ -209,6 +224,29 @@ static cs_bool runcommand(cs_byte *cmd) {
 	return Command_Handle((cs_char *)cmd, NULL);
 }
 
+static void sendconsolestate(struct _HttpClient *hc) {
+	cs_uint32 end = WebState.ll.pos + WebState.ll.cnt,
+	pos = WebState.ll.pos;
+	cs_char *lasttc = hc->cpls->lasttc;
+	for (cs_uint32 i = pos; *lasttc != '\0' && i < end; i++) {
+		if (String_CaselessCompare2(WebState.ll.items[i % LOGLIST_SIZE], lasttc, 12)) {
+			cs_uint32 diff = i - pos;
+			pos += diff; end -= diff;
+			break;
+		}
+	}
+	cs_uint32 cnt = end > pos ? end - pos : 0;
+	genpacket(&hc->nb, "SR^i", cnt);
+	if (cnt < 1) return;
+	for (cs_uint32 i = pos; i < end; i++) {
+		cs_str line = WebState.ll.items[i % LOGLIST_SIZE];
+		cs_uint32 linelen = (cs_uint32)String_Length(line) + 1;
+		String_Copy(NetBuffer_StartWrite(&hc->nb, linelen), linelen, line);
+		NetBuffer_EndWrite(&hc->nb, linelen);
+	}
+	// String_Copy(lasttc, 13, WebState.ll.items[(end % LOGLIST_SIZE) - 1]);
+}
+
 static void handlewebsockmsg(struct _HttpClient *hc) {
 	cs_byte *data = (cs_byte *)hc->wsh->payload;
 	while (hc->state < CHS_CLOSING && (data - (cs_byte *)hc->wsh->payload) < hc->wsh->paylen) {
@@ -268,6 +306,27 @@ static void handlewebsockmsg(struct _HttpClient *hc) {
 					break;
 				}
 				WebState.ustates[hc->cpls->wsstate]++;
+				switch (hc->cpls->wsstate) {
+					case WSS_HOME:
+						break;
+
+					case WSS_CONSOLE:
+						sendconsolestate(hc);
+						break;
+
+					case WSS_CFGEDIT:
+						break;
+					
+					case WSS_PLUGINS:
+						break;
+
+					default:
+					case WSS_MAXVAL:
+					case WSS_INVALID:
+						hc->state = CHS_CLOSING;
+						genpacket(&hc->nb, "NE^s", "Invalid state code received");
+						break;
+				}
 				WL(Debug, "State changed to %d", hc->cpls->wsstate);
 				break;
 
@@ -410,7 +469,7 @@ THREAD_FUNC(WebThread) {(void)param;
 								break;
 
 							case 0:
-								hc->state = CHS_BODY;
+								hc->state = CHS_SENDFILE;
 								break;
 
 							default:
@@ -423,7 +482,7 @@ THREAD_FUNC(WebThread) {(void)param;
 					}
 
 					break;
-				case CHS_BODY:
+				case CHS_SENDFILE:
 					applyheaders(&hc->nb, hc->code, File_Seek(hc->file, 0, SEEK_END), hc->type);
 					File_Seek(hc->file, 0, SEEK_SET);
 					while (!File_IsEnd(hc->file)) {
@@ -479,14 +538,24 @@ static void evtpoststart(void *p) {(void)p;
 }
 
 static void evtonlog(LogBuffer *lb) {
-	if (WebState.clients) {
-		if (lb->flag & LOG_DEBUG) return;
+	if (lb->flag & LOG_DEBUG) return;
 
+	cs_uint32 cpos = (WebState.ll.pos + WebState.ll.cnt) % LOGLIST_SIZE;
+	if (++WebState.ll.cnt > LOGLIST_SIZE) {
+		WebState.ll.cnt = LOGLIST_SIZE;
+		if (++WebState.ll.pos > (LOGLIST_SIZE - 1))
+			WebState.ll.pos = 0;
+	}
+	if (WebState.ll.items[cpos]) Memory_Free((void *)WebState.ll.items[cpos]);
+	WebState.ll.items[cpos] = String_AllocCopy(lb->data);
+
+	if (WebState.clients) {
 		AListField *tmp;
 		Mutex_Lock(WebState.mutex);
 		List_Iter(tmp, WebState.clients) {
 			struct _HttpClient *hc = AList_GetValue(tmp).ptr;
 			if (!hc->cpls || hc->cpls->wsstate != WSS_CONSOLE) continue;
+			String_Copy(hc->cpls->lasttc, 13, lb->data);
 			genpacket(&hc->nb, "Cs", lb->data);
 		}
 		Mutex_Unlock(WebState.mutex);
