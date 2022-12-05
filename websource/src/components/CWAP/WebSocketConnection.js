@@ -37,7 +37,7 @@ let WebSocket = () => {
 		},
 		share: true,
 		protocols: 'cserver-cpl',
-		reconnectInterval: 5,
+		reconnectInterval: 3,
 		reconnectAttempts: 15,
 		onReconnectStop: (attempts) => {
 			toast.error(`Unable to reconnect to a WebSocket.\nSeems like your server is down.\nRetiring after ${attempts} attempts`, {

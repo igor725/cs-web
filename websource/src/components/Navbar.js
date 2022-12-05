@@ -31,7 +31,7 @@ const Navbar = props => {
 				if (target.tagName === 'A') {
 					const path = target.getAttribute('href');
 					props.CWAP.switchState(path);
-					if (window.location.pathname != "/"){
+					if (window.location.pathname !== "/"){
 						closeWorld();
 					}
 				}
