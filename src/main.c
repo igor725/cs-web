@@ -5,6 +5,7 @@
 #include <netbuffer.h>
 #include <command.h>
 #include <strstor.h>
+#include <world.h>
 #include <event.h>
 #include <list.h>
 #include <log.h>
@@ -183,11 +184,15 @@ static void genpacket(NetBuffer *nb, cs_str fmt, ...) {
 			case 's':
 				temps = va_arg(args, cs_str);
 				size = (cs_int32)(String_Length(temps) + 1);
-				NetBuffer_EndWrite(nb, (cs_int32)String_Copy(NetBuffer_StartWrite(
-					nb, (cs_uint32)size), (cs_int32)size, temps
+				NetBuffer_EndWrite(nb, (cs_uint32)String_Copy(NetBuffer_StartWrite(
+					nb, (cs_uint32)size), (cs_uint32)size, temps
 				) + 1);
 				break;
 
+			case '^':
+				*NetBuffer_StartWrite(nb, 1) = '\0';
+				NetBuffer_EndWrite(nb, 1);
+				break;
 			default:
 				*NetBuffer_StartWrite(nb, 1) = *fmt;
 				NetBuffer_EndWrite(nb, 1);
@@ -209,7 +214,7 @@ static void handlewebsockmsg(struct _HttpClient *hc) {
 	while (hc->state < CHS_CLOSING && (data - (cs_byte *)hc->wsh->payload) < hc->wsh->paylen) {
 		if (!hc->cpls->authed) {
 			if (*data != 'A') {
-				genpacket(&hc->nb, "Nss", "E", "You need to log in first");
+				genpacket(&hc->nb, "NE^s", "You need to log in first");
 				break;
 			}
 
@@ -220,7 +225,7 @@ static void handlewebsockmsg(struct _HttpClient *hc) {
 			}
 
 			if (hc->wsh->paylen < 34) {
-				genpacket(&hc->nb, "Nss", "E", "Invalid auth packet received");
+				genpacket(&hc->nb, "NE^s", "Invalid auth packet received");
 				data += 34;
 				break;
 			}
@@ -247,12 +252,12 @@ static void handlewebsockmsg(struct _HttpClient *hc) {
 
 			case 'K':
 				readstr(&data);
-				genpacket(&hc->nb, "Psi", "R", 1);
+				genpacket(&hc->nb, "PR^i", 1);
 				break;
 
 			case 'O':
 				readstr(&data); readint(&data);
-				genpacket(&hc->nb, "Psii", "O", 1, 1);
+				genpacket(&hc->nb, "PO^ii", 1, 1);
 				break;
 
 			case 'S':
@@ -267,7 +272,7 @@ static void handlewebsockmsg(struct _HttpClient *hc) {
 				break;
 
 			default:
-				genpacket(&hc->nb, "Nss", "E", "Failed to handle unknown message");
+				genpacket(&hc->nb, "NE^s", "Failed to handle unknown message");
 				data += hc->wsh->paylen;
 				break;
 		}
@@ -489,9 +494,36 @@ static void evtonlog(void *param) {
 	}
 }
 
+static void evtenvupd(void *param) {
+	if (WebState.clients) {
+		preWorldEnvUpdate *pweu = param;
+		if ((pweu->values & CPE_WMODVAL_TEXPACK) == 0 &&
+			(pweu->values & CPE_WMODVAL_WEATHER) == 0) {
+				return;
+		}
+
+		AListField *tmp;
+		Mutex_Lock(WebState.mutex);
+		List_Iter(tmp, WebState.clients) {
+			struct _HttpClient *hc = AList_GetValue(tmp).ptr;
+			if (!hc->cpls || hc->cpls->wsstate != WSS_HOME) continue;
+			if (pweu->values & CPE_WMODVAL_TEXPACK) genpacket(&hc->nb,
+				"WT^ss", World_GetName(pweu->world),
+				World_GetTexturePack(pweu->world)
+			);
+			if (pweu->values & CPE_WMODVAL_WEATHER) genpacket(&hc->nb,
+				"WW^si", World_GetName(pweu->world),
+				World_GetWeather(pweu->world)
+			);
+		}
+		Mutex_Unlock(WebState.mutex);
+	}
+}
+
 Event_DeclareBunch(events) {
 	EVENT_BUNCH_ADD('v', EVT_POSTSTART, evtpoststart),
 	EVENT_BUNCH_ADD('v', EVT_ONLOG, evtonlog),
+	EVENT_BUNCH_ADD('v', EVT_PREWORLDENVUPDATE, evtenvupd),
 
 	EVENT_BUNCH_END
 };
