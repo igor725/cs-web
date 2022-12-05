@@ -131,14 +131,16 @@
 .world, .worldBG {
 	transition-duration: 1.2s;
 }
+
 .world h2{
 	transition: all 1.3s ease;;
-
 }
+
 .world-grid:hover .world h2{
 	background: white;
 	color:black;
 }
+
 .world-grid:hover .world .worldBG {
 	box-shadow: 0 1px 12px rgba(0, 0, 0, 1);
 	-webkit-filter: blur(4px);

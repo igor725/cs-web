@@ -23,8 +23,14 @@ body {
 	background: #f6f6f6;
 }
 
+.selected{
+	font-weight: bold !important;
+	border-bottom: 4px solid black;;
+}
+
 .light h3{
-	background: linear-gradient(45deg, #ff0000 33%, #0048a1 66%, #1bf700);
+	background: black;
+	font-weight: 400;
 	background-clip: text;
 	-webkit-background-clip: text;
 	-webkit-text-fill-color: transparent;
@@ -33,7 +39,6 @@ body {
 .light .buttons a {
 	color: black !important;
 	font-weight:500;
-	border-radius: 4px;
 	border-top-left-radius: 0px;
 	border-top-right-radius: 0px;
 }
@@ -74,7 +79,7 @@ body {
 	align-items: center;
 }
 
-.navbar .buttons a:hover, .red {
+.navbar .buttons a:hover {
 	background: red;
 }
 

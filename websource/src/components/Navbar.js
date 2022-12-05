@@ -14,10 +14,16 @@ const Navbar = props => {
 	const currentLocation = useLocation().pathname;
 
 	useEffect(() => {
-		if (prev_colored) prev_colored.classList.remove('red');
+		if (prev_colored){
+			prev_colored.className = "";
+		}
 		var els = document.querySelectorAll(`a[href='${currentLocation}']`)[0];
-		if (els !== undefined) {
-			els.classList.add('red');
+		if ((els !== undefined)) {
+			if (isDarkMode){
+				els.classList.add('red');
+			} else{
+				els.classList.add("selected")
+			}
 			prev_colored = els;
 		}
 	});

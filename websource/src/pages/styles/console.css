@@ -137,16 +137,15 @@
 }
 
 #console-out div {
-	background-color: #0000;
 	transition: background-color 0.4s ease-in;
 }
 
 .darkmode #console-out div:hover {
-	background-color: #4d4c50;
+	background-color: #4d5568;
 }
 
 .lightmode #console-out div:hover {
-	background-color: #4d4c501a;
+	background-color: #7c7c7c3d;
 }
 
 .dot {

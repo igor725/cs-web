@@ -11,7 +11,7 @@ h1, h2, h3, a{
     grid-template-columns: 0fr 0fr;
     justify-content: center;
 }
-html, body{
+html{
 	scrollbar-color: #222;
   	scrollbar-width: none;
 }
