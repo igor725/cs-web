@@ -6,15 +6,6 @@ import { prev_player } from './PlayersList';
 let worldOpened;
 let worldOpenedName;
 
-let status;
-let size;
-let spawn;
-let name
-let seed;
-let textures;
-let weather;
-let players = [];
-
 export let closeWorld = () =>{
 	worldOpened = false
 }
@@ -37,28 +28,28 @@ const Worlds = props => {
 					<table>
 						<tbody>
 							<tr>
-								<th style={{ textAlign: 'right' }}>Status: </th>
-								<th id='wStatus' style={{ textAlign: 'left' }}>{props.status}</th>
+								<td>Status: </td>
+								<td id='wStatus'>{props.status}</td>
 							</tr>
 							<tr>
-								<th style={{ textAlign: 'right' }}>Size: </th>
-								<th id='wSize' style={{ textAlign: 'left' }}>{props.size}</th>
+								<td>Size: </td>
+								<td id='wSize'>{props.size}</td>
 							</tr>
 							<tr>
-								<th style={{ textAlign: 'right' }}>Spawn: </th>
-								<th id='wSpawn' style={{ textAlign: 'left' }}>{props.spawn}</th>
+								<td>Spawn: </td>
+								<td id='wSpawn'>{props.spawn}</td>
 							</tr>
 							<tr>
-								<th style={{ textAlign: 'right' }}>Seed: </th>
-								<th id='wSeed' style={{ textAlign: 'left' }}>{props.seed}</th>
+								<td>Seed: </td>
+								<td id='wSeed'>{props.seed}</td>
 							</tr>
 							<tr>
-								<th style={{ textAlign: 'right' }}>Textures: </th>
-								<th id='wTexturePack' style={{ textAlign: 'left' }}>{props.textures}</th>
+								<td>Textures: </td>
+								<td id='wTexturePack'>{props.texturepack}</td>
 							</tr>
 							<tr>
-								<th style={{ textAlign: 'right' }}>Weather: </th>
-								<th id='wWeather' style={{ textAlign: 'left' }}>{props.weather}</th>
+								<td>Weather: </td>
+								<td id='wWeather'>{props.weather}</td>
 							</tr>
 						</tbody>
 					</table>
@@ -78,7 +69,7 @@ const Worlds = props => {
 	useEffect(() => {
 		const listElement = document.getElementById('pList2');
 		worldsEl = document.getElementsByClassName('worlds')[0];
-		// listElement.onscroll = (e) => prev_player && prev_player.classList.remove('show');
+		listElement.onscroll = (e) => prev_player && prev_player.classList.remove('show');
 	});
 	const closeExpand = (worldsEl) => {
 		worldsEl.classList.remove('extend');

@@ -65,6 +65,7 @@
 }
 
 #console-out, #console-in {
+	scrollbar-width: none; /* For Firefox */
 	overflow: auto;
 	border: 1px solid #4d4c50;
 	border-bottom: none;

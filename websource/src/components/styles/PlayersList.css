@@ -25,7 +25,6 @@
 	transition: 1s;
 	display: grid;
 	justify-self: end;
-	margin-right: 30px;
 	grid-template-rows: 0fr 1fr;
 	width: 300px;
 	border: 1px solid rgb(56, 56, 56);
@@ -39,7 +38,9 @@
 	margin: 0 auto;
 	text-align: center;
 }
-
+.plist, #plist{
+	scrollbar-width: thin;
+}
 .playersOnline ul, .plist {
 	overflow-y: auto;
 	list-style: none;

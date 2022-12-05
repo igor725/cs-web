@@ -1,18 +1,25 @@
 .worlds {
-	border: 1px solid rgb(56, 56, 56);
-	border-radius: 12px;
-	height: 650px;
-	max-height: 500px;
-	max-width: 865px;
-	min-width: 600px;
-	justify-self: center;
-	background: rgb(46, 46, 46);
-	overflow-y:scroll;
-	transition: 1s;
+    border: 1px solid rgb(56, 56, 56);
+    border-radius: 12px;
+    height: 650px;
+    max-height: 500px;
+    justify-self: center;
+    background: rgb(46, 46, 46);
+    overflow-y: scroll;
+    transition: 1s;
+    width: 60%;
+    min-width: 700px;
+	scrollbar-width: none; /* For Firefox */
 }
+
 .worlds::-webkit-scrollbar {
 	display: none;
-  }
+}
+
+.lightmode .world-grid{
+	background: #d1cbd3;
+}
+
 .world-grid {
     background: #3a373a;
     display: grid;
@@ -52,12 +59,15 @@
 	color: black;
 }
 
-.worldCart_info table {
-    margin-top: 15px;
-    margin-left: 10px;
+.worldCart_info table td{
+	font-weight: bold;
+	/* font-family: "Roboto"; */
+	padding: 0px 2px 5px 10px;
 }
+
 .worldCart_info {
 	color: rgb(219, 219, 219);
+	margin-left: 10px;
 }
 
 .worlds_list {
@@ -121,10 +131,13 @@
 .world, .worldBG {
 	transition-duration: 1.2s;
 }
+.world h2{
+	transition: all 1.3s ease;;
+
+}
 .world-grid:hover .world h2{
 	background: white;
 	color:black;
-	transition: all 1.3s ease;;
 }
 .world-grid:hover .world .worldBG {
 	box-shadow: 0 1px 12px rgba(0, 0, 0, 1);
