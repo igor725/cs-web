@@ -125,12 +125,11 @@ export let processCommand = (data) => {
 						data_splitted.splice(0, 4);
 						break;
 					case 'R':
-						let logsCount = parseInt(data_splitted[1], 10);
-						for (let i = 2; ; i++) {
-							if (!data_splitted[i]) break;
+						const logsCount = parseInt(data_splitted[1], 10);
+						const endLogs = logsCount + 2;
+						for (let i = 2; i < endLogs; i++)
 							writeInConsole(data_splitted[i]);
-						}
-						data_splitted.splice(0, logsCount + 3);
+						data_splitted.splice(0, endLogs);
 						break;
 					case 'C':
 						let configStrsCount = data_splitted[1];

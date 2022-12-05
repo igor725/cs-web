@@ -121,7 +121,7 @@
 	width:75px;
 }
 
-.lightmode .console-top{
+.lightmode .console-top {
 	background: #edeeee;
 }
 
@@ -134,6 +134,19 @@
 	display: grid;
 	grid-template-columns: 0fr 1fr;
 	background: #39383b;
+}
+
+#console-out div {
+	background-color: #0000;
+	transition: background-color 0.4s ease-in;
+}
+
+.darkmode #console-out div:hover {
+	background-color: #4d4c50;
+}
+
+.lightmode #console-out div:hover {
+	background-color: #4d4c501a;
 }
 
 .dot {
