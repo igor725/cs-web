@@ -38,7 +38,7 @@ const Navbar = props => {
 			}}
 			>
 				<Link to='/'> Home </Link>
-				<Link to='/console'> Console </Link>
+				<Link to='/console'> Terminal </Link>
 				<Link to='/configeditor'> Config Editor </Link>
 				<Link to='/pluginmanager'> Plugin Manager</Link>
 				<DarkModeToggle

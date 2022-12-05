@@ -128,7 +128,7 @@ export let processCommand = (data) => {
 						let logsCount = parseInt(data_splitted[1], 10);
 						for (let i = 2; ; i++) {
 							if (!data_splitted[i]) break;
-							console.log('Log string: ', data_splitted[i]);
+							writeInConsole(data_splitted[i]);
 						}
 						data_splitted.splice(0, logsCount + 3);
 						break;
