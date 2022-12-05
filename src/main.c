@@ -231,11 +231,13 @@ static void sendconsolestate(struct _HttpClient *hc) {
 	for (cs_uint32 i = pos; *lasttc != '\0' && i < end; i++) {
 		if (String_CaselessCompare2(WebState.ll.items[i % LOGLIST_SIZE], lasttc, 12)) {
 			cs_uint32 diff = i - pos;
-			pos += diff; end -= diff;
+			pos += diff + 1;
+			if (pos >= end)
+				pos = end;
 			break;
 		}
 	}
-	cs_uint32 cnt = end > pos ? end - pos : 0;
+	cs_uint32 cnt = end - pos;
 	genpacket(&hc->nb, "SR^i", cnt);
 	if (cnt < 1) return;
 	for (cs_uint32 i = pos; i < end; i++) {
@@ -244,7 +246,7 @@ static void sendconsolestate(struct _HttpClient *hc) {
 		String_Copy(NetBuffer_StartWrite(&hc->nb, linelen), linelen, line);
 		NetBuffer_EndWrite(&hc->nb, linelen);
 	}
-	// String_Copy(lasttc, 13, WebState.ll.items[(end % LOGLIST_SIZE) - 1]);
+	String_Copy(lasttc, 13, WebState.ll.items[(end % LOGLIST_SIZE) - 1]);
 }
 
 static void handlewebsockmsg(struct _HttpClient *hc) {
