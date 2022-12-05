@@ -478,9 +478,8 @@ static void evtpoststart(void *p) {(void)p;
 	WL(Info, "Listener started on *:8887");
 }
 
-static void evtonlog(void *param) {
+static void evtonlog(LogBuffer *lb) {
 	if (WebState.clients) {
-		LogBuffer *lb = param;
 		if (lb->flag & LOG_DEBUG) return;
 
 		AListField *tmp;
@@ -494,9 +493,8 @@ static void evtonlog(void *param) {
 	}
 }
 
-static void evtenvupd(void *param) {
+static void evtpreenvupd(preWorldEnvUpdate *pweu) {
 	if (WebState.clients) {
-		preWorldEnvUpdate *pweu = param;
 		if ((pweu->values & CPE_WMODVAL_TEXPACK) == 0 &&
 			(pweu->values & CPE_WMODVAL_WEATHER) == 0) {
 				return;
@@ -520,10 +518,69 @@ static void evtenvupd(void *param) {
 	}
 }
 
+static void evtonwstatus(World *world) {
+	if (WebState.clients) {
+		AListField *tmp;
+		Mutex_Lock(WebState.mutex);
+		List_Iter(tmp, WebState.clients) {
+			struct _HttpClient *hc = AList_GetValue(tmp).ptr;
+			if (!hc->cpls || hc->cpls->wsstate != WSS_HOME) continue;
+			genpacket(&hc->nb, "WS^si", World_GetName(world), World_IsReadyToPlay(world));
+		}
+		Mutex_Unlock(WebState.mutex);
+	}
+}
+
+static void evtonhs(onHandshakeDone *ohd) {
+	if (WebState.clients) {
+		AListField *tmp;
+		Mutex_Lock(WebState.mutex);
+		List_Iter(tmp, WebState.clients) {
+			struct _HttpClient *hc = AList_GetValue(tmp).ptr;
+			if (!hc->cpls || hc->cpls->wsstate != WSS_HOME) continue;
+			genpacket(&hc->nb, "PA^isis",
+				Client_GetID(ohd->client), Client_GetName(ohd->client),
+				Client_IsOP(ohd->client), World_GetName(ohd->world)
+			);
+		}
+		Mutex_Unlock(WebState.mutex);
+	}
+}
+
+static void evtondisc(Client *client) {
+	if (WebState.clients) {
+		AListField *tmp;
+		Mutex_Lock(WebState.mutex);
+		List_Iter(tmp, WebState.clients) {
+			struct _HttpClient *hc = AList_GetValue(tmp).ptr;
+			if (!hc->cpls || hc->cpls->wsstate != WSS_HOME) continue;
+			genpacket(&hc->nb, "PR^i", Client_GetID(client));
+		}
+		Mutex_Unlock(WebState.mutex);
+	}
+}
+
+static void evtonspawn(onSpawn *os) {
+	if (WebState.clients) {
+		AListField *tmp;
+		Mutex_Lock(WebState.mutex);
+		List_Iter(tmp, WebState.clients) {
+			struct _HttpClient *hc = AList_GetValue(tmp).ptr;
+			if (!hc->cpls || hc->cpls->wsstate != WSS_HOME) continue;
+			genpacket(&hc->nb, "PW^is", Client_GetID(os->client), World_GetName(Client_GetWorld(os->client)));
+		}
+		Mutex_Unlock(WebState.mutex);
+	}
+}
+
 Event_DeclareBunch(events) {
 	EVENT_BUNCH_ADD('v', EVT_POSTSTART, evtpoststart),
 	EVENT_BUNCH_ADD('v', EVT_ONLOG, evtonlog),
-	EVENT_BUNCH_ADD('v', EVT_PREWORLDENVUPDATE, evtenvupd),
+	EVENT_BUNCH_ADD('v', EVT_PREWORLDENVUPDATE, evtpreenvupd),
+	EVENT_BUNCH_ADD('v', EVT_ONWORLDSTATUSCHANGE, evtonwstatus),
+	EVENT_BUNCH_ADD('v', EVT_ONHANDSHAKEDONE, evtonhs),
+	EVENT_BUNCH_ADD('v', EVT_ONDISCONNECT, evtondisc),
+	EVENT_BUNCH_ADD('v', EVT_ONSPAWN, evtonspawn),
 
 	EVENT_BUNCH_END
 };
