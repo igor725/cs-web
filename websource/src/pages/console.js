@@ -17,7 +17,7 @@ var convert = new Convert({
 	}
 });
 
-let messages = [];
+let messages = [], history = [], hispos = 0;
 export let writeInConsole = () => {};
 
 const Console = ({ CWAP }) => {
@@ -61,14 +61,30 @@ const Console = ({ CWAP }) => {
 				<div className='inputting-field'>
 					<p className='console-in-dot'> &gt; </p>
 					<input name='input-mac' id='console-in' type='text' onKeyDown={(e) => {
-						const text = document.getElementById('console-out');
-						if (e.key === 'Enter') {
-							const input_el = document.getElementById('console-in');
-							if (input_el.value.length > 0) {
-								pushMessage(<div> &gt; {CWAP.sendConsole(input_el.value)}</div>);
-								input_el.value = '';
-								setTimeout(() => text.scrollTop = text.scrollHeight, 100);
-							}
+						const input_el = document.getElementById('console-in');
+
+						switch (e.key) {
+							case 'Enter':
+								const text = document.getElementById('console-out');
+								if (input_el.value.length > 0) {
+									pushMessage(<div> &gt; {CWAP.sendConsole(input_el.value)}</div>);
+									hispos = 0;
+									history.push(input_el.value);
+									console.log(history);
+									input_el.value = '';
+									setTimeout(() => text.scrollTop = text.scrollHeight, 100);
+								}
+								break;
+							case 'ArrowUp':
+								if (history.length === 0) break;
+								if (--hispos < 0) hispos = history.length - 1;
+								input_el.value = history[hispos];
+								break;
+							case 'ArrowDown':
+								if (history.length === 0) break;
+								if (++hispos >= history.length) hispos = 0;
+								input_el.value = history[hispos];
+								break;
 						}
 					}} autoComplete='off'/>
 				</div>

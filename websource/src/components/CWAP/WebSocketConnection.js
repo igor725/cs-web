@@ -16,7 +16,7 @@ let WebSocket = () => {
 		>
 			Retry
 		</button>
-	  );
+	);
 	const {
 		sendMessage,
 		lastMessage,
@@ -25,7 +25,7 @@ let WebSocket = () => {
 		onOpen: () => {
 			document.getElementsByClassName('websocketStatus')[0].title = `WebSocket connection: ${ReadyState[readyState]}`;
 			document.getElementsByClassName('websocketStatus')[0].style.background = connectionStatus;
-			sendMessage('ATEST\x00');
+			sendMessage('ATEST\x00', false);
 		},
 		onError: (err) => {
 			toast.error(err);

@@ -130,6 +130,8 @@ export let processCommand = (data) => {
 						for (let i = 2; i < endLogs; i++)
 							writeInConsole(data_splitted[i]);
 						data_splitted.splice(0, endLogs);
+						const cout = document.getElementById('console-out');
+						cout.scrollTop = cout.scrollHeight;
 						break;
 					case 'C':
 						let configStrsCount = data_splitted[1];
@@ -194,13 +196,13 @@ let CWAP = () => {
 	return ({
 		getAnswer: () => { return lastMessage && lastMessage.data.text(); },
 
-		sendAuth: (hash) => sendMessage(`A${hash}\x00`),
-		banPlayer: (name) => sendMessage(`B${name}\x00Banned by WebAdmin\x000\x00`),
-		kickPlayer: (name) => sendMessage(`K${name}\x00`),
-		opPlayer: (name) => sendMessage(`O${name}\x001\x00`),
-		deopPlayer: (name) => sendMessage(`O${name}\x000\x00`),
-		switchState: (path) => { console.log('switch state to ', path); sendMessage(`S${state_paths[path]}\x00`); },
-		sendConsole: (value) => { sendMessage(`C${value}\x00`); return value; }
+		sendAuth: (hash) => sendMessage(`A${hash}\x00`, false),
+		banPlayer: (name) => sendMessage(`B${name}\x00Banned by WebAdmin\x000\x00`, false),
+		kickPlayer: (name) => sendMessage(`K${name}\x00`, false),
+		opPlayer: (name) => sendMessage(`O${name}\x001\x00`, false),
+		deopPlayer: (name) => sendMessage(`O${name}\x000\x00`, false),
+		switchState: (path) => { console.log('switch state to ', path); sendMessage(`S${state_paths[path]}\x00`, false); },
+		sendConsole: (value) => { sendMessage(`C${value}\x00`, false); return value; }
 	});
 }
 
