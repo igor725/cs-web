@@ -1,6 +1,11 @@
+html, body{
+	height: 100%;
+}
+#root, #main{
+	height: 100%;
+}
 .lightmode {
-	background: rgb(246, 246, 246);
-	/* background-color: #fff; */
+	background: white;
 }
 
 .darkmode {
@@ -9,5 +14,4 @@
 
 .lightmode, .darkmode {
 	overflow: hidden;
-	height: 94vh;
 }

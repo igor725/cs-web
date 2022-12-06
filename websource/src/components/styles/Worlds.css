@@ -25,6 +25,7 @@
     display: grid;
     grid-template-columns: 0fr 1fr 1fr;
     padding: 10px;
+	border-radius:12px;
 }
 
 .worldCart_players {
@@ -41,13 +42,6 @@
 	-webkit-box-shadow: 4px 4px 23px 33px rgba(0, 0, 0, 0.2) inset !important;
 	-moz-box-shadow: 4px 4px 23px 33px rgba(0, 0, 0, 0.2) inset !important;
 	box-shadow: 4px 4px 23px 33px rgba(0, 0, 0, 0.2) inset !important;
-}
-
-/* Сам див с мирами */
-.worlds:hover {
-	box-shadow: 0px 6px 18px 5px rgba(0, 0, 0, 0.75);
-	-webkit-box-shadow: 0px 6px 18px 5px rgba(0, 0, 0, 0.75);
-	-moz-box-shadow: 0px 6px 18px 5px rgba(0, 0, 0, 0.75);
 }
 
 .lightmode .worlds {
@@ -74,6 +68,7 @@
 	grid-auto-flow: row;
 	display: grid;
 	grid-gap: 33px;
+	padding: 12px;
 }
 
 .lightmode #wName {

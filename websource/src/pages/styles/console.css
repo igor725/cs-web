@@ -48,12 +48,28 @@
 }
 
 .lightmode .console-top{
-	border: none;
+	border: 1px solid #c7c7c7;
 }
 
 .lightmode #console-out, .lightmode #console-in, .lightmode .console-in-dot{
 	background: #ffffff;
-	border: none !important;
+}
+.lightmode #console-out {
+	border: 1px solid #c7c7c7 !important;
+	border-bottom: none !important;
+}
+
+.lightmode .console-in-dot{
+	border: 1px solid #c7c7c7 !important;
+	border-right: none !important;
+	border-top: none !important;
+}
+
+.lightmode #console-in {
+	border: 1px solid #c7c7c7 !important;
+	border-left: none !important;
+	border-top: none !important;
+
 }
 
 #console-out{

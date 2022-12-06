@@ -20,20 +20,19 @@ body {
 }
 
 .light {
-	background: #f6f6f6;
+	background: #ffffff;
 }
 
 .selected{
 	font-weight: bold !important;
-	border-bottom: 4px solid black;;
+	border-bottom: 4px solid black;
 }
 
-.light h3{
-	background: black;
-	font-weight: 400;
-	background-clip: text;
-	-webkit-background-clip: text;
-	-webkit-text-fill-color: transparent;
+.light h3 {
+    font-weight: 400;
+    background-clip: text;
+    color: black !important;
+
 }
 
 .light .buttons a {
@@ -82,7 +81,10 @@ body {
 .navbar .buttons a:hover {
 	background: red;
 }
-
+.light .buttons a:hover {
+	background: none;
+	border-bottom: 4px solid black;
+}
 .navbar h3 {
 	margin-left: 15px;
 	white-space: nowrap;
