@@ -7,7 +7,7 @@ import './styles/WSC.css';
 // который импортирует из ЭТОГО файла
 import { processCommand } from './CWAP';
 
-const socketUrl = `ws://127.0.0.1:8888/ws`;
+const socketUrl = `ws://127.0.0.1:8887/ws`;
 let WebSocket = () => {
 	const reconnectBtn = ({ closeToast }) => (
 		<button
@@ -52,7 +52,8 @@ let WebSocket = () => {
 				progress: undefined,
 				theme: ((window.localStorage.getItem('DARKMODE_STATE') === 'true') || false ? 'dark':'light'),
 			});
-		}
+		},
+		shouldReconnect: () => true
 	});
 	const connectionStatus = {
 		[ReadyState.CONNECTING]: 'yellow',
