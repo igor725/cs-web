@@ -9,6 +9,7 @@
 #include <event.h>
 #include <list.h>
 #include <log.h>
+#include <config.h>
 
 Plugin_SetVersion(1);
 Plugin_SetURL("https://github.com/igor725/cs-web");
@@ -68,6 +69,7 @@ struct _HttpClient {
 static struct _WebState {
 	cs_bool stopped, alive;
 	Mutex *mutex;
+	CStore *cfg;
 	Thread thread;
 	Socket fd;
 	AListField *clients;
@@ -522,9 +524,18 @@ THREAD_FUNC(WebThread) {(void)param;
 }
 
 static void evtpoststart(void *p) {(void)p;
+	if (!Config_GetBoolByKey(WebState.cfg, "enabled")) return;
+	cs_str ip = Config_GetStrByKey(WebState.cfg, "ip");
+	cs_uint16 port = (cs_uint16)Config_GetInt16ByKey(WebState.cfg, "port");
+	// cs_str password = Config_GetStrByKey(WebState.cfg, "password");
+	String_Copy((cs_char *)WebState.pwhash, 33, "098f6bcd4621d373cade4e832627b4f6");
+
+	WebState.mutex = Mutex_Create();
+	WebState.thread = Thread_Create(WebThread, NULL, false);
 	WebState.fd = Socket_New();
+
 	struct sockaddr_in ssa;
-	if (Socket_SetAddr(&ssa, "0.0.0.0", 8887) < 0) {
+	if (Socket_SetAddr(&ssa, ip, port) < 0) {
 		Socket_Close(WebState.fd);
 		WL(Error, "Failed to set socket address");
 		return;
@@ -538,16 +549,16 @@ static void evtpoststart(void *p) {(void)p;
 
 	if (!Socket_Bind(WebState.fd, &ssa)) {
 		Socket_Close(WebState.fd);
-		WL(Error, "Failed to bind port 8887");
+		WL(Error, "Failed to bind %s:%d", ip, port);
 		return;
 	}
 
 	WebState.alive = true;
-	WL(Info, "Listener started on *:8887");
+	WL(Info, "Listener started on %s:%d", ip, port);
 }
 
 static void evtonlog(LogBuffer *lb) {
-	if (lb->flag & LOG_DEBUG) return;
+	if (!WebState.alive || lb->flag & LOG_DEBUG) return;
 
 	cs_uint32 cpos = (WebState.ll.pos + WebState.ll.cnt) % LOGLIST_SIZE;
 	if (++WebState.ll.cnt > LOGLIST_SIZE) {
@@ -572,7 +583,7 @@ static void evtonlog(LogBuffer *lb) {
 }
 
 static void evtpreenvupd(preWorldEnvUpdate *pweu) {
-	if (WebState.clients) {
+	if (WebState.alive && WebState.clients) {
 		if ((pweu->values & CPE_WMODVAL_TEXPACK) == 0 &&
 			(pweu->values & CPE_WMODVAL_WEATHER) == 0) {
 				return;
@@ -597,7 +608,7 @@ static void evtpreenvupd(preWorldEnvUpdate *pweu) {
 }
 
 static void evtonwstatus(World *world) {
-	if (WebState.clients) {
+	if (WebState.alive && WebState.clients) {
 		AListField *tmp;
 		Mutex_Lock(WebState.mutex);
 		List_Iter(tmp, WebState.clients) {
@@ -610,7 +621,7 @@ static void evtonwstatus(World *world) {
 }
 
 static void evtonhs(onHandshakeDone *ohd) {
-	if (WebState.clients) {
+	if (WebState.alive && WebState.clients) {
 		AListField *tmp;
 		Mutex_Lock(WebState.mutex);
 		List_Iter(tmp, WebState.clients) {
@@ -626,7 +637,7 @@ static void evtonhs(onHandshakeDone *ohd) {
 }
 
 static void evtondisc(Client *client) {
-	if (WebState.clients) {
+	if (WebState.alive && WebState.clients) {
 		AListField *tmp;
 		Mutex_Lock(WebState.mutex);
 		List_Iter(tmp, WebState.clients) {
@@ -639,13 +650,26 @@ static void evtondisc(Client *client) {
 }
 
 static void evtonspawn(onSpawn *os) {
-	if (WebState.clients) {
+	if (WebState.alive && WebState.clients) {
 		AListField *tmp;
 		Mutex_Lock(WebState.mutex);
 		List_Iter(tmp, WebState.clients) {
 			struct _HttpClient *hc = AList_GetValue(tmp).ptr;
 			if (!hc->cpls || hc->cpls->wsstate != WSS_HOME) continue;
 			genpacket(&hc->nb, "PW^is", Client_GetID(os->client), World_GetName(Client_GetWorld(os->client)));
+		}
+		Mutex_Unlock(WebState.mutex);
+	}
+}
+
+static void evtonutype(Client *client) {
+	if (WebState.alive && WebState.clients) {
+		AListField *tmp;
+		Mutex_Lock(WebState.mutex);
+		List_Iter(tmp, WebState.clients) {
+			struct _HttpClient *hc = AList_GetValue(tmp).ptr;
+			if (!hc->cpls || hc->cpls->wsstate != WSS_HOME) continue;
+			genpacket(&hc->nb, "PO^ii", Client_GetID(client), Client_IsOP(client));
 		}
 		Mutex_Unlock(WebState.mutex);
 	}
@@ -659,22 +683,51 @@ Event_DeclareBunch(events) {
 	EVENT_BUNCH_ADD('v', EVT_ONHANDSHAKEDONE, evtonhs),
 	EVENT_BUNCH_ADD('v', EVT_ONDISCONNECT, evtondisc),
 	EVENT_BUNCH_ADD('v', EVT_ONSPAWN, evtonspawn),
+	EVENT_BUNCH_ADD('v', EVT_ONUSERTYPECHANGE, evtonutype),
 
 	EVENT_BUNCH_END
 };
 
 cs_bool Plugin_Load(void) {
-	String_Copy((cs_char *)WebState.pwhash, 33, "098f6bcd4621d373cade4e832627b4f6");
-	WebState.mutex = Mutex_Create();
-	WebState.thread = Thread_Create(WebThread, NULL, false);
+	WebState.cfg = Config_NewStore("web");
+
+	CEntry *ent;
+	ent = Config_NewEntry(WebState.cfg, "enabled", CONFIG_TYPE_BOOL);
+	Config_SetComment(ent, "Enable web admin");
+	Config_SetDefaultBool(ent, false);
+
+	ent = Config_NewEntry(WebState.cfg, "ip", CONFIG_TYPE_STR);
+	Config_SetComment(ent, "WebAdmin service ip (0.0.0.0 means \"all available network adapters\")");
+	Config_SetDefaultStr(ent, "0.0.0.0");
+
+	ent = Config_NewEntry(WebState.cfg, "port", CONFIG_TYPE_INT16);
+	Config_SetComment(ent, "WebAdmin service port");
+	Config_SetDefaultInt16(ent, 8888);
+
+	ent = Config_NewEntry(WebState.cfg, "password", CONFIG_TYPE_STR);
+	Config_SetComment(ent, "WebAdmin password (empty means no password required)");
+	Config_SetDefaultStr(ent, "");
+
+	if (!Config_Load(WebState.cfg)) {
+		WL(Error, "Failed to parse config file, resetting to default values");
+		Config_ResetToDefault(WebState.cfg);
+		Config_Save(WebState.cfg, true);
+	}
+
 	return Event_RegisterBunch(events);
 }
 
 cs_bool Plugin_Unload(cs_bool force) {(void)force;
+	Config_Save(WebState.cfg, false);
+	Config_DestroyStore(WebState.cfg);
 	Event_UnregisterBunch(events);
-	WebState.stopped = true;
-	Thread_Join(WebState.thread);
-	Socket_Close(WebState.fd);
-	Mutex_Free(WebState.mutex);
+
+	if (WebState.alive) {
+		WebState.stopped = true;
+		Thread_Join(WebState.thread);
+		Socket_Close(WebState.fd);
+		Mutex_Free(WebState.mutex);
+	}
+
 	return true;
 }
