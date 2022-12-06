@@ -31,6 +31,23 @@ enum _WsState {
 	WSS_MAXVAL
 };
 
+enum _SerCommand {
+	SERC_ENABLE,
+	SERC_DISABLE,
+	SERC_START,
+	SERC_STOP,
+	SERC_RELOAD,
+	SERC_STATUS,
+};
+
+enum _SerResponse {
+	SERR_ON,
+	SERR_OFF,
+
+	SERR_OK,
+	SERR_FAIL
+};
+
 struct _CplState {
 	enum _WsState wsstate;
 	cs_bool authed;
@@ -69,7 +86,9 @@ struct _WebState {
 
 extern struct _WebState WebState;
 extern EventRegBunch events[];
+extern CommandRegBunch cmds[];
 void genpacket(NetBuffer *nb, cs_str fmt, ...);
 void handlewebsockmsg(struct _HttpClient *hc);
+cs_int32 service(enum _SerCommand sc);
 TRET WebThread(TARG);
 #endif

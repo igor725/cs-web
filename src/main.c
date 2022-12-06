@@ -2,6 +2,7 @@
 #include <websock.h>
 #include <platform.h>
 #include <netbuffer.h>
+#include <command.h>
 #include <config.h>
 
 #include "plhdr.h"
@@ -42,20 +43,15 @@ cs_bool Plugin_Load(void) {
 		Config_Save(WebState.cfg, true);
 	}
 
-	return Event_RegisterBunch(events);
+	return Event_RegisterBunch(events) &&
+	Command_RegisterBunch(cmds);
 }
 
 cs_bool Plugin_Unload(cs_bool force) {(void)force;
 	Config_Save(WebState.cfg, false);
 	Config_DestroyStore(WebState.cfg);
 	Event_UnregisterBunch(events);
-
-	if (WebState.alive) {
-		WebState.stopped = true;
-		Thread_Join(WebState.thread);
-		Socket_Close(WebState.fd);
-		Mutex_Free(WebState.mutex);
-	}
-
+	Command_UnregisterBunch(cmds);
+	service(SERC_STOP);
 	return true;
 }

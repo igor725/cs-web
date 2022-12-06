@@ -1,3 +1,4 @@
+#include <core.h>
 #include <plugin.h>
 
 Plugin_SetVersion(1);

@@ -7,41 +7,11 @@
 #include "defines.h"
 
 static void evtpoststart(void *p) {(void)p;
-	if (!Config_GetBoolByKey(WebState.cfg, "enabled")) return;
-	cs_str ip = Config_GetStrByKey(WebState.cfg, "ip");
-	cs_uint16 port = (cs_uint16)Config_GetInt16ByKey(WebState.cfg, "port");
-	// cs_str password = Config_GetStrByKey(WebState.cfg, "password");
-	String_Copy((cs_char *)WebState.pwhash, 33, "098f6bcd4621d373cade4e832627b4f6");
-
-	WebState.mutex = Mutex_Create();
-	WebState.thread = Thread_Create(WebThread, NULL, false);
-	WebState.fd = Socket_New();
-
-	struct sockaddr_in ssa;
-	if (Socket_SetAddr(&ssa, ip, port) < 0) {
-		Socket_Close(WebState.fd);
-		WL(Error, "Failed to set socket address");
-		return;
-	}
-
-	if (!Socket_SetNonBlocking(WebState.fd, true)) {
-		Socket_Close(WebState.fd);
-		WL(Error, "Failed to set non-blocking option");
-		return;
-	}
-
-	if (!Socket_Bind(WebState.fd, &ssa)) {
-		Socket_Close(WebState.fd);
-		WL(Error, "Failed to bind %s:%d", ip, port);
-		return;
-	}
-
-	WebState.alive = true;
-	WL(Info, "Listener started on %s:%d", ip, port);
+	service(SERC_START);
 }
 
 static void evtonlog(LogBuffer *lb) {
-	if (!WebState.alive || lb->flag & LOG_DEBUG) return;
+	if (lb->flag & LOG_DEBUG) return;
 
 	cs_uint32 cpos = (WebState.ll.pos + WebState.ll.cnt) % LOGLIST_SIZE;
 	if (++WebState.ll.cnt > LOGLIST_SIZE) {
@@ -52,7 +22,7 @@ static void evtonlog(LogBuffer *lb) {
 	if (WebState.ll.items[cpos]) Memory_Free((void *)WebState.ll.items[cpos]);
 	WebState.ll.items[cpos] = String_AllocCopy(lb->data);
 
-	if (WebState.clients) {
+	if (WebState.alive && WebState.clients) {
 		AListField *tmp;
 		Mutex_Lock(WebState.mutex);
 		List_Iter(tmp, WebState.clients) {
