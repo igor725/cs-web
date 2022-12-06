@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './styles/console.css';
 
 var Convert = require('ansi-to-html');
@@ -20,9 +20,29 @@ var convert = new Convert({
 let messages = [], history = [], hispos = 0;
 export let writeInConsole = () => {};
 
+
+
 const Console = ({ CWAP }) => {
 	const [, updateState] = React.useState();
 	const forceUpdate = React.useCallback(() => updateState({}), []);
+	let copyMenu;
+	let prevCopy;
+	let selectedCopy;
+
+	useEffect(()=>{
+		copyMenu = document.getElementsByClassName("console-copyboard")[0];
+		window.onclick = (event) => {
+			if (!event.target.matches('.console-copyboard')) {
+				copyMenu.style.display = "none";
+				if (prevCopy) prevCopy.classList.remove("selected-term-text");
+			}
+		};
+		return () => {
+			copyMenu.style.display = "none";
+			window.onclick = "";
+		};
+	});
+
 	const pushMessage = (msg) => {
 		messages.push(msg);
 		while (messages.length > 99)
@@ -40,8 +60,28 @@ const Console = ({ CWAP }) => {
 		}, 100);
 	};
 
+	const showCopy = (e) => {
+		e.preventDefault();
+		if (prevCopy) prevCopy.classList.remove("selected-term-text")
+		e.target.classList.add("selected-term-text");
+		selectedCopy = e.target.innerText;
+		copyMenu.style.display = "block";
+		copyMenu.style.left = e.clientX + 10 +'px';
+		copyMenu.style.top = e.clientY + 5 +  'px';
+		prevCopy = e.target;
+	};
+
+	const hideCopy = () => {
+		copyMenu.style.display = "hide";
+		navigator.clipboard.writeText(selectedCopy);
+		prevCopy.classList.add("selected-term-text");
+	}
+
 	return (
 		<div className='console'>
+			<div className='console-copyboard' onClick={hideCopy}>
+				<i className="far fa-clipboard"></i>
+			</div>
 			<div className='console-top'>
 				<div className='console-exit'>
 					<span className='dot red'></span>
@@ -53,7 +93,7 @@ const Console = ({ CWAP }) => {
 				</div>
 			</div>
 			<div className='console-main'>
-				<div id='console-out' readOnly={true}>
+				<div id='console-out' readOnly={true} onContextMenu={showCopy}>
 					{messages.map((msg) => {
 						return React.cloneElement(msg);
 					})}
@@ -62,7 +102,6 @@ const Console = ({ CWAP }) => {
 					<p className='console-in-dot'> &gt; </p>
 					<input name='input-mac' id='console-in' type='text' onKeyDown={(e) => {
 						const input_el = document.getElementById('console-in');
-
 						switch (e.key) {
 							case 'Enter':
 								const text = document.getElementById('console-out');
@@ -70,7 +109,6 @@ const Console = ({ CWAP }) => {
 									pushMessage(<div> &gt; {CWAP.sendConsole(input_el.value)}</div>);
 									hispos = 0;
 									history.push(input_el.value);
-									console.log(history);
 									input_el.value = '';
 									setTimeout(() => text.scrollTop = text.scrollHeight, 100);
 								}

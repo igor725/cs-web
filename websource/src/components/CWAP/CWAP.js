@@ -1,7 +1,26 @@
 import { toast } from 'react-toastify';
 import { writeInConsole } from '../../pages/console';
 import WebSocket from './WebSocketConnection';
-import { doAuthGood, showAuth, hideAuth, showAuthError, hack_auth } from '../Auth';
+import { doAuthGood, showAuth, hideAuth, showAuthError, doLogin } from '../Auth';
+import { updateGlobalList } from '../PlayersList';
+import { updateWorlds } from '../Worlds';
+
+export let playersList = [];
+const getPlayer = (playerId) => {
+	let pl;
+	playersList.map((player, index) => {
+		if (player.id === playerId){
+			pl = playersList[index];
+			return;
+		}
+	})
+	return pl;
+};
+
+const updateUsers = () =>{
+	updateGlobalList();
+	updateWorlds();
+};
 
 const state_paths = {
 	'/': 'H',
@@ -30,7 +49,7 @@ export let processCommand = (data) => {
 				switch (status) {
 					case 'REQ':
 						if (user_pass !== null) {
-							hack_auth(user_pass);
+							doLogin(user_pass, true);
 						} else {
 							showAuth();
 						}
@@ -92,25 +111,37 @@ export let processCommand = (data) => {
 						let playerName = data_splitted[2]
 						let playerOp = data_splitted[3]
 						let playerWorld = data_splitted[4]
-						console.log('playerName', playerName, 'playerOp(?):',playerOp, 'playerWorld:',playerWorld);
+						playersList.push({
+							"name": playerName,
+							"id": playerId,
+							"world": playerWorld,
+							"isAdmin": playerOp
+						})
 						data_splitted.splice(0, 4);
 						break;
 					case 'R':
+						let pl;
+						playersList.map((player, index) => {
+							if (player.id === playerId){
+								pl = playersList[index];
+							}
+						})
+						playersList.splice(pl, 1);
 						data_splitted.shift();
 						break;
 					case 'W':
 						let playerNewWorld = data_splitted[2];
-						console.log('playerNewWorld:',playerNewWorld);
+						getPlayer(playerId).world = playerNewWorld;
 						data_splitted.splice(0, 2);
 						break;
 					case 'O':
 						let playerNewOp = data_splitted[2];
-						console.log('playerNewOp:',playerNewOp);
+						getPlayer(playerId).isAdmin = playerNewOp;
 						data_splitted.splice(0, 2);
 						break;
-
 					default: throw {message: "Invalid player event received", eventCode: playerEventType};
 				}
+				updateUsers()
 				break
 			case 'S':
 				let state = data_splitted[0].charAt(1);

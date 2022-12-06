@@ -32,19 +32,16 @@ const Auth = ({cwap}) => {
 		cwap.switchState(window.location.pathname);
 	};
 
-	doLogin = (pass) => {
+	doLogin = (pass, md5) => {
 		let hash;
-		if (typeof(pass) !== 'string') {
+		if (!md5) {
 			const password = document.getElementById('authPassword');
 			hash = MD5.generate(password.value);
 			password.value = '';
 		} else hash = pass;
-		console.log(hash);
 		cwap.sendAuth(hash);
 		pass_candidate = hash;
 	};
-
-	hack_auth = (hash) => doLogin(hash);
 
 	return (
 		<div className='authWindowG'>

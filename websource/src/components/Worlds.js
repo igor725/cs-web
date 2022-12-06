@@ -1,11 +1,18 @@
 import React, { useEffect } from 'react';
 import './styles/Worlds.css';
+import { playersList } from './CWAP/CWAP';
 import PlayerDropdown from './PlayerList/PlayerDropdown';
 import { prev_player } from './PlayersList';
 
+export let updateWorlds = () => {}
 
 const World = props => {
+	const [, updateState] = React.useState();
+	const forceUpdate = React.useCallback(() => updateState({}), []);
 	const cwap = props.cwap;
+	updateWorlds = () => {
+		forceUpdate();
+	}
 	return (
 		<div className='world-grid'>
 			<div className='world' name={props.name} style={{ zIndex: props.pos }}>
@@ -45,8 +52,16 @@ const World = props => {
 			<div className='worldCart_players'>
 				<h3 id='wName'>Players</h3>
 				<ul className='plist' id='pList2'>
-					{ props.players.map((player) => {
-					   return <PlayerDropdown cwap={cwap}>{player}</PlayerDropdown>
+					{ playersList.map((player)=>{
+						if (player.world == props.name){
+							return (
+							<PlayerDropdown 
+								id={player.id}
+								isAdmin={player.isAdmin} 
+								cwap={cwap}
+							>{player.name}</PlayerDropdown>
+						)
+						}
 					})}
 				</ul>
 			</div>

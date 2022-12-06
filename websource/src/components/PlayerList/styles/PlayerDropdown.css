@@ -3,17 +3,34 @@
 }
 
 .show {
+	margin-top:10px;
 	display: grid !important;
-	grid-template-columns: 0fr 0fr;
+	grid-template-columns: repeat(3, 1fr);
 	position: absolute;
 }
 
-.ban,
-.kick {
+.admin .playerMenu .op{
+	cursor: pointer;
+}
+
+.admin .playerMenu > button {
+	cursor: not-allowed;
+}
+
+.admin{
+	color: red;
+}
+
+.dropbtn{
+	cursor: pointer;
+}
+
+.playerMenu > button {
 	width: 65px;
 	color: white;
 	border: none;
-	border-radius: 5px;
+	cursor: pointer;
+	border-radius: 8px;
 	font-size: 14px;
 	background: transparent;
 	transition: all 0.35s ease-in 0s;
@@ -22,29 +39,32 @@
 	padding: 0;
 }
 
-.playerDropdown button:hover {
-	background-color: red
+.darkmode .playerMenu > button{
+	color: rgb(112, 112, 112);
 }
 
-.lightmode button:hover {
-	background-color: rgb(2, 0, 107);
+.darkmode .playerMenu > button:hover{
+	color: white;
 }
 
-.lightmode .ban,
-.lightmode .kick {
-	border: 0px;
+.lightmode .playerMenu > button{
+	color: #b3b3b3;
+}
+
+.lightmode .playerMenu > button:hover{
+	color: black;
 }
 
 .lightmode .playerMenu {
-	background-color: rgb(4, 0, 255);
+	background: white;
 }
 
 .playerMenu {
 	display: none;
 	background-color: #3e3e3e;
-	box-shadow: -1px 6px 36px 2px rgba(0, 0, 0, 0.75);
-	-webkit-box-shadow: -1px 6px 36px 2px rgba(0, 0, 0, 0.75);
-	-moz-box-shadow: -1px 6px 36px 2px rgba(0, 0, 0, 0.75);
+	box-shadow: 0px 6px 36px 2px rgba(0, 0, 0, 0.75);
+	-webkit-box-shadow: 0px 6px 36px 2px rgba(0, 0, 0, 0.75);
+	-moz-box-shadow: 0px 6px 36px 2px rgba(0, 0, 0, 0.75);
 	border-radius: 8px;
-	height: 37px;
+	height: 38px;
 }

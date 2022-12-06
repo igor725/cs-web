@@ -24,7 +24,6 @@ window.onclick = (event) => {
 
 export let showMenu = (e) => {
 	let playerEl = e.currentTarget.parentElement.childNodes[1];
-	// const playerName = playerEl.parentElement.childNodes[0].childNodes[0].getAttribute('name');
 	if ((playerEl !== prev_player) && prev_player) {
 		prev_player.classList.remove('show');
 	}
@@ -32,7 +31,18 @@ export let showMenu = (e) => {
 	prev_player = playerEl;
 };
 
+export let updateGlobalList = () => {}
+
+
+let playersList = [];
 const PlayersList = ({ cwap }) => {
+	const [, updateState] = React.useState();
+	const forceUpdate = React.useCallback(() => updateState({}), []);
+	
+	updateGlobalList = () =>{
+		forceUpdate();
+	}
+
 	useEffect(() => {
 		document.getElementById('plist').onscroll = (e) => {
 			prev_player && prev_player.classList.remove('show');
@@ -46,24 +56,18 @@ const PlayersList = ({ cwap }) => {
 				<hr />
 			</div>
 			<ul id='plist'>
-				<PlayerDropdown cwap={cwap} world='Tets'>KEK</PlayerDropdown>
-				<PlayerDropdown cwap={cwap} >KEK1</PlayerDropdown>
-				<PlayerDropdown cwap={cwap} >KEK2</PlayerDropdown>
-				<PlayerDropdown cwap={cwap} >KEK3</PlayerDropdown>
-				<PlayerDropdown cwap={cwap} >KEK4</PlayerDropdown>
-				<PlayerDropdown cwap={cwap} >KEK5</PlayerDropdown>
-				<PlayerDropdown cwap={cwap} >KEK6</PlayerDropdown>
-				<PlayerDropdown cwap={cwap} >KEK7</PlayerDropdown>
-				<PlayerDropdown cwap={cwap} >KEK8</PlayerDropdown>
-				<PlayerDropdown cwap={cwap} >KEK9</PlayerDropdown>
-				<PlayerDropdown cwap={cwap} >KEK0</PlayerDropdown>
-				<PlayerDropdown cwap={cwap} >KEK00</PlayerDropdown>
-				<PlayerDropdown cwap={cwap} >KEK01</PlayerDropdown>
-				<PlayerDropdown cwap={cwap} >KEK02</PlayerDropdown>
-				<PlayerDropdown cwap={cwap} >KEK03</PlayerDropdown>
-				<PlayerDropdown cwap={cwap} >KEK04</PlayerDropdown>
-				<PlayerDropdown cwap={cwap} >KEK05</PlayerDropdown>
-
+				{
+					playersList.map((player)=>{
+						return (
+							<PlayerDropdown 
+								id={player.id} 
+								world={player.world} 
+								isAdmin={player.isAdmin} 
+								cwap={cwap}
+							>{player.name}</PlayerDropdown>
+						)
+					})
+				}
 			</ul>
 		</div>
 	);
