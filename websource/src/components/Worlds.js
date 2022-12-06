@@ -3,18 +3,9 @@ import './styles/Worlds.css';
 import PlayerDropdown from './PlayerList/PlayerDropdown';
 import { prev_player } from './PlayersList';
 
-let worldOpened;
-let worldOpenedName;
-
-export let closeWorld = () =>{
-	worldOpened = false
-}
 
 const Worlds = props => {
-	let worldsEl
 	let worldsInfo = [];
-	const [, updateState] = React.useState();
-	const forceUpdate = React.useCallback(() => updateState({}), []);
 	const World = props => {
 		if (!worldsInfo.includes(props)) worldsInfo.push(props);
 		return (
@@ -24,7 +15,6 @@ const Worlds = props => {
 					<h2>{props.name}</h2>
 				</div>
 				<div className='worldCart_info'>
-					<h3 id='wName'></h3>
 					<table>
 						<tbody>
 							<tr>
@@ -68,43 +58,8 @@ const Worlds = props => {
 
 	useEffect(() => {
 		const listElement = document.getElementById('pList2');
-		worldsEl = document.getElementsByClassName('worlds')[0];
 		listElement.onscroll = (e) => prev_player && prev_player.classList.remove('show');
 	});
-	const closeExpand = (worldsEl) => {
-		worldsEl.classList.remove('extend');
-		worldsEl.classList.add('close');
-	}
-	const expand = (e) => {
-		if (e.target.className === 'worldBG' || e.target.tagName === 'H2') {
-			const wName = e.target.tagName === 'H2' ? e.target.innerHTML : e.target.parentElement.childNodes[1].innerHTML;
-			if (worldOpened) {
-				if (worldOpenedName !== wName) {
-					closeExpand(worldsEl);
-					setTimeout(() => {
-						worldsEl.classList.remove('close');
-						worldOpened = true
-						worldOpenedName = wName
-						forceUpdate();
-						worldsEl.classList.add('extend');
-					}, 1500);
-				}
-				closeExpand(worldsEl);
-				setTimeout(() => {
-					worldsEl.classList.remove('close');
-				}, 1300);
-				worldOpened = undefined;
-				worldOpenedName = undefined;
-			} else {
-				forceUpdate();
-				worldsEl.classList.add('extend');
-				worldOpened = true;
-				worldOpenedName = wName;
-			}
-			return wName;
-		}
-	}
-
 	return (
 		<div className='worlds'>
 			<h3 className='worlds-header'>Worlds</h3>
