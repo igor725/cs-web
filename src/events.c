@@ -35,6 +35,43 @@ static void evtonlog(LogBuffer *lb) {
 	}
 }
 
+static void evtonwadd(World *world) {
+	if (WebState.alive && WebState.clients) {
+		AListField *tmp;
+		Mutex_Lock(WebState.mutex);
+		cs_str wname = World_GetName(world),
+		wtex = World_GetTexturePack(world);
+		SVec wdims; World_GetDimensions(world, &wdims);
+		Vec wspawn; World_GetSpawn(world, &wspawn, NULL);
+		EWeather ww = World_GetWeather(world);
+		cs_bool wr = World_IsReadyToPlay(world);
+
+		List_Iter(tmp, WebState.clients) {
+			struct _HttpClient *hc = AList_GetValue(tmp).ptr;
+			if (!hc->cpls || hc->cpls->wsstate != WSS_HOME) continue;
+			genpacket(&hc->nb, "WA^ssiiifffii",
+				wname, wtex, wdims.x, wdims.y, wdims.z,
+				wspawn.x, wspawn.y, wspawn.z, ww, wr);
+		}
+		Mutex_Unlock(WebState.mutex);
+	}
+}
+
+static void evtonwrem(World *world) {
+	if (WebState.alive && WebState.clients) {
+		AListField *tmp;
+		Mutex_Lock(WebState.mutex);
+		cs_str wname = World_GetName(world);
+
+		List_Iter(tmp, WebState.clients) {
+			struct _HttpClient *hc = AList_GetValue(tmp).ptr;
+			if (!hc->cpls || hc->cpls->wsstate != WSS_HOME) continue;
+			genpacket(&hc->nb, "WR^s", wname);
+		}
+		Mutex_Unlock(WebState.mutex);
+	}
+}
+
 static void evtpreenvupd(preWorldEnvUpdate *pweu) {
 	if (WebState.alive && WebState.clients) {
 		if ((pweu->values & CPE_WMODVAL_TEXPACK) == 0 &&
@@ -44,17 +81,15 @@ static void evtpreenvupd(preWorldEnvUpdate *pweu) {
 
 		AListField *tmp;
 		Mutex_Lock(WebState.mutex);
+		cs_str wname = World_GetName(pweu->world),
+		wtex = World_GetTexturePack(pweu->world);
+		EWeather ww = World_GetWeather(pweu->world);
+
 		List_Iter(tmp, WebState.clients) {
 			struct _HttpClient *hc = AList_GetValue(tmp).ptr;
 			if (!hc->cpls || hc->cpls->wsstate != WSS_HOME) continue;
-			if (pweu->values & CPE_WMODVAL_TEXPACK) genpacket(&hc->nb,
-				"WT^ss", World_GetName(pweu->world),
-				World_GetTexturePack(pweu->world)
-			);
-			if (pweu->values & CPE_WMODVAL_WEATHER) genpacket(&hc->nb,
-				"WW^si", World_GetName(pweu->world),
-				World_GetWeather(pweu->world)
-			);
+			if (pweu->values & CPE_WMODVAL_TEXPACK) genpacket(&hc->nb, "WT^ss", wname, wtex);
+			if (pweu->values & CPE_WMODVAL_WEATHER) genpacket(&hc->nb, "WW^si", wname, ww);
 		}
 		Mutex_Unlock(WebState.mutex);
 	}
@@ -64,10 +99,13 @@ static void evtonwstatus(World *world) {
 	if (WebState.alive && WebState.clients) {
 		AListField *tmp;
 		Mutex_Lock(WebState.mutex);
+		cs_str wname = World_GetName(world);
+		cs_bool wr = World_IsReadyToPlay(world);
+
 		List_Iter(tmp, WebState.clients) {
 			struct _HttpClient *hc = AList_GetValue(tmp).ptr;
 			if (!hc->cpls || hc->cpls->wsstate != WSS_HOME) continue;
-			genpacket(&hc->nb, "WS^si", World_GetName(world), World_IsReadyToPlay(world));
+			genpacket(&hc->nb, "WS^si", wname, wr);
 		}
 		Mutex_Unlock(WebState.mutex);
 	}
@@ -77,13 +115,15 @@ static void evtonhs(onHandshakeDone *ohd) {
 	if (WebState.alive && WebState.clients) {
 		AListField *tmp;
 		Mutex_Lock(WebState.mutex);
+		ClientID cid = Client_GetID(ohd->client);
+		cs_str cname = Client_GetName(ohd->client),
+		cworld = World_GetName(ohd->world);
+		cs_bool cop = Client_IsOP(ohd->client);
+
 		List_Iter(tmp, WebState.clients) {
 			struct _HttpClient *hc = AList_GetValue(tmp).ptr;
 			if (!hc->cpls || hc->cpls->wsstate != WSS_HOME) continue;
-			genpacket(&hc->nb, "PA^isis",
-				Client_GetID(ohd->client), Client_GetName(ohd->client),
-				Client_IsOP(ohd->client), World_GetName(ohd->world)
-			);
+			genpacket(&hc->nb, "PA^isis", cid, cname, cop, cworld);
 		}
 		Mutex_Unlock(WebState.mutex);
 	}
@@ -93,10 +133,12 @@ static void evtondisc(Client *client) {
 	if (WebState.alive && WebState.clients) {
 		AListField *tmp;
 		Mutex_Lock(WebState.mutex);
+		ClientID cid = Client_GetID(client);
+
 		List_Iter(tmp, WebState.clients) {
 			struct _HttpClient *hc = AList_GetValue(tmp).ptr;
 			if (!hc->cpls || hc->cpls->wsstate != WSS_HOME) continue;
-			genpacket(&hc->nb, "PR^i", Client_GetID(client));
+			genpacket(&hc->nb, "PR^i", cid);
 		}
 		Mutex_Unlock(WebState.mutex);
 	}
@@ -106,10 +148,13 @@ static void evtonspawn(onSpawn *os) {
 	if (WebState.alive && WebState.clients) {
 		AListField *tmp;
 		Mutex_Lock(WebState.mutex);
+		ClientID cid = Client_GetID(os->client);
+		cs_str cworld = World_GetName(Client_GetWorld(os->client));
+
 		List_Iter(tmp, WebState.clients) {
 			struct _HttpClient *hc = AList_GetValue(tmp).ptr;
 			if (!hc->cpls || hc->cpls->wsstate != WSS_HOME) continue;
-			genpacket(&hc->nb, "PW^is", Client_GetID(os->client), World_GetName(Client_GetWorld(os->client)));
+			genpacket(&hc->nb, "PW^is", cid, cworld);
 		}
 		Mutex_Unlock(WebState.mutex);
 	}
@@ -119,10 +164,13 @@ static void evtonutype(Client *client) {
 	if (WebState.alive && WebState.clients) {
 		AListField *tmp;
 		Mutex_Lock(WebState.mutex);
+		ClientID cid = Client_GetID(client);
+		cs_bool cop = Client_IsOP(client);
+
 		List_Iter(tmp, WebState.clients) {
 			struct _HttpClient *hc = AList_GetValue(tmp).ptr;
 			if (!hc->cpls || hc->cpls->wsstate != WSS_HOME) continue;
-			genpacket(&hc->nb, "PO^ii", Client_GetID(client), Client_IsOP(client));
+			genpacket(&hc->nb, "PO^ii", cid, cop);
 		}
 		Mutex_Unlock(WebState.mutex);
 	}
@@ -131,6 +179,8 @@ static void evtonutype(Client *client) {
 Event_DeclarePubBunch(events) {
 	EVENT_BUNCH_ADD('v', EVT_POSTSTART, evtpoststart),
 	EVENT_BUNCH_ADD('v', EVT_ONLOG, evtonlog),
+	EVENT_BUNCH_ADD('v', EVT_ONWORLDADDED, evtonwadd),
+	EVENT_BUNCH_ADD('v', EVT_ONWORLDREMOVED, evtonwrem),
 	EVENT_BUNCH_ADD('v', EVT_PREWORLDENVUPDATE, evtpreenvupd),
 	EVENT_BUNCH_ADD('v', EVT_ONWORLDSTATUSCHANGE, evtonwstatus),
 	EVENT_BUNCH_ADD('v', EVT_ONHANDSHAKEDONE, evtonhs),

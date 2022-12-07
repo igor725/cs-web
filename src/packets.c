@@ -10,7 +10,7 @@ void genpacket(NetBuffer *nb, cs_str fmt, ...) {
 	va_list args;
 	va_start(args, fmt);
 	cs_int32 tempi, size;
-	cs_str temps;
+	cs_str temps; cs_float tempf;
 
 	while (*fmt != '\0') {
 		switch (*fmt) {
@@ -20,6 +20,15 @@ void genpacket(NetBuffer *nb, cs_str fmt, ...) {
 					NetBuffer_EndWrite(nb, String_FormatBuf(
 						NetBuffer_StartWrite(nb, size + 1),
 						size + 1, "%d", tempi
+					) + 1);
+				}
+				break;
+			case 'f':
+				tempf = va_arg(args, cs_float);
+				if ((size = String_FormatBuf(NULL, 0, "%f", tempf)) > 0) {
+					NetBuffer_EndWrite(nb, String_FormatBuf(
+						NetBuffer_StartWrite(nb, size + 1),
+						size + 1, "%f", tempf
 					) + 1);
 				}
 				break;
