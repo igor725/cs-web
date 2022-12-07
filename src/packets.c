@@ -3,6 +3,8 @@
 #include <str.h>
 #include <strstor.h>
 #include <command.h>
+#include <list.h>
+#include <world.h>
 
 #include "defines.h"
 
@@ -24,7 +26,7 @@ void genpacket(NetBuffer *nb, cs_str fmt, ...) {
 				}
 				break;
 			case 'f':
-				tempf = va_arg(args, cs_float);
+				tempf = (cs_float)va_arg(args, cs_double);
 				if ((size = String_FormatBuf(NULL, 0, "%f", tempf)) > 0) {
 					NetBuffer_EndWrite(nb, String_FormatBuf(
 						NetBuffer_StartWrite(nb, size + 1),
@@ -41,9 +43,11 @@ void genpacket(NetBuffer *nb, cs_str fmt, ...) {
 				break;
 
 			case '^':
-				*NetBuffer_StartWrite(nb, 1) = '\0';
+			case '!':
+				*NetBuffer_StartWrite(nb, 1) = *fmt == '^' ? '\0' : '\1';
 				NetBuffer_EndWrite(nb, 1);
 				break;
+
 			default:
 				*NetBuffer_StartWrite(nb, 1) = *fmt;
 				NetBuffer_EndWrite(nb, 1);
@@ -100,6 +104,41 @@ static void sendconsolestate(struct _HttpClient *hc) {
 	}
 
 	String_Copy(lasttc, 13, items[min((end % LOGLIST_SIZE) - 1, LOGLIST_SIZE - 1)]);
+}
+
+static void sendhomestate(struct _HttpClient *hc) {
+	genpacket(&hc->nb, "SH^");
+
+	for (ClientID i = 0; i < MAX_CLIENTS; i++) {
+		Client *client = Clients_List[i];
+		if (!client) continue;
+		genpacket(&hc->nb, "isis", i, Client_GetName(client),
+			Client_IsOP(client), World_GetName(Client_GetWorld(client))
+		);
+	}
+
+	AListField *tmp;
+	genpacket(&hc->nb, "!");
+	List_Iter(tmp, World_Head) {
+		World *world = AList_GetValue(tmp).ptr;
+		SVec dims; World_GetDimensions(world, &dims);
+		Vec spawn; World_GetSpawn(world, &spawn, NULL);
+		genpacket(&hc->nb, List_Next(tmp) ? "ssiiifffii" : "ssiiifffii!",
+			World_GetName(world), World_GetTexturePack(world),
+			dims.x, dims.y, dims.z, spawn.x, spawn.y, spawn.z,
+			World_GetWeather(world), World_IsReadyToPlay(world)
+		);
+	}
+}
+
+static void kickplayer(NetBuffer *nb, ClientID id) {
+	Client *cl = Client_GetByID(id);
+	if (!cl) {
+		genpacket(nb, "NE^s", "Failed to kick specified player");
+		return;
+	}
+	Client_Kick(cl, "Kicked by WebAdmin");
+	genpacket(nb, "NI^s", "Player kicked successfully");
 }
 
 static cs_bool runcommand(cs_byte *cmd) {
@@ -167,8 +206,7 @@ void handlewebsockmsg(struct _HttpClient *hc) {
 				break;
 
 			case 'K':
-				readstr(&data);
-				genpacket(&hc->nb, "PR^i", 1);
+				kickplayer(&hc->nb, (ClientID)readint(&data));
 				break;
 
 			case 'O':
@@ -186,6 +224,7 @@ void handlewebsockmsg(struct _HttpClient *hc) {
 				WebState.ustates[hc->cpls->wsstate]++;
 				switch (hc->cpls->wsstate) {
 					case WSS_HOME:
+						sendhomestate(hc);
 						break;
 
 					case WSS_CONSOLE:

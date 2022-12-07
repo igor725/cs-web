@@ -13,4 +13,5 @@ const Home = ({ CWAP }) => {
 		</div>
 	);
 }
+
 export default Home;

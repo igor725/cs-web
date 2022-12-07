@@ -53,6 +53,7 @@ const Console = ({ CWAP }) => {
 	};
 
 	writeInConsole = (msg) => {
+		if (!msg) return;
 		const text = document.getElementById('console-out');
 		pushMessage(<div dangerouslySetInnerHTML={{
 			__html: convert.toHtml(msg).replaceAll('  ', '&emsp;')

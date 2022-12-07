@@ -4,12 +4,13 @@ import WebSocket from './WebSocketConnection';
 import { doAuthGood, showAuth, hideAuth, showAuthError, doLogin } from '../Auth';
 import { updateGlobalList } from '../PlayersList';
 import { updateWorlds } from '../Worlds';
+import { text } from '@fortawesome/fontawesome-svg-core';
 
 export let playersList = [];
 export let worldsList = [];
 
 const getWorld = (worldName) => {
-	let wrld;
+	let wrld = undefined;
 	worldsList.every((world, index) => {
 		if (world.name === worldName){
 			wrld = worldsList[index];
@@ -21,7 +22,7 @@ const getWorld = (worldName) => {
 };
 
 const getPlayer = (playerId) => {
-	let pl;
+	let pl = undefined;
 	playersList.every((player, index) => {
 		if (player.id === playerId){
 			pl = playersList[index];
@@ -34,41 +35,58 @@ const getPlayer = (playerId) => {
 
 const createPlayer = (data_splitted, startIndex) => {
 	let playerId = parseInt(data_splitted[startIndex]);
-	let playerName = data_splitted[startIndex+1];
-	let playerOp = parseInt(data_splitted[startIndex+2]);
-	let playerWorld = data_splitted[startIndex+3]
-	playersList.push({
-		"name": playerName,
-		"id": playerId,
-		"world": playerWorld,
-		"isAdmin": playerOp
-	});
-	return startIndex + 3;
+	let playerName = data_splitted[startIndex + 1];
+	let playerOp = parseInt(data_splitted[startIndex + 2]);
+	let playerWorld = data_splitted[startIndex + 3];
+	let player = undefined;
+
+	if (player = getPlayer(playerId)) {
+		player.name = playerName;
+		player.world = playerWorld;
+		player.isAdmin = playerOp;
+	} else {
+		playersList.push({
+			"name": playerName,
+			"id": playerId,
+			"world": playerWorld,
+			"isAdmin": playerOp
+		});
+	}
+
+	return 4;
 }
 
 const createWorld = (data_splitted, startIndex) => {
 	let worldName = data_splitted[startIndex];
-	let texturepack = data_splitted[startIndex+1] || "Default";
-	let size = [data_splitted[startIndex+2], data_splitted[startIndex+3], data_splitted[startIndex+4]];
+	let texturepack = data_splitted[startIndex + 1] || "Default";
+	let size = [data_splitted[startIndex + 2], data_splitted[startIndex + 3], data_splitted[startIndex + 4]].join("x");
 	let spawn = [
-		parseFloat(data_splitted[startIndex+5]).toFixed(2), 
-		parseFloat(data_splitted[startIndex+6]).toFixed(2),
-		parseFloat(data_splitted[startIndex+7]).toFixed(2)
-	]
-	let weather = parseInt(data_splitted[startIndex+8]);
-	let status = parseInt(data_splitted[startIndex+9]);
-	worldsList.push(
-		{
+		parseFloat(data_splitted[startIndex + 5]).toFixed(2), 
+		parseFloat(data_splitted[startIndex + 6]).toFixed(2),
+		parseFloat(data_splitted[startIndex + 7]).toFixed(2)
+	].join(",");
+	let weather = parseInt(data_splitted[startIndex + 8]);
+	let status = parseInt(data_splitted[startIndex + 9]);
+	let world = undefined;
+
+	if (world = getWorld(worldName)) {
+		world.texturepack = texturepack;
+		world.size = size;
+		world.spawn = spawn;
+		world.weather = weather;
+		world.status = status;
+	} else {
+		worldsList.push({
 			"name": worldName, 
 			"texturepack": texturepack, 
-			"size": size.join("x"), 
-			"spawn": `x: ${spawn[0]}, y: ${spawn[1]}, z: ${spawn[2]}`, 
+			"size": size, 
+			"spawn": spawn, 
 			"weather": weather, 
 			"status": status
-		}
-	);
-	console.log(worldsList)
-	return startIndex+9
+		});
+	}
+
+	return 10;
 }
 
 const updateAll = () =>{
@@ -93,10 +111,19 @@ export let processCommand = (data) => {
 	console.log('RAW DATA: ', data);
 	let data_splitted = data.split('\x00');
 
-	while (data_splitted.length > 0) {
-		switch (data_splitted[0].at(0)) {
+	while (data_splitted.length > 1) {
+		const packetId = data_splitted[0].at(0);
+		/* Тут число элементов массива, которое нужно пидорнуть после обработки пакета
+		** оно всегда должно быть равно {количеству полей в обрабатываемом пакете} + 1,
+		** в ином случае - гроб гроб кладбище пидор. Для пакетов, не имеющих полей,
+		** логично предположить, переменная равна просто 1.
+		** И да, A-пакет не имеет полей, так как у нас первое поле сливается с 
+		** идентификатором пакета. */
+		let spcnt = 2;
+
+		switch (packetId) {
 			case 'A':
-				let status = data_splitted[0].substring(1);
+				const status = data_splitted[0].substring(1);
 				console.log('Auth:', status);
 				const user_pass = localStorage.getItem('USER_PASSWORD');
 
@@ -110,10 +137,10 @@ export let processCommand = (data) => {
 						break;
 
 					case 'OK':
-						if (!user_pass) {
-							doAuthGood();
-						} else {
+						if (user_pass) {
 							hideAuth();
+						} else {
+							doAuthGood();
 						}
 						break;
 
@@ -123,20 +150,21 @@ export let processCommand = (data) => {
 						break;
 				}
 
-				data_splitted.shift();
+				spcnt = 1;
 				break;
 			case 'B':
 				let playerName = data_splitted[0].substring(1);
 				let banSuccess = data_splitted[1];
 				console.log('player:', playerName, 'isSuccess?:', banSuccess);
-				data_splitted.splice(0, 1);
+				spcnt = 2;
 				break;
 			case 'C':
 				let msg = data_splitted[0].substring(1);
 				writeInConsole(msg);
-				data_splitted.shift();
+				spcnt = 1;
 				break;
-			case 'E':
+			/*case 'E':
+				spcnt = 5;
 				let pluginEventType = data_splitted[0].charAt(1);
 				let pluginId = data_splitted[1];
 				console.log('Plugin Manage | Type: ',pluginEventType,'ID: ',pluginId);
@@ -145,183 +173,129 @@ export let processCommand = (data) => {
 					let pluginHtml = data_splitted[3];
 					let pluginVer = data_splitted[4];
 					console.log('pluginName:', pluginName, 'pluginHtml:', pluginHtml, 'pluginVer', pluginVer);
-					data_splitted.splice(0, 4);
-				} else {
-					data_splitted.shift();
+
 				}
-				break;
+				break;*/
 			case 'N':
-				let type = data_splitted[0].charAt(1);
-				let text = data_splitted[1];
-				notyType[type](text);
-				data_splitted.splice(0, 1);
+				notyType[data_splitted[0].charAt(1)](data_splitted[1]);
 				break;
 			case 'P':
-				let playerEventType = data_splitted[0].charAt(1);
-				let playerId = parseInt(data_splitted[1]);
-				let player = getPlayer(playerId)
+				const playerEventType = data_splitted[0].charAt(1);
+				const playerId = parseInt(data_splitted[1]);
+				const player = getPlayer(playerId);
+				spcnt = 3;
+
 				switch (playerEventType) {
 					case 'A':
-						const lastIndex = createPlayer(data_splitted, 1)
-						data_splitted.splice(0, lastIndex);
+						spcnt = createPlayer(data_splitted, 1) + 1;
 						break;
 					case 'R':
-						let pl;
+						spcnt = 2;
 						playersList.every((player, index) => {
 							if (player.id === playerId){
-								pl = playersList[index];
+								playersList.splice(index, 1)
 								return false;
 							}
 							return true;
-						})
-						playersList.splice(pl, 1);
-						data_splitted.shift();
+						});
 						break;
 					case 'W':
-						let playerNewWorld = data_splitted[2];
-						if (player){
-							player.world = playerNewWorld;
-						};
-						data_splitted.splice(0, 2);
+						if (player) player.world = data_splitted[2];
 						break;
 					case 'O':
-						let playerNewOp = parseInt(data_splitted[2]);
-						if (player){
-							player.isAdmin = playerNewOp;
-						}
-						data_splitted.splice(0, 2);
+						if (player) player.isAdmin = parseInt(data_splitted[2]);
 						break;
 					default: throw {message: "Invalid player event received", eventCode: playerEventType};
 				}
 				updateAll();
-				break
+				break;
 			case 'S':
-				let state = data_splitted[0].charAt(1);
-				console.log('switch state:',state);
+				const state = data_splitted[0].charAt(1);
+				console.log('switch state:', state);
 				switch (state) {
 					case 'H':
-						const players_worlds = data.substring(3).split('\x01') // делим raw строку по этому разделителю нахуй так нельзя я знаю переделать нада
+						spcnt = 0;
+						const lists = data.substring(3).split('\x01');
 
-						const players = players_worlds[0].split('\x00')
-						let players_length = 4 // кол-во параметров типа понял
-
-						const worlds = players_worlds[1].split('\x00')
-						let world_length = 10;
-
-						for (let i = 0; i < worlds.length; i += world_length) {
-							const chunk = worlds.slice(i, i + world_length);
-							if (chunk.length > 1){
-								createWorld(chunk, 0)
+						const worlds = lists[1].split('\x00');
+						if (worlds.length > 0 && worlds[0].length > 0) {
+							for (let i = 0;;) {
+								if (!worlds[i]) break;
+								const ido = createWorld(worlds, i);
+								spcnt += ido; i += ido;
 							}
 						}
-						for (let i = 0; i < players.length; i += players_length) {
-							const chunk = players.slice(i, i + players_length);
-							if (chunk.length > 1){
-								createPlayer(chunk, 0)
+
+						const players = lists[0].split('\x00');
+						if (players.length > 0 && players[0].length > 0) {
+							for (let i = 0;;) {
+								if (!players[i]) break;
+								const ido = createPlayer(players, i);
+								spcnt += ido; i += ido;
 							}
 						}
+						
+						spcnt += 1;
 						updateAll();
-						// console.log(lastIndex, data_splitted)
-						data_splitted.splice(0, 20); // я наугад ебанул число нада переделать
 						break;
 					case 'R':
-						const logsCount = parseInt(data_splitted[1], 10);
-						const endLogs = logsCount + 2;
-						for (let i = 2; i < endLogs; i++)
+						spcnt = parseInt(data_splitted[1], 10) + 2;
+						for (let i = 2; i < spcnt; i++)
 							writeInConsole(data_splitted[i]);
-						data_splitted.splice(0, endLogs);
 						const cout = document.getElementById('console-out');
 						cout.scrollTop = cout.scrollHeight;
-						break;
-					case 'C':
-						let configStrsCount = data_splitted[1];
-						let configStrs = data_splitted[2];
-						console.log('configStrsCount:', configStrsCount, 'configStrs:', configStrs);
-						data_splitted.splice(0, 2);
-						break;
-					case 'E':
-						let pluginsCount = data_splitted[1];
-						let pluginsArr = data_splitted[2];
-						console.log('pluginsCount:', pluginsCount, 'pluginsArr:', pluginsArr);
-						data_splitted.splice(0, 2);
 						break;
 
 					default: throw {message: "Invalid state packet received", stateCode: state};
 				}
 				break;
 			case 'W':
-				let worldEventType = data_splitted[0].charAt(1);
-				let worldName = data_splitted[1];
-				let world = getWorld(worldName)
+				const worldEventType = data_splitted[0].charAt(1);
+				const worldName = data_splitted[1];
+				const world = getWorld(worldName);
+				spcnt = 3;
+
 				console.log('World Management | Type:',worldEventType, 'worldName:', worldName);
 				switch (worldEventType) {
 					case 'A':
-						let texturepack = data_splitted[2] || "Default";
-						let size = [data_splitted[3], data_splitted[4], data_splitted[5]];
-						let spawn = [
-							parseFloat(data_splitted[6]).toFixed(2), 
-							parseFloat(data_splitted[7]).toFixed(2),
-							parseFloat(data_splitted[8]).toFixed(2)
-						]
-						let weather = parseInt(data_splitted[9]);
-						let status = parseInt(data_splitted[10]);
-						worldsList.push(
-							{
-								"name": worldName, 
-								"texturepack": texturepack, 
-								"size": size.join("x"), 
-								"spawn": `x: ${spawn[0]}, y: ${spawn[1]}, z: ${spawn[2]}`, 
-								"weather": weather, 
-								"status": status
-							}
-						);
+						spcnt = createWorld(data_splitted, 1) + 1;
 						updateWorlds();
-						data_splitted.splice(0, 10);
 						break;
 					case 'R':
-						let wIndex;
-						worldsList.every((world, index) => {
-							if (world.name = worldName){
-								wIndex = index;
+						spcnt = 2;
+						worldsList.every((eworld, index) => {
+							if (eworld.name === worldName) {
+								worldsList.splice(index, 1);
 								return false;
 							}
 							return true;
 						});
 						updateWorlds();
-						worldsList.splice(wIndex, 1);
-						data_splitted.shift();
 						break;
 					case 'S':
-						let newStatus = parseInt(data_splitted[2]);
-						if (world) {
-							world.status = newStatus;
-						};
+						if (world) world.status = parseInt(data_splitted[2]);
 						updateWorlds();
-						data_splitted.splice(0,2);
 						break;
 					case 'W':
-						let newWeather = parseInt(data_splitted[2]);
-						if (world) {
-							world.weather = newWeather;
-						};
+						if (world) world.weather = parseInt(data_splitted[2]);
 						updateWorlds();
-						data_splitted.splice(0,2);
 						break;
 					case 'T':
-						let newTexturepack = data_splitted[2];
-						if (world) {
-							world.texturepack = newTexturepack;
-						};
+						if (world) world.texturepack = data_splitted[2] || "Default";
 						updateWorlds();
-						data_splitted.splice(0,2);
 						break;
+
 					default: throw {message: "Invalid world event received", eventCode: worldEventType};
 				}
 				break;
-			default:
-				data_splitted.shift();
-				break;
+
+			default: throw {message: "Unknown packet received", packetId: packetId};
 		}
+
+		console.log(data_splitted.length, spcnt);
+		if (data_splitted.length <= spcnt)
+			throw {message: "Гроб гроб кладбище пидор!!!"};
+		data_splitted.splice(0, spcnt);
 	}
 };
 

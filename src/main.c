@@ -29,9 +29,10 @@ cs_bool Plugin_Load(void) {
 	Config_SetComment(ent, "WebAdmin service ip (0.0.0.0 means \"all available network adapters\")");
 	Config_SetDefaultStr(ent, "0.0.0.0");
 
-	ent = Config_NewEntry(WebState.cfg, "port", CONFIG_TYPE_INT16);
+	ent = Config_NewEntry(WebState.cfg, "port", CONFIG_TYPE_INT);
 	Config_SetComment(ent, "WebAdmin service port");
-	Config_SetDefaultInt16(ent, 8888);
+	Config_SetLimit(ent, 0, 65535);
+	Config_SetDefaultInt(ent, 8888);
 
 	ent = Config_NewEntry(WebState.cfg, "password", CONFIG_TYPE_STR);
 	Config_SetComment(ent, "WebAdmin password (empty means no password required)");

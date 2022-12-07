@@ -13,7 +13,7 @@ static enum _SerResponse serr_start(void) {
 	}
 
 	cs_str ip = Config_GetStrByKey(WebState.cfg, "ip");
-	cs_uint16 port = (cs_uint16)Config_GetInt16ByKey(WebState.cfg, "port");
+	cs_uint16 port = (cs_uint16)Config_GetIntByKey(WebState.cfg, "port");
 	// cs_str password = Config_GetStrByKey(WebState.cfg, "password");
 	String_Copy((cs_char *)WebState.pwhash, 33, "098f6bcd4621d373cade4e832627b4f6");
 
