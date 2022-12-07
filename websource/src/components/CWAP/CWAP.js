@@ -10,12 +10,12 @@ const getPlayer = (playerId) => {
 	let pl;
 	playersList.every((player, index) => {
 		if (player.id === playerId){
-			pl = index;
+			pl = playersList[index];
 			return false;
 		}
 		return true;
 	})
-	return playersList[pl];
+	return pl;
 };
 
 const updateUsers = () =>{
@@ -104,20 +104,21 @@ export let processCommand = (data) => {
 				data_splitted.splice(0, 1);
 				break;
 			case 'P':
+				let player;
 				let playerEventType = data_splitted[0].charAt(1);
-				let playerId = parseInt(data_splitted[1])
+				let playerId = parseInt(data_splitted[1]);
 				console.log('Player Event | Type:',playerEventType, 'ID:',playerId);
 				switch (playerEventType) {
 					case 'A':
-						let playerName = data_splitted[2]
-						let playerOp = parseInt(data_splitted[3])
+						let playerName = data_splitted[2];
+						let playerOp = parseInt(data_splitted[3]);
 						let playerWorld = data_splitted[4]
-						playersList.push({
+						playersList.push({;
 							"name": playerName,
 							"id": playerId,
 							"world": playerWorld,
 							"isAdmin": playerOp
-						})
+						});
 						data_splitted.splice(0, 4);
 						break;
 					case 'R':
@@ -134,12 +135,18 @@ export let processCommand = (data) => {
 						break;
 					case 'W':
 						let playerNewWorld = data_splitted[2];
-						getPlayer(playerId).world = playerNewWorld;
+						player = getPlayer(playerId);
+						if (player){
+							player.world = playerNewWorld;
+						};
 						data_splitted.splice(0, 2);
 						break;
 					case 'O':
-						let playerNewOp = data_splitted[2];
-						getPlayer(playerId).isAdmin = playerNewOp;
+						let playerNewOp = parseInt(data_splitted[2]);
+						player = getPlayer(playerId);
+						if (player){
+							player.isAdmin = playerNewOp;
+						}
 						data_splitted.splice(0, 2);
 						break;
 					default: throw {message: "Invalid player event received", eventCode: playerEventType};
