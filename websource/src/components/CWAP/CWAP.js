@@ -10,12 +10,12 @@ const getPlayer = (playerId) => {
 	let pl;
 	playersList.every((player, index) => {
 		if (player.id === playerId){
-			pl = playersList[index];
+			pl = index;
 			return false;
 		}
 		return true;
 	})
-	return pl;
+	return playersList[pl];
 };
 
 const updateUsers = () =>{
