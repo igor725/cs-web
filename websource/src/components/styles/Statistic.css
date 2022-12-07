@@ -1,0 +1,9 @@
+.statistic{
+    background: #2e2e2e;
+}
+.statistic-usage{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-items: center;
+    margin-top: 30px;
+}

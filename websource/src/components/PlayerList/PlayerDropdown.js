@@ -26,7 +26,7 @@ const PlayerDropdown = props => {
 				</p>
 				<div className='playerMenu'>
 					<button className='ban' onClick={()=> cwap.banPlayer(playerName)}> Ban </button>
-					<button className='kick' onClick={() => cwap.kickPlayer(playerName)}> Kick </button>
+					<button className='kick' onClick={() => cwap.kickPlayer(playerId)}> Kick </button>
 					<button className='op' onClick={isAdmin ? deopPlayer : opPlayer}>{isAdmin ? "de-op" : "OP"}</button>
 				</div>
 			</li>

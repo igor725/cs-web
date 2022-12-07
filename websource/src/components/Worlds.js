@@ -9,7 +9,7 @@ export let updateWorlds = () => {}
 const wTypes = {
 	0: "Sunny",
 	1: "Raining",
-	2: "Snowin"
+	2: "Snowing"
 }
 
 const World = props => {

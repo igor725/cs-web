@@ -32,7 +32,46 @@ const getPlayer = (playerId) => {
 	return pl;
 };
 
-const updateUsers = () =>{
+const createPlayer = (data_splitted, startIndex) => {
+	let playerId = parseInt(data_splitted[startIndex]);
+	let playerName = data_splitted[startIndex+1];
+	let playerOp = parseInt(data_splitted[startIndex+2]);
+	let playerWorld = data_splitted[startIndex+3]
+	playersList.push({
+		"name": playerName,
+		"id": playerId,
+		"world": playerWorld,
+		"isAdmin": playerOp
+	});
+	return startIndex + 3;
+}
+
+const createWorld = (data_splitted, startIndex) => {
+	let worldName = data_splitted[startIndex];
+	let texturepack = data_splitted[startIndex+1] || "Default";
+	let size = [data_splitted[startIndex+2], data_splitted[startIndex+3], data_splitted[startIndex+4]];
+	let spawn = [
+		parseFloat(data_splitted[startIndex+5]).toFixed(2), 
+		parseFloat(data_splitted[startIndex+6]).toFixed(2),
+		parseFloat(data_splitted[startIndex+7]).toFixed(2)
+	]
+	let weather = parseInt(data_splitted[startIndex+8]);
+	let status = parseInt(data_splitted[startIndex+9]);
+	worldsList.push(
+		{
+			"name": worldName, 
+			"texturepack": texturepack, 
+			"size": size.join("x"), 
+			"spawn": `x: ${spawn[0]}, y: ${spawn[1]}, z: ${spawn[2]}`, 
+			"weather": weather, 
+			"status": status
+		}
+	);
+	console.log(worldsList)
+	return startIndex+9
+}
+
+const updateAll = () =>{
 	updateGlobalList();
 	updateWorlds();
 };
@@ -123,16 +162,8 @@ export let processCommand = (data) => {
 				let player = getPlayer(playerId)
 				switch (playerEventType) {
 					case 'A':
-						let playerName = data_splitted[2];
-						let playerOp = parseInt(data_splitted[3]);
-						let playerWorld = data_splitted[4]
-						playersList.push({
-							"name": playerName,
-							"id": playerId,
-							"world": playerWorld,
-							"isAdmin": playerOp
-						});
-						data_splitted.splice(0, 4);
+						const lastIndex = createPlayer(data_splitted, 1)
+						data_splitted.splice(0, lastIndex);
 						break;
 					case 'R':
 						let pl;
@@ -162,19 +193,36 @@ export let processCommand = (data) => {
 						break;
 					default: throw {message: "Invalid player event received", eventCode: playerEventType};
 				}
-				updateUsers();
+				updateAll();
 				break
 			case 'S':
 				let state = data_splitted[0].charAt(1);
 				console.log('switch state:',state);
 				switch (state) {
 					case 'H':
-						let usersTotal = data_splitted[1];
-						let usersArray = data_splitted[2];
-						let worldsCount = data_splitted[3];
-						let worldsArray = data_splitted[4];
-						console.log('usersTotal:',usersTotal, 'usersArray:',usersArray,'worldsCount:',worldsCount,'worldsArray:',worldsArray);
-						data_splitted.splice(0, 4);
+						const players_worlds = data.substring(3).split('\x01') // делим raw строку по этому разделителю нахуй так нельзя я знаю переделать нада
+
+						const players = players_worlds[0].split('\x00')
+						let players_length = 4 // кол-во параметров типа понял
+
+						const worlds = players_worlds[1].split('\x00')
+						let world_length = 10;
+
+						for (let i = 0; i < worlds.length; i += world_length) {
+							const chunk = worlds.slice(i, i + world_length);
+							if (chunk.length > 1){
+								createWorld(chunk, 0)
+							}
+						}
+						for (let i = 0; i < players.length; i += players_length) {
+							const chunk = players.slice(i, i + players_length);
+							if (chunk.length > 1){
+								createPlayer(chunk, 0)
+							}
+						}
+						updateAll();
+						// console.log(lastIndex, data_splitted)
+						data_splitted.splice(0, 20); // я наугад ебанул число нада переделать
 						break;
 					case 'R':
 						const logsCount = parseInt(data_splitted[1], 10);
