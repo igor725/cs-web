@@ -6,6 +6,20 @@ import { updateGlobalList } from '../PlayersList';
 import { updateWorlds } from '../Worlds';
 
 export let playersList = [];
+export let worldsList = [];
+
+const getWorld = (worldName) => {
+	let wrld;
+	worldsList.every((world, index) => {
+		if (world.name === worldName){
+			wrld = worldsList[index];
+			return false;
+		}
+		return true;
+	})
+	return wrld;
+};
+
 const getPlayer = (playerId) => {
 	let pl;
 	playersList.every((player, index) => {
@@ -104,16 +118,15 @@ export let processCommand = (data) => {
 				data_splitted.splice(0, 1);
 				break;
 			case 'P':
-				let player;
 				let playerEventType = data_splitted[0].charAt(1);
 				let playerId = parseInt(data_splitted[1]);
-				console.log('Player Event | Type:',playerEventType, 'ID:',playerId);
+				let player = getPlayer(playerId)
 				switch (playerEventType) {
 					case 'A':
 						let playerName = data_splitted[2];
 						let playerOp = parseInt(data_splitted[3]);
 						let playerWorld = data_splitted[4]
-						playersList.push({;
+						playersList.push({
 							"name": playerName,
 							"id": playerId,
 							"world": playerWorld,
@@ -135,7 +148,6 @@ export let processCommand = (data) => {
 						break;
 					case 'W':
 						let playerNewWorld = data_splitted[2];
-						player = getPlayer(playerId);
 						if (player){
 							player.world = playerNewWorld;
 						};
@@ -143,7 +155,6 @@ export let processCommand = (data) => {
 						break;
 					case 'O':
 						let playerNewOp = parseInt(data_splitted[2]);
-						player = getPlayer(playerId);
 						if (player){
 							player.isAdmin = playerNewOp;
 						}
@@ -193,30 +204,67 @@ export let processCommand = (data) => {
 			case 'W':
 				let worldEventType = data_splitted[0].charAt(1);
 				let worldName = data_splitted[1];
+				let world = getWorld(worldName)
 				console.log('World Management | Type:',worldEventType, 'worldName:', worldName);
 				switch (worldEventType) {
 					case 'A':
-						let texturepack = data_splitted[2];
-						let seed = data_splitted[3];
-						console.log('texturepack:',texturepack, 'seed:',seed);
-						data_splitted.splice(0, 3);
+						let texturepack = data_splitted[2] || "Default";
+						let size = [data_splitted[3], data_splitted[4], data_splitted[5]];
+						let spawn = [
+							parseFloat(data_splitted[6]).toFixed(2), 
+							parseFloat(data_splitted[7]).toFixed(2),
+							parseFloat(data_splitted[8]).toFixed(2)
+						]
+						let weather = parseInt(data_splitted[9]);
+						let status = parseInt(data_splitted[10]);
+						worldsList.push(
+							{
+								"name": worldName, 
+								"texturepack": texturepack, 
+								"size": size.join("x"), 
+								"spawn": `x: ${spawn[0]}, y: ${spawn[1]}, z: ${spawn[2]}`, 
+								"weather": weather, 
+								"status": status
+							}
+						);
+						updateWorlds();
+						data_splitted.splice(0, 10);
 						break;
 					case 'R':
+						let wIndex;
+						worldsList.every((world, index) => {
+							if (world.name = worldName){
+								wIndex = index;
+								return false;
+							}
+							return true;
+						});
+						updateWorlds();
+						worldsList.splice(wIndex, 1);
 						data_splitted.shift();
 						break;
 					case 'S':
-						let newStatus = data_splitted[2];
-						console.log('newStatus:',newStatus);
+						let newStatus = parseInt(data_splitted[2]);
+						if (world) {
+							world.status = newStatus;
+						};
+						updateWorlds();
 						data_splitted.splice(0,2);
 						break;
 					case 'W':
-						let newWeather = data_splitted[2];
-						console.log('newWeather:',newWeather);
+						let newWeather = parseInt(data_splitted[2]);
+						if (world) {
+							world.weather = newWeather;
+						};
+						updateWorlds();
 						data_splitted.splice(0,2);
 						break;
 					case 'T':
 						let newTexturepack = data_splitted[2];
-						console.log('newTexturepack:',newTexturepack);
+						if (world) {
+							world.texturepack = newTexturepack;
+						};
+						updateWorlds();
 						data_splitted.splice(0,2);
 						break;
 
