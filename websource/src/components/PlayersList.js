@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import PlayerDropdown from './PlayerList/PlayerDropdown';
+import { playersList } from './CWAP/CWAP';
 import './styles/PlayersList.css';
 
 export let prev_player;
@@ -34,7 +35,6 @@ export let showMenu = (e) => {
 export let updateGlobalList = () => {}
 
 
-let playersList = [];
 const PlayersList = ({ cwap }) => {
 	const [, updateState] = React.useState();
 	const forceUpdate = React.useCallback(() => updateState({}), []);

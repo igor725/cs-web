@@ -8,11 +8,12 @@ import { updateWorlds } from '../Worlds';
 export let playersList = [];
 const getPlayer = (playerId) => {
 	let pl;
-	playersList.map((player, index) => {
+	playersList.every((player, index) => {
 		if (player.id === playerId){
 			pl = playersList[index];
-			return;
+			return false;
 		}
+		return true;
 	})
 	return pl;
 };
@@ -104,12 +105,12 @@ export let processCommand = (data) => {
 				break;
 			case 'P':
 				let playerEventType = data_splitted[0].charAt(1);
-				let playerId = data_splitted[1]
+				let playerId = parseInt(data_splitted[1])
 				console.log('Player Event | Type:',playerEventType, 'ID:',playerId);
 				switch (playerEventType) {
 					case 'A':
 						let playerName = data_splitted[2]
-						let playerOp = data_splitted[3]
+						let playerOp = parseInt(data_splitted[3])
 						let playerWorld = data_splitted[4]
 						playersList.push({
 							"name": playerName,
@@ -121,10 +122,12 @@ export let processCommand = (data) => {
 						break;
 					case 'R':
 						let pl;
-						playersList.map((player, index) => {
+						playersList.every((player, index) => {
 							if (player.id === playerId){
 								pl = playersList[index];
+								return false;
 							}
+							return true;
 						})
 						playersList.splice(pl, 1);
 						data_splitted.shift();
@@ -141,7 +144,7 @@ export let processCommand = (data) => {
 						break;
 					default: throw {message: "Invalid player event received", eventCode: playerEventType};
 				}
-				updateUsers()
+				updateUsers();
 				break
 			case 'S':
 				let state = data_splitted[0].charAt(1);

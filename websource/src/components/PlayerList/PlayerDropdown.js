@@ -6,7 +6,7 @@ const PlayerDropdown = props => {
 	const playerId = props.id
 	const playerName = props.children;
 	const playerWorld = props.world;
-	const isAdmin = props.isAdmin || false;
+	const isAdmin = Boolean(props.isAdmin);
 	const cwap = props.cwap;
 
 	const opPlayer = (playerName) =>{

@@ -7,12 +7,7 @@ import { prev_player } from './PlayersList';
 export let updateWorlds = () => {}
 
 const World = props => {
-	const [, updateState] = React.useState();
-	const forceUpdate = React.useCallback(() => updateState({}), []);
 	const cwap = props.cwap;
-	updateWorlds = () => {
-		forceUpdate();
-	}
 	return (
 		<div className='world-grid'>
 			<div className='world' name={props.name} style={{ zIndex: props.pos }}>
@@ -53,14 +48,14 @@ const World = props => {
 				<h3 id='wName'>Players</h3>
 				<ul className='plist' id='pList2'>
 					{ playersList.map((player)=>{
-						if (player.world == props.name){
+						if (player.world === props.name){
 							return (
-							<PlayerDropdown 
-								id={player.id}
-								isAdmin={player.isAdmin} 
-								cwap={cwap}
-							>{player.name}</PlayerDropdown>
-						)
+								<PlayerDropdown 
+									id={player.id}
+									isAdmin={player.isAdmin} 
+									cwap={cwap}
+								>{player.name}</PlayerDropdown>
+							)
 						}
 					})}
 				</ul>
@@ -70,7 +65,12 @@ const World = props => {
 };
 
 const Worlds = props => {
+	const [, updateState] = React.useState();
+	const forceUpdate = React.useCallback(() => updateState({}), []);
 	const cwap = props.cwap;
+	updateWorlds = () => {
+		forceUpdate();
+	}
 	useEffect(() => {
 		const listElement = document.getElementById('pList2');
 		listElement.onscroll = (e) => prev_player && prev_player.classList.remove('show');

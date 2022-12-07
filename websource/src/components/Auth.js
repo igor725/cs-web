@@ -1,5 +1,9 @@
 import React from 'react';
 import { MD5 } from 'md5-js-tools';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
+
 import './styles/Auth.css';
 
 export let showAuth = () => {};
@@ -48,7 +52,7 @@ const Auth = ({cwap}) => {
 			<div className='authWindow'>
 				<div className='authWindowMain'>
 					<h2>WebAdmin Password</h2>
-					<i id='userlogo' className='fa duotone fa-user'></i>
+					<FontAwesomeIcon id='userlogo' icon={regular("user")}/>
 					<input type='password' id='authPassword' placeholder='password'/>
 					<p id='status'></p>
 					<button className='btn41-43 btn-41 loginBtn' onClick={doLogin}>

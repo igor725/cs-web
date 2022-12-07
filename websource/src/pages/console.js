@@ -1,5 +1,8 @@
 import React, { useEffect } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import './styles/console.css';
+
 
 var Convert = require('ansi-to-html');
 var convert = new Convert({
@@ -80,7 +83,7 @@ const Console = ({ CWAP }) => {
 	return (
 		<div className='console'>
 			<div className='console-copyboard' onClick={hideCopy}>
-				<i className="far fa-clipboard"></i>
+				<FontAwesomeIcon icon={regular("clipboard")} />
 			</div>
 			<div className='console-top'>
 				<div className='console-exit'>
