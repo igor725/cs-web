@@ -267,7 +267,6 @@ export let processCommand = (data) => {
 						updateWorlds();
 						data_splitted.splice(0,2);
 						break;
-
 					default: throw {message: "Invalid world event received", eventCode: worldEventType};
 				}
 				break;

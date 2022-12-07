@@ -5,6 +5,7 @@ import PlayerDropdown from './PlayerList/PlayerDropdown';
 import { prev_player } from './PlayersList';
 
 export let updateWorlds = () => {}
+
 const wTypes = {
 	0: "Sunny",
 	1: "Raining",
