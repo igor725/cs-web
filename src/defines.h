@@ -7,6 +7,7 @@
 #include <event.h>
 #include <netbuffer.h>
 #include <log.h>
+#include <server.h>
 
 #define WL(I, T, ...) Log_##I("WebPanel: " T,  ##__VA_ARGS__)
 
@@ -84,6 +85,7 @@ struct _WebState {
 	cs_byte pwhash[33];
 };
 
+extern ServerInfo ServInf;
 extern struct _WebState WebState;
 extern EventRegBunch events[];
 extern CommandRegBunch cmds[];

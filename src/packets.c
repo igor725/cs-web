@@ -35,7 +35,8 @@ void genpacket(NetBuffer *nb, cs_str fmt, ...) {
 				}
 				break;
 			case 's':
-				temps = va_arg(args, cs_str);
+				if ((temps = va_arg(args, cs_str)) == NULL)
+					temps = "(nullptr)";
 				size = (cs_int32)(String_Length(temps) + 1);
 				NetBuffer_EndWrite(nb, (cs_uint32)String_Copy(NetBuffer_StartWrite(
 					nb, (cs_uint32)size), (cs_uint32)size, temps
@@ -136,7 +137,7 @@ static void kickplayer(NetBuffer *nb, ClientID id) {
 	genpacket(nb, "NI^s", "Player kicked successfully");
 }
 
-static cs_bool runcommand(cs_byte *cmd) {
+static inline cs_bool runcommand(cs_byte *cmd) {
 	WL(Info, "Executed a command: %s", cmd);
 	return Command_Handle((cs_char *)cmd, NULL);
 }
@@ -180,8 +181,9 @@ void handlewebsockmsg(struct _HttpClient *hc) {
 				break;
 			}
 
-			hc->cpls->authed = Memory_Compare(WebState.pwhash, data + 1, 32);
-			genpacket(&hc->nb, "As", hc->cpls->authed ? "OK" : "FAIL");
+			if ((hc->cpls->authed = Memory_Compare(WebState.pwhash, data + 1, 32)) == true)
+				genpacket(&hc->nb, "AOK^ss", ServInf.coreName, ServInf.coreGitTag);
+			else genpacket(&hc->nb, "AFAIL^");
 
 			data += 34;
 			continue;
@@ -211,7 +213,7 @@ void handlewebsockmsg(struct _HttpClient *hc) {
 			case 'S':
 				hc->cpls->wsstate = ustate(*readstr(&data));
 				if (prev == hc->cpls->wsstate) {
-					genpacket(&hc->nb, "NE^s", "You already here");
+					genpacket(&hc->nb, "NE^s", "You're already here");
 					break;
 				}
 				WebState.ustates[prev]--;

@@ -125,22 +125,20 @@ export let processCommand = (data) => {
 				const status = data_splitted[0].substring(1);
 				console.log('Auth:', status);
 				const user_pass = localStorage.getItem('USER_PASSWORD');
+				spcnt = 1;
 
 				switch (status) {
 					case 'REQ':
-						if (user_pass !== null) {
-							doLogin(user_pass, true);
-						} else {
-							showAuth();
-						}
+						(user_pass !== null) ? doLogin(user_pass, true) : showAuth();
 						break;
 
 					case 'OK':
-						if (user_pass) {
-							hideAuth();
-						} else {
-							doAuthGood();
-						}
+						spcnt = 3;
+						const software = data_splitted[1];
+						const git_tag = data_splitted[2];
+
+						console.log(`Current software: ${software}/${git_tag}`);
+						(user_pass ? hideAuth : doAuthGood)();
 						break;
 
 					default:
@@ -149,28 +147,27 @@ export let processCommand = (data) => {
 						break;
 				}
 
-				spcnt = 1;
 				break;
 			case 'B':
-				let playerName = data_splitted[0].substring(1);
-				let banSuccess = data_splitted[1];
+				const playerName = data_splitted[0].substring(1);
+				const banSuccess = data_splitted[1];
 				console.log('player:', playerName, 'isSuccess?:', banSuccess);
 				spcnt = 2;
 				break;
 			case 'C':
-				let msg = data_splitted[0].substring(1);
+				const msg = data_splitted[0].substring(1);
 				writeInConsole(msg);
 				spcnt = 1;
 				break;
 			/*case 'E':
 				spcnt = 5;
-				let pluginEventType = data_splitted[0].charAt(1);
-				let pluginId = data_splitted[1];
+				const pluginEventType = data_splitted[0].charAt(1);
+				const pluginId = data_splitted[1];
 				console.log('Plugin Manage | Type: ',pluginEventType,'ID: ',pluginId);
 				if (pluginEventType === 'A') {
-					let pluginName = data_splitted[2];
-					let pluginHtml = data_splitted[3];
-					let pluginVer = data_splitted[4];
+					const pluginName = data_splitted[2];
+					const pluginHtml = data_splitted[3];
+					const pluginVer = data_splitted[4];
 					console.log('pluginName:', pluginName, 'pluginHtml:', pluginHtml, 'pluginVer', pluginVer);
 
 				}

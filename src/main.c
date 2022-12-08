@@ -4,9 +4,12 @@
 #include <netbuffer.h>
 #include <command.h>
 #include <config.h>
+#include <server.h>
 
 #include "plhdr.h"
 #include "defines.h"
+
+ServerInfo ServInf = {0};
 
 struct _WebState WebState = {
 	.stopped = false,
@@ -18,6 +21,13 @@ struct _WebState WebState = {
 };
 
 cs_bool Plugin_Load(void) {
+	if (!Server_GetInfo(&ServInf, sizeof(ServInf))) {
+		WL(Warn, "Failed to get server version info");
+		ServInf.coreGitTag = "unknown";
+		ServInf.coreName = "unnamed";
+		ServInf.coreFlags = 0;
+	}
+
 	WebState.cfg = Config_NewStore("web");
 
 	CEntry *ent;
