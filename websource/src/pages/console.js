@@ -61,7 +61,7 @@ const Console = ({ CWAP }) => {
 		forceUpdate();
 		setTimeout(() => {
 			text.scrollTop = text.scrollHeight;
-		}, 100);
+		}, 200);
 	};
 
 	const showCopy = (e) => {
@@ -114,7 +114,7 @@ const Console = ({ CWAP }) => {
 									hispos = 0;
 									history.push(input_el.value);
 									input_el.value = '';
-									setTimeout(() => text.scrollTop = text.scrollHeight, 100);
+									setTimeout(() => text.scrollTop = text.scrollHeight, 200);
 								}
 								break;
 							case 'ArrowUp':

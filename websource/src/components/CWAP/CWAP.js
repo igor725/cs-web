@@ -4,7 +4,6 @@ import WebSocket from './WebSocketConnection';
 import { doAuthGood, showAuth, hideAuth, showAuthError, doLogin } from '../Auth';
 import { updateGlobalList } from '../PlayersList';
 import { updateWorlds } from '../Worlds';
-import { text } from '@fortawesome/fontawesome-svg-core';
 
 export let playersList = [];
 export let worldsList = [];
@@ -242,8 +241,6 @@ export let processCommand = (data) => {
 						spcnt = parseInt(data_splitted[1], 10) + 2;
 						for (let i = 2; i < spcnt; i++)
 							writeInConsole(data_splitted[i]);
-						const cout = document.getElementById('console-out');
-						cout.scrollTop = cout.scrollHeight;
 						break;
 
 					default: throw {message: "Invalid state packet received", stateCode: state};
@@ -259,7 +256,6 @@ export let processCommand = (data) => {
 				switch (worldEventType) {
 					case 'A':
 						spcnt = createWorld(data_splitted, 1) + 1;
-						updateWorlds();
 						break;
 					case 'R':
 						spcnt = 2;
@@ -270,23 +266,20 @@ export let processCommand = (data) => {
 							}
 							return true;
 						});
-						updateWorlds();
 						break;
 					case 'S':
 						if (world) world.status = parseInt(data_splitted[2]);
-						updateWorlds();
 						break;
 					case 'W':
 						if (world) world.weather = parseInt(data_splitted[2]);
-						updateWorlds();
 						break;
 					case 'T':
 						if (world) world.texturepack = data_splitted[2] || "Default";
-						updateWorlds();
 						break;
-
-					default: throw {message: "Invalid world event received", eventCode: worldEventType};
-				}
+						
+						default: throw {message: "Invalid world event received", eventCode: worldEventType};
+					}
+				updateWorlds();
 				break;
 
 			default: throw {message: "Unknown packet received", packetId: packetId};
@@ -301,11 +294,8 @@ export let processCommand = (data) => {
 
 let CWAP = () => {
 	const [lastMessage, sendMessage] = WebSocket();
-	// ПРОБЕЛ !!! \x00
-
 	return ({
 		getAnswer: () => { return lastMessage && lastMessage.data.text(); },
-
 		sendAuth: (hash) => sendMessage(`A${hash}\x00`, false),
 		banPlayer: (name) => sendMessage(`B${name}\x00Banned by WebAdmin\x000\x00`, false),
 		kickPlayer: (name) => sendMessage(`K${name}\x00`, false),

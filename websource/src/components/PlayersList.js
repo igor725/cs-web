@@ -17,10 +17,10 @@ window.onclick = (event) => {
 		}
 	}
 
-	if (prev_player) {
-		prev_player.style.left = event.clientX + 'px';
-		prev_player.style.top = event.clientY + 'px';
-	}
+	// if (prev_player) {
+	// 	prev_player.style.left = event.clientX + 'px';
+	// 	prev_player.style.top = event.clientY + 'px';
+	// }
 };
 
 export let showMenu = (e) => {

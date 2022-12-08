@@ -5,6 +5,7 @@ h1, h2, h3, a{
 }
 .homeMenu {
     margin-top: 20px;
+	margin-bottom: 20px;
     display: grid;
     grid-gap: 70px;
     grid-template-columns: 0fr 0fr;
