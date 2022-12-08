@@ -289,6 +289,9 @@ export let processCommand = (data) => {
 		if (data_splitted.length <= spcnt)
 			throw {message: "Гроб гроб кладбище пидор!!!"};
 		data_splitted.splice(0, spcnt);
+
+		if (data_splitted[0].at(0) == "\x01")
+			data_splitted[0] = data_splitted[0].substring(1);
 	}
 };
 

@@ -185,15 +185,14 @@ void handlewebsockmsg(struct _HttpClient *hc) {
 				break;
 			}
 
-			if (Memory_Compare(WebState.pwhash, data + 1, 32)) {
-				sendsockmsg(hc, "AOK\0", 4);
-				hc->cpls->authed = true;
-			} else sendsockmsg(hc, "AFAIL\0", 6);
+			hc->cpls->authed = Memory_Compare(WebState.pwhash, data + 1, 32);
+			genpacket(&hc->nb, "As", hc->cpls->authed ? "OK" : "FAIL");
 
 			data += 34;
 			continue;
 		}
 
+		enum _WsState prev = hc->cpls->wsstate;
 		switch (*data++) {
 			case 'B':
 				genpacket(&hc->nb, "Bsi", readstr(&data), 1);
@@ -215,8 +214,12 @@ void handlewebsockmsg(struct _HttpClient *hc) {
 				break;
 
 			case 'S':
-				WebState.ustates[hc->cpls->wsstate]--;
 				hc->cpls->wsstate = ustate(*readstr(&data));
+				if (prev == hc->cpls->wsstate) {
+					genpacket(&hc->nb, "NE^s", "You already here");
+					break;
+				}
+				WebState.ustates[prev]--;
 				if (hc->cpls->wsstate == WSS_INVALID) {
 					hc->state = CHS_CLOSING;
 					break;

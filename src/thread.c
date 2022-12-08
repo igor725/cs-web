@@ -143,7 +143,7 @@ THREAD_PUBFUNC(WebThread) {(void)param;
 							hc->cpls = (void *)((cs_char *)hc->wsh + sizeof(WebSock));
 							hc->wsh->proto = "cserver-cpl";
 							hc->wsh->maxpaylen = 32 * 1024;
-							hc->cpls->wsstate = WSS_HOME;
+							hc->cpls->wsstate = WSS_INVALID;
 							hc->state = CHS_UPGRADING;
 						} else hc->state = CHS_REQUEST;
 					}
