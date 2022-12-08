@@ -12,32 +12,33 @@ export let doAuthGood = () => { };
 export let doLogin = () => { };
 
 let pass_candidate;
+const LOG_IN_MSG = "Log in";
 const Auth = ({ cwap }) => {
 	const authWindow = document.getElementsByClassName('authWindowG')[0];
 	const authError = document.getElementById('status');
-	const password = document.getElementById('authPassword')
+	const password = document.getElementById('authPassword');
 	const loginBtn = document.getElementsByClassName("loginBtn")[0];
 	showAuth = () => authWindow.style.display = 'block';
 
 	showAuthError = () => {
 		showAuth();
-		setTimeout(()=>{
+		setTimeout(() => {
 			loginBtn.classList.add("fancyLoginFailed")
 		}, 1000);
-		setTimeout(()=>{
+		setTimeout(() => {
 			authError.innerHTML = 'Wrong password';
 			authError.classList.add("badPassAnimation")
-			setTimeout(()=>authError.classList.remove("badPassAnimation"), 260)
+			setTimeout(() => authError.classList.remove("badPassAnimation"), 260)
 			loginBtn.classList.remove("fancyLoginFailed", "fancyLoginAnim")
 		}, 2000)
 	};
 
 	doAuthGood = (localPass) => {
-		if (!localPass){
-			setTimeout(()=>{
+		if (!localPass) {
+			setTimeout(() => {
 				authWindow.classList.add("fancyLoginSuccess");
 			}, 1000)
-			setTimeout(()=>{
+			setTimeout(() => {
 				authWindow.style.display = 'none';
 			}, 2500)
 		} else {
@@ -46,12 +47,13 @@ const Auth = ({ cwap }) => {
 		!localPass && localStorage.setItem('USER_PASSWORD', pass_candidate);
 		cwap.switchState(window.location.pathname);
 	};
-
 	doLogin = (hash) => {
 		if (!hash) {
 			loginBtn.classList.add("fancyLoginAnim");
+			loginBtn.innerHTML = "Logging in..."
+			setTimeout(() => loginBtn.innerHTML = LOG_IN_MSG, 2000)
 			let pass = password.value;
-			if ((pass = password.value).length > 1){
+			if ((pass = password.value).length > 1) {
 				hash = MD5.generate(pass);
 			} else {
 				return;
@@ -75,11 +77,11 @@ const Auth = ({ cwap }) => {
 						}
 					}} />
 					<p id='status'></p>
-					<button className='btn41-43 btn-41 loginBtn' onClick={(e) => {
+					<button className='btn41-43 btn-41 loginBtn' onClick={() => {
 						if (password.value.length > 1) {
 							doLogin();
 						}
-					}}> Log In </button>
+					}}> {LOG_IN_MSG} </button>
 				</div>
 			</div>
 		</div>
