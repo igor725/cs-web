@@ -1,5 +1,5 @@
 if [ $PLUGIN_INSTALL -eq 1 ]; then
-	if [ $PLUGIN_ARGS == "wbuild" ]; then
+	if [ "$PLUGIN_ARGS" == "wbuild" ]; then
 		pushd "$ROOT/websource/";
 		if ! npm install; then
 			echo "Failed to install dependencies";

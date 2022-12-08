@@ -43,7 +43,7 @@ static inline cs_str guessmime(cs_str path) {
 	};
 
 	cs_char *ext = String_LastChar(path, '.') + 1;
-	for (cs_int32 i = 0; i < (sizeof(mimes) / sizeof(mimes[0])); i++) {
+	for (cs_int32 i = 0; i < (cs_int32)(sizeof(mimes) / sizeof(mimes[0])); i++) {
 		static cs_str cmime = NULL;
 		if (mimes[i] == NULL) {
 			cmime = mimes[++i];

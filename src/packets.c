@@ -69,11 +69,6 @@ static inline enum _WsState ustate(cs_char s) {
 	}
 }
 
-static void sendsockmsg(struct _HttpClient *hc, void *msg, cs_uint32 len) {
-	Memory_Copy(NetBuffer_StartWrite(&hc->nb, len), msg, len);
-	NetBuffer_EndWrite(&hc->nb, len);
-}
-
 static void sendconsolestate(struct _HttpClient *hc) {
 	cs_uint32 end = WebState.ll.pos + WebState.ll.cnt,
 	pos = WebState.ll.pos;
@@ -156,14 +151,14 @@ static cs_str readstr(cs_byte **data) {
 	*data += String_Length(ret) + 1;
 	return ret;
 }
-
+/*
 static cs_uint32 readargc(cs_byte *data, cs_uint16 len) {
 	cs_uint32 argc = 0;
 	for (; len > 1; len--)
 		if (*data++ == '\0') argc++;
 	return argc;
 }
-
+*/
 void handlewebsockmsg(struct _HttpClient *hc) {
 	cs_byte *data = (cs_byte *)hc->wsh->payload;
 	while (hc->state < CHS_CLOSING && (data - (cs_byte *)hc->wsh->payload) < hc->wsh->paylen) {
