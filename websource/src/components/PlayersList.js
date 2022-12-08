@@ -16,11 +16,6 @@ window.onclick = (event) => {
 			}
 		}
 	}
-
-	// if (prev_player) {
-	// 	prev_player.style.left = event.clientX + 'px';
-	// 	prev_player.style.top = event.clientY + 'px';
-	// }
 };
 
 export let showMenu = (e) => {
@@ -28,6 +23,10 @@ export let showMenu = (e) => {
 	if ((playerEl !== prev_player) && prev_player) {
 		prev_player.classList.remove('show');
 	}
+	
+	playerEl.style.left = e.pageX + 'px';
+	playerEl.style.top = e.pageY + 'px';
+	
 	playerEl.classList.toggle('show');
 	prev_player = playerEl;
 };

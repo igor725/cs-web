@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { toast } from 'react-toastify';
 import './styles/console.css';
 
 
@@ -23,16 +24,23 @@ var convert = new Convert({
 let messages = [], history = [], hispos = 0;
 export let writeInConsole = () => {};
 
-
-
 const Console = ({ CWAP }) => {
 	const [, updateState] = React.useState();
 	const forceUpdate = React.useCallback(() => updateState({}), []);
+
+	const text = document.getElementById('console-out');
+	const input_el = document.getElementById('console-in');
+
 	let copyMenu;
 	let prevCopy;
 	let selectedCopy;
 
+	const scrollToLatest = () => {
+		setTimeout(() => text.scrollTop = text.scrollHeight, 200);
+	};
+
 	useEffect(()=>{
+		scrollToLatest();
 		copyMenu = document.getElementsByClassName("console-copyboard")[0];
 		window.onclick = (event) => {
 			if (!event.target.matches('.console-copyboard')) {
@@ -54,14 +62,11 @@ const Console = ({ CWAP }) => {
 
 	writeInConsole = (msg) => {
 		if (!msg) return;
-		const text = document.getElementById('console-out');
 		pushMessage(<div dangerouslySetInnerHTML={{
 			__html: convert.toHtml(msg).replaceAll('  ', '&emsp;')
 		}}></div>);
 		forceUpdate();
-		setTimeout(() => {
-			text.scrollTop = text.scrollHeight;
-		}, 200);
+		scrollToLatest();
 	};
 
 	const showCopy = (e) => {
@@ -70,8 +75,8 @@ const Console = ({ CWAP }) => {
 		e.target.classList.add("selected-term-text");
 		selectedCopy = e.target.innerText;
 		copyMenu.style.display = "block";
-		copyMenu.style.left = e.clientX + 10 +'px';
-		copyMenu.style.top = e.clientY + 5 +  'px';
+		copyMenu.style.left = e.pageX + 10 +'px';
+		copyMenu.style.top = e.pageY + 5 +  'px';
 		prevCopy = e.target;
 	};
 
@@ -79,6 +84,7 @@ const Console = ({ CWAP }) => {
 		copyMenu.style.display = "hide";
 		navigator.clipboard.writeText(selectedCopy);
 		prevCopy.classList.add("selected-term-text");
+		toast.success("Copied to clipboard!")
 	}
 
 	return (
@@ -105,16 +111,14 @@ const Console = ({ CWAP }) => {
 				<div className='inputting-field'>
 					<p className='console-in-dot'> &gt; </p>
 					<input name='input-mac' id='console-in' type='text' onKeyDown={(e) => {
-						const input_el = document.getElementById('console-in');
 						switch (e.key) {
 							case 'Enter':
-								const text = document.getElementById('console-out');
 								if (input_el.value.length > 0) {
 									pushMessage(<div> &gt; {CWAP.sendConsole(input_el.value)}</div>);
 									hispos = 0;
 									history.push(input_el.value);
 									input_el.value = '';
-									setTimeout(() => text.scrollTop = text.scrollHeight, 200);
+									scrollToLatest();
 								}
 								break;
 							case 'ArrowUp':
