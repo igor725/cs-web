@@ -91,6 +91,46 @@ body {
 	color: rgb(200, 238, 127);
 }
 
-.navbar .buttons {
-	display: inline-flex;
+@media only screen and (min-width: 601px){
+	.navbar .buttons {
+		display: inline-flex;
+	}
 }
+
+@media only screen and (max-width: 600px) {
+	.show-navbar{
+		display: grid !important;
+		grid-auto-flow: row;
+		grid-column: 1/4;
+	}
+
+	.show-navbar > a{
+		width: 100% !important;
+		height: 50px;
+		font-size: 23px;
+		justify-content: center;
+	}
+
+	.websocketStatus {
+		height: 100%;
+	}
+
+	.navbar h3 {
+		margin-left: 0;
+		font-size: 22px;
+		height: 100%;
+	}
+
+	.buttons {
+		display:none;
+	}
+
+	#navbar-mobile-btn{
+		margin: 0 auto;
+		width: fit-content;
+		padding: 10px;
+		height: 55px;
+		color: #6d7264;
+		border-radius: 12px;
+	}
+  }

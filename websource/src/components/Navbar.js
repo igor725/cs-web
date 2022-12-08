@@ -3,6 +3,9 @@ import './styles/Navbar.css';
 import { Link, useLocation } from 'react-router-dom';
 import { DarkModeToggle } from 'react-dark-mode-toggle-2';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+
 let prev_colored;
 const Navbar = props => {
 	const DARKMODE_STATE = (window.localStorage.getItem('DARKMODE_STATE') === 'true') || false;
@@ -11,7 +14,11 @@ const Navbar = props => {
 	window.localStorage.setItem('DARKMODE_STATE', isDarkMode);
 
 	const currentLocation = useLocation().pathname;
+	const navbar_btns = document.getElementsByClassName("buttons")[0];
 
+	const openNavbar = () => {
+		navbar_btns.classList.toggle("show-navbar")
+	}
 	useEffect(() => {
 		if (prev_colored){
 			prev_colored.className = "";
@@ -31,9 +38,12 @@ const Navbar = props => {
 		<div className={((window.localStorage.getItem('DARKMODE_STATE') === 'true') || false) ? 'navbar' : 'navbar light'}>
 			<div style={{ width: '4px', background: 'red' }} title='WebSocket connection: ' className='websocketStatus' />
 			<h3 style={{ cursor: 'pointer' }}>CServer Webadmin</h3>
+			{(window.screen.width <= 600) && (
+					<FontAwesomeIcon id='navbar-mobile-btn' icon={solid('bars')} onClick={openNavbar}></FontAwesomeIcon>
+			)}
 			<div className='buttons' onClick={(e) => {
 				const target = e.target
-				if (target.tagName === 'A') {
+				if (target.tagName === 'A' && !target.classList.contains("red")) {
 					const path = target.getAttribute('href');
 					props.CWAP.switchState(path);
 				}

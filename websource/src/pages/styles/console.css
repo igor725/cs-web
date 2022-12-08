@@ -197,3 +197,15 @@
 .green {
 	background: yellowgreen;
 }
+
+@media only screen and (max-width: 600px) {
+	.console {
+		width: 95%;
+	}
+	#console-out {
+		padding-right: 10px;
+	}
+	.terminal-text {
+		margin-right: 30%;
+	}
+}

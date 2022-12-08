@@ -3,6 +3,7 @@ h1, h2, h3, a{
 	-ms-user-select: none; /* IE 10 and IE 11 */
 	user-select: none; /* Standard syntax */
 }
+
 .homeMenu {
     margin-top: 20px;
 	margin-bottom: 20px;
@@ -50,4 +51,11 @@ html{
 
 ::-webkit-scrollbar-corner {
 	background: #222;
+}
+
+@media only screen and (max-width: 600px) {
+	.homeMenu {
+		grid-template-columns: none !important;
+		grid-gap: 35px;
+	}
 }
