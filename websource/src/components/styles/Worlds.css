@@ -22,7 +22,7 @@
 .world-grid {
     background: #3a373a;
     display: grid;
-    grid-template-columns: 0fr 0fr 1fr;
+    grid-template-columns: 0fr 1fr 1fr;
     padding: 10px;
 	border-radius:12px;
 }
@@ -152,8 +152,7 @@
 }
 
 .worlds h3 {
-	margin-top: 20px;
-	margin-bottom: 0;
+	margin: 0 auto;
 	text-align: center;
 	color: white;
 	font-size: 22px;

@@ -84,8 +84,10 @@ const Worlds = props => {
 
 	return (
 		<div className='worlds'>
-			<h3 className='worlds-header'>Worlds</h3>
-			<hr />
+			<div style={{"padding-top": "10px"}}>
+				<h3 className='worlds-header'>Worlds</h3>
+				<hr />
+			</div>
 			<div className='worlds_list'>
 				{
 					worldsList.map((world, pos) => {
