@@ -9,6 +9,19 @@
 	transform: translate(-50%, -50%);
 }
 
+@keyframes move {
+	0% {
+	  transform: translateX(25%);
+	  font-size:20px;
+	}
+	50% {
+		transform: translateX(-25%)
+	}
+	100% {
+		transform: translateX(0%)
+	}
+}
+
 .authWindowG{
 	display: none;
 	width: 100%;
@@ -74,18 +87,74 @@
 	margin-top: 45px;
 }
 
+@keyframes translate {
+	0% {
+	  margin-top: 10px;
+	}
+	100% {
+		margin-top: -80px;
+		background: white;
+		color:black;
+		/* width: 300px; */
+	}
+}
+
+@keyframes translate-back {
+	0% {
+		margin-top: -80px;
+		background: white;
+		color:black;
+		/* width: 300px; */
+	}
+	100% {
+		margin-top: 10px;
+	}
+}
+@keyframes translate-top {
+	0% {
+	  margin-top: -80px;
+	  background: white;
+	  color:black;
+	  /* width: 300px; */
+	}
+	100% {
+		margin-top: -10000px;
+	}
+}
+
+.fancyLoginAnim, .fancyLoginFailed, .fancyLoginSuccess {
+	cursor: default;
+}
+.fancyLoginAnim {
+	-webkit-animation: translate 1s;
+    -webkit-animation-delay: 0s;
+    -webkit-animation-fill-mode: forwards;
+}
+
+.fancyLoginFailed{
+	-webkit-animation: translate-back 1s;
+    -webkit-animation-delay: 0s;
+    -webkit-animation-fill-mode: backwards;
+}
+
+.fancyLoginSuccess {
+	-webkit-animation: translate-top 1.5s;
+    -webkit-animation-delay: 0s;
+    -webkit-animation-fill-mode: forwards;
+}
 .loginBtn {
 	margin-top:10px;
-	width: 75px;
 	text-align: center;
 }
 
 #status {
 	margin-top:10px;
 	height: 25px;
-	/* margin:0; */
 	width: 270px;
 	color: #ff4141;
+}
+.badPassAnimation {
+	animation: 0.25s linear move;
 }
 
 .btn41-43 {
@@ -101,7 +170,7 @@
 }
 
 .btn-41 {
-	width: 270px;
+	width: 280px;
 	border: 2px solid rgb(255, 255, 255);
 	z-index: 1;
 	color: white;

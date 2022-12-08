@@ -1,7 +1,7 @@
 import { toast } from 'react-toastify';
 import { writeInConsole } from '../../pages/console';
 import WebSocket from './WebSocketConnection';
-import { doAuthGood, showAuth, hideAuth, showAuthError, doLogin } from '../Auth';
+import { doAuthGood, showAuth, showAuthError, doLogin } from '../Auth';
 import { updateGlobalList } from '../PlayersList';
 import { updateWorlds } from '../Worlds';
 
@@ -11,7 +11,7 @@ export let worldsList = [];
 const getWorld = (worldName) => {
 	let wrld = undefined;
 	worldsList.every((world, index) => {
-		if (world.name === worldName){
+		if (world.name === worldName) {
 			wrld = worldsList[index];
 			return false;
 		}
@@ -23,7 +23,7 @@ const getWorld = (worldName) => {
 const getPlayer = (playerId) => {
 	let pl = undefined;
 	playersList.every((player, index) => {
-		if (player.id === playerId){
+		if (player.id === playerId) {
 			pl = playersList[index];
 			return false;
 		}
@@ -60,7 +60,7 @@ const createWorld = (data_splitted, startIndex) => {
 	let texturepack = data_splitted[startIndex + 1] || "Default";
 	let size = [data_splitted[startIndex + 2], data_splitted[startIndex + 3], data_splitted[startIndex + 4]].join("x");
 	let spawn = [
-		parseFloat(data_splitted[startIndex + 5]).toFixed(2), 
+		parseFloat(data_splitted[startIndex + 5]).toFixed(2),
 		parseFloat(data_splitted[startIndex + 6]).toFixed(2),
 		parseFloat(data_splitted[startIndex + 7]).toFixed(2)
 	].join(",");
@@ -76,11 +76,11 @@ const createWorld = (data_splitted, startIndex) => {
 		world.status = status;
 	} else {
 		worldsList.push({
-			"name": worldName, 
-			"texturepack": texturepack, 
-			"size": size, 
-			"spawn": spawn, 
-			"weather": weather, 
+			"name": worldName,
+			"texturepack": texturepack,
+			"size": size,
+			"spawn": spawn,
+			"weather": weather,
 			"status": status
 		});
 	}
@@ -88,7 +88,7 @@ const createWorld = (data_splitted, startIndex) => {
 	return 10;
 }
 
-const updateAll = () =>{
+const updateAll = () => {
 	updateGlobalList();
 	updateWorlds();
 };
@@ -129,7 +129,7 @@ export let processCommand = (data) => {
 
 				switch (status) {
 					case 'REQ':
-						(user_pass !== null) ? doLogin(user_pass, true) : showAuth();
+						(user_pass !== null) ? doLogin(user_pass) : showAuth();
 						break;
 
 					case 'OK':
@@ -138,7 +138,7 @@ export let processCommand = (data) => {
 						const git_tag = data_splitted[2];
 
 						console.log(`Current software: ${software}/${git_tag}`);
-						(user_pass ? hideAuth : doAuthGood)();
+						(user_pass ? doAuthGood(true) : doAuthGood(false));
 						break;
 
 					default:
@@ -188,7 +188,7 @@ export let processCommand = (data) => {
 					case 'R':
 						spcnt = 2;
 						playersList.every((player, index) => {
-							if (player.id === playerId){
+							if (player.id === playerId) {
 								playersList.splice(index, 1)
 								return false;
 							}
@@ -201,7 +201,7 @@ export let processCommand = (data) => {
 					case 'O':
 						if (player) player.isAdmin = parseInt(data_splitted[2]);
 						break;
-					default: throw {message: "Invalid player event received", eventCode: playerEventType};
+					default: throw { message: "Invalid player event received", eventCode: playerEventType };
 				}
 				updateAll();
 				break;
@@ -215,7 +215,7 @@ export let processCommand = (data) => {
 
 						const worlds = lists[1].split('\x00');
 						if (worlds.length > 0 && worlds[0].length > 0) {
-							for (let i = 0;;) {
+							for (let i = 0; ;) {
 								if (!worlds[i]) break;
 								const ido = createWorld(worlds, i);
 								spcnt += ido; i += ido;
@@ -224,13 +224,13 @@ export let processCommand = (data) => {
 
 						const players = lists[0].split('\x00');
 						if (players.length > 0 && players[0].length > 0) {
-							for (let i = 0;;) {
+							for (let i = 0; ;) {
 								if (!players[i]) break;
 								const ido = createPlayer(players, i);
 								spcnt += ido; i += ido;
 							}
 						}
-						
+
 						spcnt += 1;
 						updateAll();
 						break;
@@ -240,7 +240,7 @@ export let processCommand = (data) => {
 							writeInConsole(data_splitted[i]);
 						break;
 
-					default: throw {message: "Invalid state packet received", stateCode: state};
+					default: throw { message: "Invalid state packet received", stateCode: state };
 				}
 				break;
 			case 'W':
@@ -249,7 +249,7 @@ export let processCommand = (data) => {
 				const world = getWorld(worldName);
 				spcnt = 3;
 
-				console.log('World Management | Type:',worldEventType, 'worldName:', worldName);
+				console.log('World Management | Type:', worldEventType, 'worldName:', worldName);
 				switch (worldEventType) {
 					case 'A':
 						spcnt = createWorld(data_splitted, 1) + 1;
@@ -273,18 +273,18 @@ export let processCommand = (data) => {
 					case 'T':
 						if (world) world.texturepack = data_splitted[2] || "Default";
 						break;
-						
-						default: throw {message: "Invalid world event received", eventCode: worldEventType};
-					}
+
+					default: throw { message: "Invalid world event received", eventCode: worldEventType };
+				}
 				updateWorlds();
 				break;
 
-			default: throw {message: "Unknown packet received", packetId: packetId};
+			default: throw { message: "Unknown packet received", packetId: packetId };
 		}
 
 		console.log(data_splitted.length, spcnt);
 		if (data_splitted.length <= spcnt)
-			throw {message: "Гроб гроб кладбище пидор!!!"};
+			throw { message: "Гроб гроб кладбище пидор!!!" };
 		data_splitted.splice(0, spcnt);
 
 		if (data_splitted[0].at(0) == "\x01")

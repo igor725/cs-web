@@ -6,43 +6,59 @@ import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 
 import './styles/Auth.css';
 
-export let showAuth = () => {};
-export let hideAuth = () => {};
-export let showAuthError = () => {};
-export let doAuthGood = () => {};
-export let doLogin = () => {};
-export let hack_auth = (hash) => {};
+export let showAuth = () => { };
+export let showAuthError = () => { };
+export let doAuthGood = () => { };
+export let doLogin = () => { };
 
 let pass_candidate;
-const Auth = ({cwap}) => {
+const Auth = ({ cwap }) => {
 	const authWindow = document.getElementsByClassName('authWindowG')[0];
 	const authError = document.getElementById('status');
+	const password = document.getElementById('authPassword')
+	const loginBtn = document.getElementsByClassName("loginBtn")[0];
 	showAuth = () => authWindow.style.display = 'block';
 
 	showAuthError = () => {
 		showAuth();
-		authError.innerHTML = 'Wrong password';
+		setTimeout(()=>{
+			loginBtn.classList.add("fancyLoginFailed")
+		}, 1000);
+		setTimeout(()=>{
+			authError.innerHTML = 'Wrong password';
+			authError.classList.add("badPassAnimation")
+			setTimeout(()=>authError.classList.remove("badPassAnimation"), 260)
+			loginBtn.classList.remove("fancyLoginFailed", "fancyLoginAnim")
+		}, 2000)
 	};
 
-	hideAuth = () => {
-		authWindow.style.display = 'none';
-		localStorage.setItem('USER_PASSWORD', pass_candidate);
+	doAuthGood = (localPass) => {
+		if (!localPass){
+			setTimeout(()=>{
+				authWindow.classList.add("fancyLoginSuccess");
+			}, 1000)
+			setTimeout(()=>{
+				authWindow.style.display = 'none';
+			}, 2500)
+		} else {
+			authWindow.style.display = 'none';
+		}
+		!localPass && localStorage.setItem('USER_PASSWORD', pass_candidate);
 		cwap.switchState(window.location.pathname);
 	};
 
-	doAuthGood = () => {
-		hideAuth();
-		localStorage.setItem('USER_PASSWORD', pass_candidate);
-		cwap.switchState(window.location.pathname);
-	};
-
-	doLogin = (pass, md5) => {
-		let hash;
-		if (!md5) {
-			const password = document.getElementById('authPassword');
-			hash = MD5.generate(password.value);
+	doLogin = (hash) => {
+		if (!hash) {
+			loginBtn.classList.add("fancyLoginAnim");
+			let pass = password.value;
+			if ((pass = password.value).length > 1){
+				hash = MD5.generate(pass);
+			} else {
+				return;
+			}
 			password.value = '';
-		} else hash = pass;
+			authError.innerHTML = '';
+		}
 		cwap.sendAuth(hash);
 		pass_candidate = hash;
 	};
@@ -52,12 +68,18 @@ const Auth = ({cwap}) => {
 			<div className='authWindow'>
 				<div className='authWindowMain'>
 					<h2>WebAdmin Password</h2>
-					<FontAwesomeIcon id='userlogo' icon={regular("user")}/>
-					<input type='password' id='authPassword' placeholder='password'/>
+					<FontAwesomeIcon id='userlogo' icon={regular("user")} />
+					<input type='password' id='authPassword' placeholder='password' onKeyDown={(e) => {
+						if (e.key == "Enter") {
+							doLogin()
+						}
+					}} />
 					<p id='status'></p>
-					<button className='btn41-43 btn-41 loginBtn' onClick={doLogin}>
-						Log In
-					</button>
+					<button className='btn41-43 btn-41 loginBtn' onClick={(e) => {
+						if (password.value.length > 1) {
+							doLogin();
+						}
+					}}> Log In </button>
 				</div>
 			</div>
 		</div>
