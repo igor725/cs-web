@@ -235,6 +235,8 @@ void handlewebsockmsg(struct _HttpClient *hc) {
 						break;
 					
 					case WSS_PLUGINS:
+						hc->cpls->time = Time_GetMSecD() + 5.0;
+						genpacket(&hc->nb, "NI^s", "Switch state packet will be delivered soon...");
 						break;
 
 					default:

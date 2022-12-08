@@ -7,7 +7,7 @@ import './styles/WSC.css';
 // который импортирует из ЭТОГО файла
 import { processCommand } from './CWAP';
 
-const socketUrl = `ws://192.168.0.101:8887/ws`;
+const socketUrl = `ws://localhost:8887/ws`;
 let WebSocket = () => {
 	const reconnectBtn = ({ closeToast }) => (
 		<button

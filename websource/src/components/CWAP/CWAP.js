@@ -234,10 +234,15 @@ export let processCommand = (data) => {
 						spcnt += 1;
 						updateAll();
 						break;
+
 					case 'R':
 						spcnt = parseInt(data_splitted[1], 10) + 2;
 						for (let i = 2; i < spcnt; i++)
 							writeInConsole(data_splitted[i]);
+						break;
+					
+					case 'E':
+						spcnt = 1;
 						break;
 
 					default: throw { message: "Invalid state packet received", stateCode: state };
