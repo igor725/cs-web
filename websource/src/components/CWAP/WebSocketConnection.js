@@ -7,7 +7,7 @@ import './styles/WSC.css';
 // который импортирует из ЭТОГО файла
 import { processCommand } from './CWAP';
 
-const socketUrl = `ws://127.0.0.1:8887/ws`;
+const socketUrl = `ws://192.168.0.101:8887/ws`;
 let WebSocket = () => {
 	const reconnectBtn = ({ closeToast }) => (
 		<button
@@ -36,7 +36,7 @@ let WebSocket = () => {
 			});
 		},
 		share: true,
-		retryOnError: true,
+		// retryOnError: true,
 		protocols: 'cserver-cpl',
 		reconnectInterval: 3,
 		reconnectAttempts: 15,

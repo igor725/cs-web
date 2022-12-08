@@ -16,7 +16,7 @@ body {
 	display: grid;
 	grid-gap: 10px;
 	background: rgb(42, 44, 39);
-	grid-template-columns: 0fr 0fr 1fr;
+	grid-template-columns: 0fr 1fr;
 }
 
 .light {
@@ -91,15 +91,28 @@ body {
 	color: rgb(200, 238, 127);
 }
 
+.navbar-head {
+	display: grid;
+}
+
 @media only screen and (min-width: 601px){
 	.navbar .buttons {
 		display: inline-flex;
 	}
+	.navbar-head {
+		grid-template-columns: 0fr 1fr;
+	}
 }
 
 @media only screen and (max-width: 600px) {
+	.navbar {
+		grid-template-columns: 0fr 1fr 1fr !important;
+		transition: all .5s ease-in-out;
+	}
+
 	.show-navbar{
 		display: grid !important;
+		width: 100%;
 		grid-auto-flow: row;
 		grid-column: 1/4;
 	}
@@ -112,25 +125,28 @@ body {
 	}
 
 	.websocketStatus {
-		height: 100%;
+		width: 100% !important;
+		height: 8px;
+		grid-row: 2;
 	}
 
 	.navbar h3 {
-		margin-left: 0;
 		font-size: 22px;
-		height: 100%;
+		width: 100%;
 	}
 
 	.buttons {
 		display:none;
 	}
 
-	#navbar-mobile-btn{
-		margin: 0 auto;
-		width: fit-content;
-		padding: 10px;
+	.navbar-head {
+		width: 250px;
+	}
+
+	#navbar-mobile-btn {
 		height: 55px;
 		color: #6d7264;
 		border-radius: 12px;
+		margin: auto;
 	}
-  }
+}

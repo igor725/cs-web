@@ -14,6 +14,7 @@ const Navbar = props => {
 	window.localStorage.setItem('DARKMODE_STATE', isDarkMode);
 
 	const currentLocation = useLocation().pathname;
+	const isMobile = (window.screen.width <= 600);
 	const navbar_btns = document.getElementsByClassName("buttons")[0];
 
 	const openNavbar = () => {
@@ -36,16 +37,28 @@ const Navbar = props => {
 
 	return (
 		<div className={((window.localStorage.getItem('DARKMODE_STATE') === 'true') || false) ? 'navbar' : 'navbar light'}>
-			<div style={{ width: '4px', background: 'red' }} title='WebSocket connection: ' className='websocketStatus' />
-			<h3 style={{ cursor: 'pointer' }}>CServer Webadmin</h3>
-			{(window.screen.width <= 600) && (
-					<FontAwesomeIcon id='navbar-mobile-btn' icon={solid('bars')} onClick={openNavbar}></FontAwesomeIcon>
+			<div className='navbar-head'>
+				<div style={{ width: '4px', background: 'red' }} title='WebSocket connection: ' className='websocketStatus' />
+				<h3 style={{ cursor: 'pointer' }}>CServer Webadmin</h3>
+			</div>
+			{(isMobile) && (
+				<DarkModeToggle
+					onChange={() => { setIsDarkMode(!isDarkMode); props.setTheme() }}
+					isDarkMode={isDarkMode}
+					className='night_btn'
+					size={50}
+				/>
+			)}
+			{(isMobile) && (
+					<FontAwesomeIcon id='navbar-mobile-btn' icon={solid('bars')} onClick={openNavbar}>
+					</FontAwesomeIcon>
 			)}
 			<div className='buttons' onClick={(e) => {
 				const target = e.target
 				if (target.tagName === 'A' && !target.classList.contains("red")) {
 					const path = target.getAttribute('href');
 					props.CWAP.switchState(path);
+					isMobile && openNavbar()
 				}
 			}}
 			>
@@ -53,12 +66,14 @@ const Navbar = props => {
 				<Link to='/console'> Terminal </Link>
 				<Link to='/configeditor'> Config Editor </Link>
 				<Link to='/pluginmanager'> Plugin Manager</Link>
-				<DarkModeToggle
-					onChange={() => { setIsDarkMode(!isDarkMode); props.setTheme() }}
-					isDarkMode={isDarkMode}
-					className='night_btn'
-					size={50}
-				/>
+				{(!isMobile) && (
+					<DarkModeToggle
+						onChange={() => { setIsDarkMode(!isDarkMode); props.setTheme() }}
+						isDarkMode={isDarkMode}
+						className='night_btn'
+						size={50}
+					/>
+				)}
 			</div>
 		</div>
 	);

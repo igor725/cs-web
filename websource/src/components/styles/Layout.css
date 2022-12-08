@@ -1,21 +1,7 @@
-/* html, body{
-	height: 100%;
-} */
-/* #root, #main{
-	height: 100%;
-} */
-body {
-	display: block;
-	overflow: scroll;
-}
 .lightmode {
 	background: white;
 }
 
 .darkmode {
 	background: rgb(36, 36, 36)
-}
-
-.lightmode, .darkmode {
-	overflow: auto;
 }

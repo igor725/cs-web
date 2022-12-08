@@ -10,7 +10,8 @@
 }
 
 .console-main {
-	overflow: auto;
+	overflow-x: hidden;
+    overflow-y: auto;
 	display: grid;
 	grid-template-rows: 1fr 0fr;
 }
@@ -200,11 +201,17 @@
 
 @media only screen and (max-width: 600px) {
 	.console {
-		width: 95%;
+		width: 100%;
 	}
+
+	#console-out, #console-in {
+		font-size: 18px;
+	}
+
 	#console-out {
-		padding-right: 10px;
+		padding: 16px;
 	}
+
 	.terminal-text {
 		margin-right: 30%;
 	}

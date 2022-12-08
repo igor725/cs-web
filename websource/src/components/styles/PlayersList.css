@@ -36,7 +36,8 @@
 	scrollbar-width: thin;
 }
 .playersOnline ul, .plist {
-	overflow-y: auto;
+	overflow-x: hidden;
+    overflow-y: auto;
 	list-style: none;
 	padding: 0;
 	padding-left: 15px;
@@ -74,7 +75,8 @@
 
 @media only screen and (max-width: 600px) {
 	.playersOnline {
-		width: 95%;
+		width: 100%;
+		justify-self: center;
 		min-height: 100px;
 		height: auto;
 		max-height: 500px;
