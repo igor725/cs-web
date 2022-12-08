@@ -53,6 +53,7 @@ const World = props => {
 						if (player.world === props.name){
 							return (
 								<PlayerDropdown 
+									key={player.id}
 									id={player.id}
 									isAdmin={player.isAdmin} 
 									cwap={cwap}
@@ -84,14 +85,14 @@ const Worlds = props => {
 
 	return (
 		<div className='worlds'>
-			<div style={{"padding-top": "10px"}}>
+			<div style={{paddingTop: "10px"}}>
 				<h3 className='worlds-header'>Worlds</h3>
 				<hr />
 			</div>
 			<div className='worlds_list'>
 				{
-					worldsList.map((world, pos) => {
-						return <World cwap={cwap} {...world} pos={pos+1} />
+					worldsList.map((world, i) => {
+						return <World cwap={cwap} {...world} key={i} pos={i+1} />
 					})
 				}
 			</div>

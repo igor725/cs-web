@@ -28,8 +28,8 @@ const Console = ({ CWAP }) => {
 	const [, updateState] = React.useState();
 	const forceUpdate = React.useCallback(() => updateState({}), []);
 
-	const text = document.getElementById('console-out');
-	const input_el = document.getElementById('console-in');
+	let text;
+	let input_el;
 
 	let copyMenu;
 	let prevCopy;
@@ -40,8 +40,11 @@ const Console = ({ CWAP }) => {
 	};
 
 	useEffect(()=>{
-		scrollToLatest();
 		copyMenu = document.getElementsByClassName("console-copyboard")[0];
+		text = document.getElementById('console-out');
+		input_el = document.getElementById('console-in');
+
+		scrollToLatest();
 		window.onclick = (event) => {
 			if (!event.target.matches('.console-copyboard')) {
 				copyMenu.style.display = "none";
@@ -104,8 +107,8 @@ const Console = ({ CWAP }) => {
 			</div>
 			<div className='console-main'>
 				<div id='console-out' readOnly={true} onContextMenu={showCopy}>
-					{messages.map((msg) => {
-						return React.cloneElement(msg);
+					{messages.map((msg, i) => {
+						return React.cloneElement(msg, {key: i});
 					})}
 				</div>
 				<div className='inputting-field'>

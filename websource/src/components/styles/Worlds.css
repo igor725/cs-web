@@ -65,7 +65,6 @@
 }
 
 .worlds_list {
-	grid-auto-flow: row;
 	display: grid;
 	grid-gap: 33px;
 	padding: 12px;
@@ -214,7 +213,7 @@
 
 	.worldCart_players {
 		margin: 20px auto;
-		min-height: 60px;
+		/* min-height: 60px; */
 	}
 
 	.worldCart_players ul{

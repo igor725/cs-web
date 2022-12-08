@@ -58,4 +58,7 @@ html{
 		grid-template-columns: none !important;
 		grid-gap: 35px;
 	}
+	.homeMenu > div{
+		min-width: 360px;
+	}
 }

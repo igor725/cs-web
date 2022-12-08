@@ -11,7 +11,7 @@
 
 .console-main {
 	overflow-x: hidden;
-    overflow-y: auto;
+	overflow-y: auto;
 	display: grid;
 	grid-template-rows: 1fr 0fr;
 }
@@ -21,10 +21,13 @@
 	display: grid;
 	grid-template-columns: 0fr 1fr;
 }
-.lightmode .inputting-field #console-in, .lightmode #console-out{
+
+.lightmode .inputting-field #console-in,
+.lightmode #console-out {
 	color: black;
 }
-.lightmode .inputting-field:hover .console-in-dot{
+
+.lightmode .inputting-field:hover .console-in-dot {
 	color: black;
 }
 
@@ -48,19 +51,22 @@
 	padding-left: 6px;
 }
 
-.lightmode .console-top{
+.lightmode .console-top {
 	border: 1px solid #c7c7c7;
 }
 
-.lightmode #console-out, .lightmode #console-in, .lightmode .console-in-dot{
+.lightmode #console-out,
+.lightmode #console-in,
+.lightmode .console-in-dot {
 	background: #ffffff;
 }
+
 .lightmode #console-out {
 	border: 1px solid #c7c7c7 !important;
 	border-bottom: none !important;
 }
 
-.lightmode .console-in-dot{
+.lightmode .console-in-dot {
 	border: 1px solid #c7c7c7 !important;
 	border-right: none !important;
 	border-top: none !important;
@@ -73,16 +79,18 @@
 
 }
 
-#console-out{
+#console-out {
 	border-left: 1px solid #4d4c50 !important;
 }
 
-#console-in{
+#console-in {
 	border-bottom: 1px solid #4d4c50 !important;
 }
 
-#console-out, #console-in {
-	scrollbar-width: none; /* For Firefox */
+#console-out,
+#console-in {
+	scrollbar-width: none;
+	/* For Firefox */
 	overflow: auto;
 	border: 1px solid #4d4c50;
 	border-bottom: none;
@@ -102,7 +110,7 @@
 
 #console-out p {
 	margin: 0;
-	padding-top:2px;
+	padding-top: 2px;
 }
 
 #console-in {
@@ -129,13 +137,13 @@
 }
 
 .console-exit {
-	padding-left:10px;
+	padding-left: 10px;
 	display: grid;
 	align-items: center;
 	grid-template-columns: repeat(3, 0fr);
-	grid-gap:6px;
-	margin:0 auto;
-	width:75px;
+	grid-gap: 6px;
+	margin: 0 auto;
+	width: 75px;
 }
 
 .lightmode .console-top {
@@ -157,15 +165,15 @@
 	transition: background-color 0.4s ease-in;
 }
 
-.lightmode .selected-term-text{
+.lightmode .selected-term-text {
 	background: #e1cdcd;
 }
 
-.darkmode .selected-term-text{
+.darkmode .selected-term-text {
 	background: #4d5568;
 }
 
-.console-copyboard{
+.console-copyboard {
 	display: none;
 	cursor: pointer;
 	position: absolute;
@@ -176,7 +184,7 @@
 	text-align: center;
 	width: 24px;
 	height: 22px;
-	padding:6px;
+	padding: 6px;
 	border-radius: 12px;
 }
 
@@ -204,7 +212,13 @@
 		width: 100%;
 	}
 
-	#console-out, #console-in {
+	#console-in {
+		border-radius: 0px;
+		margin: 0;
+	}
+
+	#console-out,
+	#console-in {
 		font-size: 18px;
 	}
 

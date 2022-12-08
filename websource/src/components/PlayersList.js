@@ -59,6 +59,7 @@ const PlayersList = ({ cwap }) => {
 					playersList.map((player)=>{
 						return (
 							<PlayerDropdown 
+								key={player.id}
 								id={player.id} 
 								world={player.world} 
 								isAdmin={player.isAdmin} 
