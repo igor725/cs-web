@@ -3,6 +3,10 @@ body {
 	margin: 0 auto;
 }
 
+.lightmode h3 {
+	color: #1b3350 !important;
+}
+
 .night_btn {
 	margin-right:15px;
 	margin-left: auto;
@@ -25,7 +29,7 @@ body {
 
 .selected{
 	font-weight: bold !important;
-	border-bottom: 4px solid black;
+	border-bottom: 4px solid orange;
 }
 
 .light h3 {
@@ -83,7 +87,7 @@ body {
 }
 .light .buttons a:hover {
 	background: none;
-	border-bottom: 4px solid black;
+	border-bottom: 4px solid orange;
 }
 .navbar h3 {
 	margin-left: 15px;
@@ -192,7 +196,9 @@ body {
 		z-index: 999;
 		background: rgb(42, 44, 39);
 	}
-
+	.light #navbar-mobile-btn {
+		color: #3c3c3c;
+	}
 	#navbar-mobile-btn {
 		height: 55px;
 		padding: 10px;
@@ -200,6 +206,9 @@ body {
 		color: #6d7264;
 		border-radius: 50%;
 		margin: auto;
+	}
+	.light .navbar-btn-pressed {
+		background: #a3a3a38f;
 	}
 	.navbar-btn-pressed {
 		background: #5851518f;

@@ -4,16 +4,24 @@ import { playersList, worldsList } from './CWAP/CWAP';
 import PlayerDropdown from './PlayerList/PlayerDropdown';
 import { prev_player } from './PlayersList';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+
+
 export let updateWorlds = () => {}
 
 const wTypes = {
-	0: 'Sunny',
-	1: 'Raining',
-	2: 'Snowing'
+	0: '🌤️Sunny',
+	1: '🌧️Raining',
+	2: '🌨️Snowing'
 }
 
 const World = props => {
 	const cwap = props.cwap;
+	const changeWeather = (e) => {
+		const newWeather = e.target.value;
+		cwap.changeWeather(props.name, newWeather);
+	}
 	return (
 		<div className='world-grid'>
 			<div className='world' name={props.name} style={{ zIndex: props.pos }}>
@@ -25,29 +33,41 @@ const World = props => {
 					<tbody>
 						<tr>
 							<td>Status: </td>
-							<td id='wStatus'>{Boolean(props.status) ? 'Loaded':'Unloaded'}</td>
+							<td>{Boolean(props.status) ? 'Loaded':'Unloaded'}</td>
 						</tr>
 						<tr>
 							<td>Size: </td>
-							<td id='wSize'>{props.size}</td>
+							<td>{props.size}</td>
 						</tr>
 						<tr>
 							<td>Spawn: </td>
-							<td id='wSpawn'>{props.spawn}</td>
+							<td>{props.spawn}</td>
 						</tr>
 						<tr>
 							<td>Textures: </td>
-							<td id='wTexturePack'>{props.texturepack}</td>
+							<td>{props.texturepack}</td>
 						</tr>
 						<tr>
 							<td>Weather: </td>
-							<td id='wWeather'>{wTypes[props.weather]}</td>
+							<td>
+								<select value={wTypes[props.weather]} onChange={changeWeather}>
+									{
+										Object.entries(wTypes).map(([key,value])=>{
+											return(
+												<option key={key} value={value}>
+													{value}
+												</option>
+											)
+										})
+									}
+								</select>
+							</td>
 						</tr>
 					</tbody>
 				</table>
 			</div>
 			<div className='worldCart_players'>
-				<h3 id='wName'>Players</h3>
+				<h4 id='wName'>Players</h4>
 				<ul className='plist' id='pList2'>
 					{ playersList.map((player)=>{
 						if (player.world === props.name){

@@ -299,6 +299,7 @@ let CWAP = () => {
 		banPlayer: (name) => sendPacket('B', name, 'Banned by WebAdmin', 0),
 		kickPlayer: (name) => sendPacket('K', name),
 		opPlayer: (name) => sendPacket('O', name, 1),
+		changeWeather: (world, weather) => sendPacket("w", world, weather),
 		deopPlayer: (name) => sendPacket('O', name, 0),
 		switchState: (path) => { console.log('switch state to ', path); sendPacket('S', state_paths[path]); },
 		sendConsole: (value) => { sendPacket('C', value); return value; }

@@ -44,7 +44,7 @@ const toBeResponded = {
 	}
 };
 
-const socketUrl = `ws://localhost:8887/ws`;
+const socketUrl = `ws://${window.location.hostname}:8887/ws`;
 let WebSocket = () => {
 	const reconnectBtn = ({ closeToast }) => (
 		<button
