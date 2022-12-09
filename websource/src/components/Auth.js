@@ -24,23 +24,23 @@ const Auth = ({ cwap }) => {
 		showAuth();
 		setTimeout(() => {
 			loginBtn.classList.add("fancyLoginFailed")
-		}, 1000);
+		}, 500);
 		setTimeout(() => {
 			authError.innerHTML = 'Wrong password';
 			authError.classList.add("badPassAnimation")
 			setTimeout(() => authError.classList.remove("badPassAnimation"), 260)
 			loginBtn.classList.remove("fancyLoginFailed", "fancyLoginAnim")
-		}, 2000)
+		}, 1000)
 	};
 
 	doAuthGood = (localPass) => {
 		if (!localPass) {
 			setTimeout(() => {
 				authWindow.classList.add("fancyLoginSuccess");
-			}, 1000)
+			}, 500)
 			setTimeout(() => {
 				authWindow.style.display = 'none';
-			}, 2500)
+			}, 1500)
 		} else {
 			authWindow.style.display = 'none';
 		}
@@ -51,7 +51,7 @@ const Auth = ({ cwap }) => {
 		if (!hash) {
 			loginBtn.classList.add("fancyLoginAnim");
 			loginBtn.innerHTML = "Logging in..."
-			setTimeout(() => loginBtn.innerHTML = LOG_IN_MSG, 2000)
+			setTimeout(() => loginBtn.innerHTML = LOG_IN_MSG, 1000)
 			let pass = password.value;
 			if ((pass = password.value).length > 1) {
 				hash = MD5.generate(pass);
@@ -72,7 +72,7 @@ const Auth = ({ cwap }) => {
 					<h2>WebAdmin Password</h2>
 					<FontAwesomeIcon id='userlogo' icon={regular("user")} />
 					<input type='password' id='authPassword' placeholder='password' onKeyDown={(e) => {
-						if (e.key == "Enter") {
+						if (e.key === "Enter") {
 							doLogin()
 						}
 					}} />

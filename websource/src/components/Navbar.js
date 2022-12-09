@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 
 let prev_colored;
+let isOpened = false;
 const Navbar = props => {
 	const DARKMODE_STATE = (window.localStorage.getItem('DARKMODE_STATE') === 'true') || false;
 	const [isDarkMode, setIsDarkMode] = useState(DARKMODE_STATE);
@@ -18,7 +19,14 @@ const Navbar = props => {
 	const navbar_btns = document.getElementsByClassName("buttons")[0];
 
 	const openNavbar = () => {
-		navbar_btns.classList.toggle("show-navbar")
+		if (isOpened){
+			navbar_btns.classList.add("hide-navbar");
+			setTimeout(()=>navbar_btns.classList.remove("hide-navbar", "show-navbar"), 750);
+			isOpened = false;
+		} else {
+			navbar_btns.classList.add("show-navbar");
+			isOpened = true;
+		}
 	}
 	useEffect(() => {
 		if (prev_colored){
@@ -37,28 +45,35 @@ const Navbar = props => {
 
 	return (
 		<div className={((window.localStorage.getItem('DARKMODE_STATE') === 'true') || false) ? 'navbar' : 'navbar light'}>
-			<div className='navbar-head'>
-				<div style={{ width: '4px', background: 'red' }} title='WebSocket connection: ' className='websocketStatus' />
-				<h3 style={{ cursor: 'pointer' }}>CServer Webadmin</h3>
-			</div>
 			{(isMobile) && (
-				<DarkModeToggle
-					onChange={() => { setIsDarkMode(!isDarkMode); props.setTheme() }}
-					isDarkMode={isDarkMode}
-					className='night_btn'
-					size={50}
-				/>
-			)}
-			{(isMobile) && (
+				<div className='navbar-head'>
+					<div className='navbar-title'>
+						<h3 style={{ cursor: 'pointer' }}>CServer Webadmin</h3>
+						<div style={{ width: '4px', background: 'red' }} title='WebSocket connection: ' className='websocketStatus' />
+					</div>
+					<DarkModeToggle
+						onChange={() => { setIsDarkMode(!isDarkMode); props.setTheme() }}
+						isDarkMode={isDarkMode}
+						className='night_btn'
+						size={50}
+					/>
 					<FontAwesomeIcon id='navbar-mobile-btn' icon={solid('bars')} onClick={openNavbar}>
 					</FontAwesomeIcon>
+			
+				</div>
+			)}
+			{(!isMobile) && (
+				<div className='navbar-head'>
+					<div style={{ width: '4px', background: 'red' }} title='WebSocket connection: ' className='websocketStatus' />
+					<h3 style={{ cursor: 'pointer' }}>CServer Webadmin</h3>
+				</div>
 			)}
 			<div className='buttons' onClick={(e) => {
 				const target = e.target
-				if (target.tagName === 'A' && !target.classList.contains("red")) {
+				if (target.tagName === 'A' && !target.classList.contains((isDarkMode ? "red":"selected"))) {
 					const path = target.getAttribute('href');
 					props.CWAP.switchState(path);
-					isMobile && openNavbar()
+					isMobile && openNavbar();
 				}
 			}}
 			>

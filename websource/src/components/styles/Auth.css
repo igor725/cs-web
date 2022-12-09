@@ -123,19 +123,19 @@
 	cursor: default;
 }
 .fancyLoginAnim {
-	-webkit-animation: translate 1s;
+	-webkit-animation: translate 0.5s;
     -webkit-animation-delay: 0s;
     -webkit-animation-fill-mode: forwards;
 }
 
 .fancyLoginFailed{
-	-webkit-animation: translate-back 1s;
+	-webkit-animation: translate-back 0.5s;
     -webkit-animation-delay: 0s;
     -webkit-animation-fill-mode: backwards;
 }
 
 .fancyLoginSuccess {
-	-webkit-animation: translate-top 1.5s;
+	-webkit-animation: translate-top 1s;
     -webkit-animation-delay: 0s;
     -webkit-animation-fill-mode: forwards;
 }

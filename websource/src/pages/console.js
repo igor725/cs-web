@@ -22,6 +22,11 @@ var convert = new Convert({
 });
 
 let messages = [], history = [], hispos = 0;
+
+let copyMenu;
+let prevCopy;
+let selectedCopy;
+
 export let writeInConsole = () => {};
 
 const Console = ({ CWAP }) => {
@@ -30,10 +35,6 @@ const Console = ({ CWAP }) => {
 
 	let text;
 	let input_el;
-
-	let copyMenu;
-	let prevCopy;
-	let selectedCopy;
 
 	const scrollToLatest = () => {
 		setTimeout(() => text.scrollTop = text.scrollHeight, 200);
@@ -52,7 +53,6 @@ const Console = ({ CWAP }) => {
 			}
 		};
 		return () => {
-			copyMenu.style.display = "none";
 			window.onclick = "";
 		};
 	});
