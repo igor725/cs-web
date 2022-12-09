@@ -7,6 +7,17 @@ import './styles/WSC.css';
 // который импортирует из ЭТОГО файла
 import { processCommand } from './CWAP';
 
+const setBlur = (state) =>
+	document.getElementById('root')
+		.classList[(['add', 'remove'][state ? 0 : 1])]('blurry');
+
+const toBeResponded = {
+	S: {
+		answered: false,
+		timeout: null
+	}
+};
+
 const socketUrl = `ws://localhost:8887/ws`;
 let WebSocket = () => {
 	const reconnectBtn = ({ closeToast }) => (
@@ -19,19 +30,24 @@ let WebSocket = () => {
 	);
 	const {
 		sendMessage,
-		lastMessage,
 		readyState,
 	} = useWebSocket(socketUrl, {
 		onOpen: () => {
 			document.getElementsByClassName('websocketStatus')[0].title = `WebSocket connection: ${ReadyState[readyState]}`;
 			document.getElementsByClassName('websocketStatus')[0].style.background = connectionStatus;
-			sendMessage('ATEST\x00', false);
+			sendPacket('A', 'TEST');
+			setBlur(false);
 		},
 		onError: (err) => {
 			toast.error(err);
 		},
 		onMessage: (msg) => {
 			msg.data.text().then((data) => {
+				let tbr = null;
+				if ((tbr = toBeResponded[data.charAt(0)]) && tbr.answered !== true) {
+					if (!tbr.timeout) setBlur(false);
+					tbr.answered = true;
+				}
 				processCommand(data);
 			});
 		},
@@ -55,6 +71,37 @@ let WebSocket = () => {
 		},
 		shouldReconnect: () => true
 	});
+
+	const sendPacket = (id, ...args) => {
+		let message = id, tbr = undefined;
+		if ((tbr = toBeResponded[id]) !== undefined) {
+			tbr.answered = false;
+			tbr.timeout = setTimeout(() => {
+				tbr.timeout = null;
+				if (!tbr.answered)
+					setBlur(true);
+			}, 500);
+		}
+
+		for (const arg of args) {
+			switch (typeof(arg)) {
+				case 'boolean':
+					message += arg ? '1' : '0';
+					break;
+				case 'string':
+					message += arg;
+					break;
+				default:
+					message += (arg).toString();
+					break;
+			}
+	
+			message += '\x00';
+		}
+
+		sendMessage(message, false);
+	};
+
 	const connectionStatus = {
 		[ReadyState.CONNECTING]: 'yellow',
 		[ReadyState.OPEN]: 'green',
@@ -62,6 +109,7 @@ let WebSocket = () => {
 		[ReadyState.CLOSED]: 'red',
 		[ReadyState.UNINSTANTIATED]: 'black',
 	}[readyState];
+
 	useEffect(() => {
 		document.getElementsByClassName('websocketStatus')[0].title = `WebSocket connection: ${ReadyState[readyState]}`;
 		let wsStat = document.getElementsByClassName('websocketStatus')[0];
@@ -72,7 +120,8 @@ let WebSocket = () => {
 		}
 		wsStat.style.background = connectionStatus;
 	});
-	return ([lastMessage, sendMessage]);
+
+	return ([sendPacket]);
 };
 
 export default WebSocket;

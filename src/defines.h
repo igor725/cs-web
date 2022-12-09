@@ -9,6 +9,10 @@
 #include <log.h>
 #include <server.h>
 
+#ifdef CSWEB_USE_BASE
+#	include "cs-base/src/base_itf.h"
+#endif
+
 #define WL(I, T, ...) Log_##I("WebPanel: " T,  ##__VA_ARGS__)
 
 enum _HttpStatus {
@@ -84,6 +88,9 @@ struct _WebState {
 
 	cs_uint32 ustates[WSS_MAXVAL];
 	cs_byte pwhash[33];
+#ifdef CSWEB_USE_BASE
+	BaseItf *iface_base;
+#endif
 };
 
 extern ServerInfo ServInf;
@@ -94,4 +101,5 @@ void genpacket(NetBuffer *nb, cs_str fmt, ...);
 void handlewebsockmsg(struct _HttpClient *hc);
 cs_int32 service(enum _SerCommand sc);
 TRET WebThread(TARG);
+void RequestIntefaces(void);
 #endif

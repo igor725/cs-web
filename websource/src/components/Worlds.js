@@ -7,9 +7,9 @@ import { prev_player } from './PlayersList';
 export let updateWorlds = () => {}
 
 const wTypes = {
-	0: "Sunny",
-	1: "Raining",
-	2: "Snowing"
+	0: 'Sunny',
+	1: 'Raining',
+	2: 'Snowing'
 }
 
 const World = props => {
@@ -25,7 +25,7 @@ const World = props => {
 					<tbody>
 						<tr>
 							<td>Status: </td>
-							<td id='wStatus'>{Boolean(props.status) ? "Loaded":"Unloaded"}</td>
+							<td id='wStatus'>{Boolean(props.status) ? 'Loaded':'Unloaded'}</td>
 						</tr>
 						<tr>
 							<td>Size: </td>
@@ -85,7 +85,7 @@ const Worlds = props => {
 
 	return (
 		<div className='worlds'>
-			<div style={{paddingTop: "10px"}}>
+			<div style={{paddingTop: '10px'}}>
 				<h3 className='worlds-header'>Worlds</h3>
 				<hr />
 			</div>

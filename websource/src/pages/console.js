@@ -41,19 +41,19 @@ const Console = ({ CWAP }) => {
 	};
 
 	useEffect(()=>{
-		copyMenu = document.getElementsByClassName("console-copyboard")[0];
+		copyMenu = document.getElementsByClassName('console-copyboard')[0];
 		text = document.getElementById('console-out');
 		input_el = document.getElementById('console-in');
 
 		scrollToLatest();
 		window.onclick = (event) => {
 			if (!event.target.matches('.console-copyboard')) {
-				copyMenu.style.display = "none";
-				if (prevCopy) prevCopy.classList.remove("selected-term-text");
+				copyMenu.style.display = 'none';
+				if (prevCopy) prevCopy.classList.remove('selected-term-text');
 			}
 		};
 		return () => {
-			window.onclick = "";
+			window.onclick = '';
 		};
 	});
 
@@ -74,26 +74,26 @@ const Console = ({ CWAP }) => {
 
 	const showCopy = (e) => {
 		e.preventDefault();
-		if (prevCopy) prevCopy.classList.remove("selected-term-text")
-		e.target.classList.add("selected-term-text");
+		if (prevCopy) prevCopy.classList.remove('selected-term-text')
+		e.target.classList.add('selected-term-text');
 		selectedCopy = e.target.innerText;
-		copyMenu.style.display = "block";
+		copyMenu.style.display = 'block';
 		copyMenu.style.left = e.pageX + 10 +'px';
 		copyMenu.style.top = e.pageY + 5 +  'px';
 		prevCopy = e.target;
 	};
 
 	const hideCopy = () => {
-		copyMenu.style.display = "hide";
+		copyMenu.style.display = 'hide';
 		navigator.clipboard.writeText(selectedCopy);
-		prevCopy.classList.add("selected-term-text");
-		toast.success("Copied to clipboard!")
+		prevCopy.classList.add('selected-term-text');
+		toast.success('Copied to clipboard!')
 	}
 
 	return (
 		<div className='console'>
 			<div className='console-copyboard' onClick={hideCopy}>
-				<FontAwesomeIcon icon={regular("clipboard")} />
+				<FontAwesomeIcon icon={regular('clipboard')} />
 			</div>
 			<div className='console-top'>
 				<div className='console-exit'>

@@ -70,6 +70,25 @@ static inline enum _WsState ustate(cs_char s) {
 	}
 }
 
+static cs_int32 readint(cs_byte **data) {
+	cs_int32 i = String_StrToLong((cs_str)*data, (cs_char **)data, 10);
+	(*data)++; return i;
+}
+
+static cs_str readstr(cs_byte **data) {
+	cs_str ret = (cs_char *)*data;
+	*data += String_Length(ret) + 1;
+	return ret;
+}
+/*
+static cs_uint32 readargc(cs_byte *data, cs_uint16 len) {
+	cs_uint32 argc = 0;
+	for (; len > 1; len--)
+		if (*data++ == '\0') argc++;
+	return argc;
+}
+*/
+
 static void sendconsolestate(struct _HttpClient *hc) {
 	cs_uint32 end = WebState.ll.pos + WebState.ll.cnt,
 	pos = WebState.ll.pos;
@@ -137,29 +156,31 @@ static void kickplayer(NetBuffer *nb, ClientID id) {
 	genpacket(nb, "NI^s", "Player kicked successfully");
 }
 
+#ifdef CSWEB_USE_BASE
+static void banplayer(NetBuffer *nb, cs_byte **data) {
+	if (!WebState.iface_base) return;
+	cs_str name = readstr(data);
+	/*cs_str reason = */readstr(data);
+	/*cs_int32 duration = */readint(data);
+	if (WebState.iface_base->banUser(name))
+		genpacket(nb, "NI^s", "Player banned successfully");
+	else
+		genpacket(nb, "NE^s", "Failed to ban specified player");
+}
+
+static void opplayer(cs_byte **data) {
+	if (!WebState.iface_base) return;
+	cs_str name = readstr(data);
+	cs_bool state = (cs_bool)readint(data);
+	(state ? WebState.iface_base->opUser : WebState.iface_base->deopUser)(name);
+}
+#endif
+
 static inline cs_bool runcommand(cs_byte *cmd) {
 	WL(Info, "Executed a command: %s", cmd);
 	return Command_Handle((cs_char *)cmd, NULL);
 }
 
-static cs_int32 readint(cs_byte **data) {
-	cs_int32 i = String_StrToLong((cs_str)*data, (cs_char **)data, 10);
-	(*data)++; return i;
-}
-
-static cs_str readstr(cs_byte **data) {
-	cs_str ret = (cs_char *)*data;
-	*data += String_Length(ret) + 1;
-	return ret;
-}
-/*
-static cs_uint32 readargc(cs_byte *data, cs_uint16 len) {
-	cs_uint32 argc = 0;
-	for (; len > 1; len--)
-		if (*data++ == '\0') argc++;
-	return argc;
-}
-*/
 void handlewebsockmsg(struct _HttpClient *hc) {
 	cs_byte *data = (cs_byte *)hc->wsh->payload;
 	while (hc->state < CHS_CLOSING && (data - (cs_byte *)hc->wsh->payload) < hc->wsh->paylen) {
@@ -191,11 +212,6 @@ void handlewebsockmsg(struct _HttpClient *hc) {
 
 		enum _WsState prev = hc->cpls->wsstate;
 		switch (*data++) {
-			case 'B':
-				genpacket(&hc->nb, "Bsi", readstr(&data), 1);
-				readstr(&data); readint(&data);
-				break;
-
 			case 'C':
 				if (!runcommand((cs_byte *)readstr(&data)))
 					genpacket(&hc->nb, "Cs", Sstor_Get("CMD_UNK"));
@@ -205,10 +221,20 @@ void handlewebsockmsg(struct _HttpClient *hc) {
 				kickplayer(&hc->nb, (ClientID)readint(&data));
 				break;
 
-			case 'O':
-				readstr(&data); readint(&data);
-				genpacket(&hc->nb, "PO^ii", 1, 1);
+#ifdef CSWEB_USE_BASE
+			case 'B':
+				banplayer(&hc->nb, &data);
 				break;
+
+			case 'O':
+				opplayer(&data);
+				break;
+#else
+			case 'B':
+			case 'O':
+				genpacket(&hc->nb, "NE^s", "Unsupported action");
+				break;
+#endif
 
 			case 'S':
 				hc->cpls->wsstate = ustate(*readstr(&data));

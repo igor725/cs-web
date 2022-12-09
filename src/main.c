@@ -54,6 +54,7 @@ cs_bool Plugin_Load(void) {
 		Config_Save(WebState.cfg, true);
 	}
 
+	RequestIntefaces();
 	return Event_RegisterBunch(events) &&
 	Command_RegisterBunch(cmds);
 }

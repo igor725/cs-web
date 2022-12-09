@@ -1,3 +1,7 @@
+IF EXIST "..\cs-base\src\base_itf.h" (
+	SET CFLAGS=!CFLAGS! /DCSWEB_USE_BASE /I../
+)
+
 IF "%PLUGIN_INSTALL%"=="1" (
 	IF "%PLUGIN_ARGS%"=="wbuild" (
 		PUSHD %ROOT%\websource

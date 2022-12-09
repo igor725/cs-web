@@ -39,16 +39,16 @@ const createPlayer = (data_splitted, startIndex) => {
 	let playerWorld = data_splitted[startIndex + 3];
 	let player = undefined;
 
-	if (player = getPlayer(playerId)) {
+	if ((player = getPlayer(playerId)) !== undefined) {
 		player.name = playerName;
 		player.world = playerWorld;
 		player.isAdmin = playerOp;
 	} else {
 		playersList.push({
-			"name": playerName,
-			"id": playerId,
-			"world": playerWorld,
-			"isAdmin": playerOp
+			'name': playerName,
+			'id': playerId,
+			'world': playerWorld,
+			'isAdmin': playerOp
 		});
 	}
 
@@ -57,18 +57,18 @@ const createPlayer = (data_splitted, startIndex) => {
 
 const createWorld = (data_splitted, startIndex) => {
 	let worldName = data_splitted[startIndex];
-	let texturepack = data_splitted[startIndex + 1] || "Default";
-	let size = [data_splitted[startIndex + 2], data_splitted[startIndex + 3], data_splitted[startIndex + 4]].join("x");
+	let texturepack = data_splitted[startIndex + 1] || 'Default';
+	let size = [data_splitted[startIndex + 2], data_splitted[startIndex + 3], data_splitted[startIndex + 4]].join('x');
 	let spawn = [
 		parseFloat(data_splitted[startIndex + 5]).toFixed(2),
 		parseFloat(data_splitted[startIndex + 6]).toFixed(2),
 		parseFloat(data_splitted[startIndex + 7]).toFixed(2)
-	].join(",");
+	].join(',');
 	let weather = parseInt(data_splitted[startIndex + 8]);
 	let status = parseInt(data_splitted[startIndex + 9]);
 	let world = undefined;
 
-	if (world = getWorld(worldName)) {
+	if ((world = getWorld(worldName)) !== undefined) {
 		world.texturepack = texturepack;
 		world.size = size;
 		world.spawn = spawn;
@@ -76,12 +76,12 @@ const createWorld = (data_splitted, startIndex) => {
 		world.status = status;
 	} else {
 		worldsList.push({
-			"name": worldName,
-			"texturepack": texturepack,
-			"size": size,
-			"spawn": spawn,
-			"weather": weather,
-			"status": status
+			'name': worldName,
+			'texturepack': texturepack,
+			'size': size,
+			'spawn': spawn,
+			'weather': weather,
+			'status': status
 		});
 	}
 
@@ -148,12 +148,6 @@ export let processCommand = (data) => {
 				}
 
 				break;
-			case 'B':
-				const playerName = data_splitted[0].substring(1);
-				const banSuccess = data_splitted[1];
-				console.log('player:', playerName, 'isSuccess?:', banSuccess);
-				spcnt = 2;
-				break;
 			case 'C':
 				const msg = data_splitted[0].substring(1);
 				writeInConsole(msg);
@@ -201,7 +195,7 @@ export let processCommand = (data) => {
 					case 'O':
 						if (player) player.isAdmin = parseInt(data_splitted[2]);
 						break;
-					default: throw { message: "Invalid player event received", eventCode: playerEventType };
+					default: throw { message: 'Invalid player event received', eventCode: playerEventType };
 				}
 				updateAll();
 				break;
@@ -245,7 +239,7 @@ export let processCommand = (data) => {
 						spcnt = 1;
 						break;
 
-					default: throw { message: "Invalid state packet received", stateCode: state };
+					default: throw { message: 'Invalid state packet received', stateCode: state };
 				}
 				break;
 			case 'W':
@@ -276,38 +270,38 @@ export let processCommand = (data) => {
 						if (world) world.weather = parseInt(data_splitted[2]);
 						break;
 					case 'T':
-						if (world) world.texturepack = data_splitted[2] || "Default";
+						if (world) world.texturepack = data_splitted[2] || 'Default';
 						break;
 
-					default: throw { message: "Invalid world event received", eventCode: worldEventType };
+					default: throw { message: 'Invalid world event received', eventCode: worldEventType };
 				}
 				updateWorlds();
 				break;
 
-			default: throw { message: "Unknown packet received", packetId: packetId };
+			default: throw { message: 'Unknown packet received', packetId: packetId };
 		}
 
 		console.log(data_splitted.length, spcnt);
 		if (data_splitted.length <= spcnt)
-			throw { message: "Гроб гроб кладбище пидор!!!" };
+			throw { message: 'Гроб гроб кладбище пидор!!!' };
 		data_splitted.splice(0, spcnt);
 
-		if (data_splitted[0].at(0) == "\x01")
-			data_splitted[0] = data_splitted[0].substring(1);
+		if (data_splitted[0].at(0) === '\x01')
+			data_splitted[0] = data_splitted[0].slice(1);
 	}
 };
 
 let CWAP = () => {
-	const [lastMessage, sendMessage] = WebSocket();
+	const [sendPacket] = WebSocket();
+
 	return ({
-		getAnswer: () => { return lastMessage && lastMessage.data.text(); },
-		sendAuth: (hash) => sendMessage(`A${hash}\x00`, false),
-		banPlayer: (name) => sendMessage(`B${name}\x00Banned by WebAdmin\x000\x00`, false),
-		kickPlayer: (name) => sendMessage(`K${name}\x00`, false),
-		opPlayer: (name) => sendMessage(`O${name}\x001\x00`, false),
-		deopPlayer: (name) => sendMessage(`O${name}\x000\x00`, false),
-		switchState: (path) => { console.log('switch state to ', path); sendMessage(`S${state_paths[path]}\x00`, false); },
-		sendConsole: (value) => { sendMessage(`C${value}\x00`, false); return value; }
+		sendAuth: (hash) => sendPacket('A', hash),
+		banPlayer: (name) => sendPacket('B', name, 'Banned by WebAdmin', 0),
+		kickPlayer: (name) => sendPacket('K', name),
+		opPlayer: (name) => sendPacket('O', name, 1),
+		deopPlayer: (name) => sendPacket('O', name, 0),
+		switchState: (path) => { console.log('switch state to ', path); sendPacket('S', state_paths[path]); },
+		sendConsole: (value) => { sendPacket('C', value); return value; }
 	});
 }
 

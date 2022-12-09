@@ -158,7 +158,8 @@ THREAD_PUBFUNC(WebThread) {(void)param;
 					}
 					if (hc->cpls && hc->cpls->time != 0.0) {
 						if (Time_GetMSecD() > hc->cpls->time) {
-							genpacket(&hc->nb, "SE^");
+							if (hc->cpls->wsstate == WSS_PLUGINS)
+								genpacket(&hc->nb, "SE^");
 							hc->cpls->time = 0.0;
 							break;
 						}

@@ -12,31 +12,31 @@ export let doAuthGood = () => { };
 export let doLogin = () => { };
 
 let pass_candidate;
-const LOG_IN_MSG = "Log in";
+const LOG_IN_MSG = 'Log in';
 const Auth = ({ cwap }) => {
 	const authWindow = document.getElementsByClassName('authWindowG')[0];
 	const authError = document.getElementById('status');
 	const password = document.getElementById('authPassword');
-	const loginBtn = document.getElementsByClassName("loginBtn")[0];
+	const loginBtn = document.getElementsByClassName('loginBtn')[0];
 	showAuth = () => authWindow.style.display = 'block';
 
 	showAuthError = () => {
 		showAuth();
 		setTimeout(() => {
-			loginBtn.classList.add("fancyLoginFailed")
+			loginBtn.classList.add('fancyLoginFailed')
 		}, 500);
 		setTimeout(() => {
 			authError.innerHTML = 'Wrong password';
-			authError.classList.add("badPassAnimation")
-			setTimeout(() => authError.classList.remove("badPassAnimation"), 260)
-			loginBtn.classList.remove("fancyLoginFailed", "fancyLoginAnim")
+			authError.classList.add('badPassAnimation')
+			setTimeout(() => authError.classList.remove('badPassAnimation'), 260)
+			loginBtn.classList.remove('fancyLoginFailed', 'fancyLoginAnim')
 		}, 1000)
 	};
 
 	doAuthGood = (localPass) => {
 		if (!localPass) {
 			setTimeout(() => {
-				authWindow.classList.add("fancyLoginSuccess");
+				authWindow.classList.add('fancyLoginSuccess');
 			}, 500)
 			setTimeout(() => {
 				authWindow.style.display = 'none';
@@ -49,8 +49,8 @@ const Auth = ({ cwap }) => {
 	};
 	doLogin = (hash) => {
 		if (!hash) {
-			loginBtn.classList.add("fancyLoginAnim");
-			loginBtn.innerHTML = "Logging in..."
+			loginBtn.classList.add('fancyLoginAnim');
+			loginBtn.innerHTML = 'Logging in...';
 			setTimeout(() => loginBtn.innerHTML = LOG_IN_MSG, 1000)
 			let pass = password.value;
 			if ((pass = password.value).length > 1) {
@@ -70,9 +70,9 @@ const Auth = ({ cwap }) => {
 			<div className='authWindow'>
 				<div className='authWindowMain'>
 					<h2>WebAdmin Password</h2>
-					<FontAwesomeIcon id='userlogo' icon={regular("user")} />
+					<FontAwesomeIcon id='userlogo' icon={regular('user')} />
 					<input type='password' id='authPassword' placeholder='password' onKeyDown={(e) => {
-						if (e.key === "Enter") {
+						if (e.key === 'Enter') {
 							doLogin()
 						}
 					}} />

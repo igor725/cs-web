@@ -22,12 +22,12 @@ const PlayerDropdown = props => {
 			<li>
 				<p style={{display: 'contents'}} 
 				onClick={showMenu}>
-						<b className={'dropbtn ' + (isAdmin ? "admin":"")} name={playerName}>{playerName}</b> in world <b>{playerWorld}</b>
+						<b className={'dropbtn ' + (isAdmin ? 'admin':'')} name={playerName}>{playerName}</b> in world <b>{playerWorld}</b>
 				</p>
 				<div className='playerMenu'>
-					<button className='ban' onClick={()=> cwap.banPlayer(playerName)}> Ban </button>
+					<button className='ban' onClick={() => cwap.banPlayer(playerName)}> Ban </button>
 					<button className='kick' onClick={() => cwap.kickPlayer(playerId)}> Kick </button>
-					<button className='op' onClick={isAdmin ? deopPlayer : opPlayer}>{isAdmin ? "de-op" : "OP"}</button>
+					<button className='op' onClick={() => (isAdmin ? deopPlayer : opPlayer)(playerName)}>{isAdmin ? 'de-op' : 'op'}</button>
 				</div>
 			</li>
 		</div>

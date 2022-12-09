@@ -16,28 +16,28 @@ const Navbar = props => {
 
 	const currentLocation = useLocation().pathname;
 	const isMobile = (window.screen.width <= 600);
-	const navbar_btns = document.getElementsByClassName("buttons")[0];
+	const navbar_btns = document.getElementsByClassName('buttons')[0];
 
 	const openNavbar = () => {
 		if (isOpened){
-			navbar_btns.classList.add("hide-navbar");
-			setTimeout(()=>navbar_btns.classList.remove("hide-navbar", "show-navbar"), 750);
+			navbar_btns.classList.add('hide-navbar');
+			setTimeout(()=>navbar_btns.classList.remove('hide-navbar', 'show-navbar'), 750);
 			isOpened = false;
 		} else {
-			navbar_btns.classList.add("show-navbar");
+			navbar_btns.classList.add('show-navbar');
 			isOpened = true;
 		}
 	}
 	useEffect(() => {
 		if (prev_colored){
-			prev_colored.className = "";
+			prev_colored.className = '';
 		}
 		var els = document.querySelectorAll(`a[href='${currentLocation}']`)[0];
 		if ((els !== undefined)) {
 			if (isDarkMode){
 				els.classList.add('red');
 			} else{
-				els.classList.add("selected")
+				els.classList.add('selected')
 			}
 			prev_colored = els;
 		}
@@ -70,7 +70,7 @@ const Navbar = props => {
 			)}
 			<div className='buttons' onClick={(e) => {
 				const target = e.target
-				if (target.tagName === 'A' && !target.classList.contains((isDarkMode ? "red":"selected"))) {
+				if (target.tagName === 'A' && !target.classList.contains((isDarkMode ? 'red':'selected'))) {
 					const path = target.getAttribute('href');
 					props.CWAP.switchState(path);
 					isMobile && openNavbar();
