@@ -17,11 +17,13 @@ const Navbar = props => {
 	const currentLocation = useLocation().pathname;
 	const isMobile = (window.screen.width <= 600);
 	const navbar_btns = document.getElementsByClassName('buttons')[0];
+	const open_btn = document.getElementById('navbar-mobile-btn');
 
 	const openNavbar = () => {
+		open_btn.classList.toggle("navbar-btn-pressed")
 		if (isOpened){
 			navbar_btns.classList.add('hide-navbar');
-			setTimeout(()=>navbar_btns.classList.remove('hide-navbar', 'show-navbar'), 750);
+			setTimeout(()=>navbar_btns.classList.remove('hide-navbar', 'show-navbar'), 300);
 			isOpened = false;
 		} else {
 			navbar_btns.classList.add('show-navbar');

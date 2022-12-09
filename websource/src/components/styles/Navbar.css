@@ -195,8 +195,13 @@ body {
 
 	#navbar-mobile-btn {
 		height: 55px;
+		padding: 10px;
+		width: 55px;
 		color: #6d7264;
-		border-radius: 12px;
+		border-radius: 50%;
 		margin: auto;
+	}
+	.navbar-btn-pressed {
+		background: #5851518f;
 	}
 }

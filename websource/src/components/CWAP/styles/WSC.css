@@ -13,3 +13,13 @@
 	background: rgb(255, 38, 38);
 	color: white;
 }
+#loading {
+	position: absolute;
+	top: 0;
+	width: 15%;
+	bottom: 0;
+	left: 0;
+	filter: invert(75%) sepia(68%) saturate(7097%) hue-rotate(163deg) brightness(97%) contrast(101%);
+	right: 0;
+	margin: auto;
+}
