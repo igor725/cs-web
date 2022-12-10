@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import './styles/Statistic.css';
-import { start_uptime } from './CWAP/CWAP';
+import { playersList, start_uptime } from './CWAP/CWAP';
 
 export let setCounter = (start_uptime) => { }
 
 const Statistic = ({ cwap }) => {
-    let curr_online = 0;
+    let curr_online = playersList.length
     const [count, setCount] = useState((Date.now() - start_uptime) / 1000);
     
     useEffect(() => {
-        curr_online = document.getElementById("plist").childNodes.length
         const id = setInterval(() => setCount((oldCount) => oldCount + 1), 1000);
         return () => {
             clearInterval(id);
