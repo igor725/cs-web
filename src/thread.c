@@ -39,6 +39,7 @@ static inline cs_str guessmime(cs_str path) {
 		"text/plain", "txt", NULL,
 		"application/json", "json", NULL,
 		"image/png", "png", NULL,
+		"image/svg+xml", "svg", NULL,
 		"image/ico", "ico"
 	};
 
