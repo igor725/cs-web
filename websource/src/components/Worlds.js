@@ -3,10 +3,7 @@ import './styles/Worlds.css';
 import { playersList, worldsList } from './CWAP/CWAP';
 import PlayerDropdown from './PlayerList/PlayerDropdown';
 import { prev_player } from './PlayersList';
-
-/*import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';*/
-
+import Fancyselect from './fancyselect/fancyselect';
 
 export let updateWorlds = () => {}
 
@@ -19,11 +16,12 @@ const wTypes = {
 const World = props => {
 	const cwap = props.cwap;
 	const changeWeather = (e) => {
-		Object.entries(wTypes).map(([key,value]) => {
+		Object.entries(wTypes).every(([key,value]) => {
 			if (value === e.target.value) {
 				cwap.changeWeather(props.name, key);
 				return false;
 			}
+			return true;
 		});
 	}
 	return (
@@ -54,7 +52,7 @@ const World = props => {
 						<tr>
 							<td>Weather: </td>
 							<td>
-								<select value={wTypes[props.weather]} onChange={changeWeather}>
+								<Fancyselect value={wTypes[props.weather]} onChange={changeWeather}>
 									{
 										Object.entries(wTypes).map(([key,value]) => {
 											return (
@@ -64,7 +62,7 @@ const World = props => {
 											);
 										})
 									}
-								</select>
+								</Fancyselect>
 							</td>
 						</tr>
 					</tbody>

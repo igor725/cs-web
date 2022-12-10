@@ -12,25 +12,6 @@
 	scrollbar-width: none; /* For Firefox */
 }
 
-.lightmode select{
-	background: #9abfdf;
-	border: 1px solid #84c4fb;
-	color: black;
-}
-
-select {
-	color: white;
-    width: 130px;
-    border-radius: 0.25em;
-    padding: 0.25em 0.5em;
-    font-size: 18px;
-    cursor: pointer;
-    outline: none;
-    background: #51789b;
-    border: none;
-    border: 1px solid #445e76;
-}
-
 .worlds::-webkit-scrollbar {
 	display: none;
 }
@@ -199,7 +180,7 @@ select {
 	.world-grid {
 		font-size: 18px;
 		grid-template-columns: none;
-		grid-template-rows: 0fr 1fr 0fr;
+		grid-template-rows: repeat(3, 0fr);
 	}
 
 	.world > h2{
@@ -233,5 +214,7 @@ select {
 
 	.worldCart_players ul{
 		height: auto;
+		min-height: 100px;
+		max-height: 150px;
 	}
 }

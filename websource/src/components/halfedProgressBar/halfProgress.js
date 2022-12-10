@@ -1,5 +1,5 @@
 import React from 'react';
-import './styles/halfProgress.css';
+import './halfProgress.css';
 
 const HalfedProgress = props => {
     const currValue = props.value;

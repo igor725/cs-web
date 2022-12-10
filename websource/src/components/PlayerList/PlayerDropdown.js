@@ -1,5 +1,5 @@
 import React from 'react';
-import './styles/PlayerDropdown.css';
+import './PlayerDropdown.css';
 import { showMenu } from '../PlayersList';
 
 const PlayerDropdown = props => {

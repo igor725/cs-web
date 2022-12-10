@@ -37,7 +37,7 @@ const Navbar = props => {
 		var els = document.querySelectorAll(`a[href='${currentLocation}']`)[0];
 		if ((els !== undefined)) {
 			if (isDarkMode){
-				els.classList.add('red');
+				els.classList.add('selected-dark');
 			} else{
 				els.classList.add('selected');
 			}
@@ -72,17 +72,25 @@ const Navbar = props => {
 			)}
 			<div className='buttons' onClick={(e) => {
 				const target = e.target
-				if (target.tagName === 'A' && !target.classList.contains((isDarkMode ? 'red':'selected'))) {
+				if (target.tagName === 'A' && !target.classList.contains((isDarkMode ? 'selected-dark':'selected'))) {
 					const path = target.getAttribute('href');
 					props.CWAP.switchState(path);
 					isMobile && openNavbar();
 				}
 			}}
 			>
-				<Link to='/'> Home </Link>
-				<Link to='/console'> Terminal </Link>
-				<Link to='/configeditor'> Config Editor </Link>
-				<Link to='/pluginmanager'> Plugin Manager</Link>
+				<Link to='/'>
+					<FontAwesomeIcon icon={solid("house")}/> Home
+				</Link>
+				<Link to='/console'> 
+					<FontAwesomeIcon icon={solid("terminal")} /> Terminal 
+				</Link>
+				<Link to='/configeditor'> 
+					<FontAwesomeIcon icon={solid("pen-to-square")} /> Config Editor
+				</Link>
+				<Link to='/pluginmanager'>
+					<FontAwesomeIcon icon={solid("bars-progress")} /> Plugin Manager
+				</Link>
 				{(!isMobile) && (
 					<DarkModeToggle
 						onChange={() => { setIsDarkMode(!isDarkMode); props.setTheme() }}

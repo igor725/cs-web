@@ -5,12 +5,11 @@ h1, h2, h3, a{
 }
 
 .homeMenu {
-    margin-top: 20px;
-	margin-bottom: 20px;
     display: grid;
     grid-gap: 70px;
     grid-template-columns: 0fr 0fr;
-    justify-content: center;
+    width: fit-content;
+    margin: 20px auto 20px;
 }
 
 .homeMenu > div:hover{
@@ -57,8 +56,13 @@ html{
 	.homeMenu {
 		grid-template-columns: none !important;
 		grid-gap: 35px;
+		width: 100%;
 	}
 	.homeMenu > div{
 		min-width: 360px;
+		max-width: 90vw;
+	}
+	.statistic {
+		justify-self: center;
 	}
 }

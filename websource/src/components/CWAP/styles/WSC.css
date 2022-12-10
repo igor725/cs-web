@@ -16,15 +16,11 @@
 
 #loading {
 	position: absolute;
-	background-image: url(/public/n3r4zzurr0-wifi-fade.svg);
-	background-repeat: no-repeat;
-	background-size: contain;
-	width: 40vh;
-	height: 40vh;
-	top: 50%;
-	bottom: 50%;
+	top: 0;
+	width: 25%;
+	bottom: 0;
 	left: 0;
 	right: 0;
 	filter: invert(75%) sepia(68%) saturate(7097%) hue-rotate(163deg) brightness(97%) contrast(101%);
-	margin: auto;
+	margin: auto auto;
 }

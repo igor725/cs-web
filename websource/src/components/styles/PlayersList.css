@@ -75,8 +75,11 @@
 @media only screen and (max-width: 600px) {
 	.playersOnline {
 		justify-self: center;
-		min-height: 100px;
+		min-height: 200px;
+		width: 100%;
 		height: auto;
+		max-height: 400px;
+		padding:8px 0 0 8px;
 	}
 
 	.playersOnline h3 {
