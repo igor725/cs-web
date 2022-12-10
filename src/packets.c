@@ -13,6 +13,7 @@ void genpacket(NetBuffer *nb, cs_str fmt, ...) {
 	va_start(args, fmt);
 	cs_int32 tempi, size;
 	cs_str temps; cs_float tempf;
+	cs_uint64 temp6;
 
 	while (*fmt != '\0') {
 		switch (*fmt) {
@@ -22,6 +23,15 @@ void genpacket(NetBuffer *nb, cs_str fmt, ...) {
 					NetBuffer_EndWrite(nb, String_FormatBuf(
 						NetBuffer_StartWrite(nb, size + 1),
 						size + 1, "%d", tempi
+					) + 1);
+				}
+				break;
+			case '6':
+				temp6 = va_arg(args, cs_int64);
+				if ((size = String_FormatBuf(NULL, 0, "%llu", temp6)) > 0) {
+					NetBuffer_EndWrite(nb, String_FormatBuf(
+						NetBuffer_StartWrite(nb, size + 1),
+						size + 1, "%llu", temp6
 					) + 1);
 				}
 				break;
@@ -57,6 +67,7 @@ void genpacket(NetBuffer *nb, cs_str fmt, ...) {
 
 		++fmt;
 	}
+
 	va_end(args);
 }
 
@@ -247,7 +258,7 @@ void handlewebsockmsg(struct _HttpClient *hc) {
 			}
 
 			if ((hc->cpls->authed = Memory_Compare(WebState.pwhash, data + 1, 32)) == true)
-				genpacket(&hc->nb, "AOK^ss", ServInf.coreName, ServInf.coreGitTag);
+				genpacket(&hc->nb, "AOK^ss6", ServInf.coreName, ServInf.coreGitTag, Server_StartTime);
 			else genpacket(&hc->nb, "AFAIL^");
 
 			data += 34;
