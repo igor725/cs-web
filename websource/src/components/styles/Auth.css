@@ -123,18 +123,27 @@
 	cursor: default;
 }
 .fancyLoginAnim {
+	animation: translate 0.5s;
+	animation-delay: 0s;
+	animation-fill-mode: forwards;
 	-webkit-animation: translate 0.5s;
     -webkit-animation-delay: 0s;
     -webkit-animation-fill-mode: forwards;
 }
 
 .fancyLoginFailed{
+	animation: translate-back 0.5s;
+	animation-delay: 0s;
+	animation-fill-mode: backwards;
 	-webkit-animation: translate-back 0.5s;
     -webkit-animation-delay: 0s;
     -webkit-animation-fill-mode: backwards;
 }
 
 .fancyLoginSuccess {
+	animation: translate-top 1s;
+	animation-delay: 0s;
+	animation-fill-mode: forwards;
 	-webkit-animation: translate-top 1s;
     -webkit-animation-delay: 0s;
     -webkit-animation-fill-mode: forwards;

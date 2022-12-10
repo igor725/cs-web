@@ -4,7 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { DarkModeToggle } from 'react-dark-mode-toggle-2';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { solid, regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 
 let prev_colored;
 let isOpened = false;
@@ -21,7 +21,8 @@ const Navbar = props => {
 	const open_btn = document.getElementById('navbar-mobile-btn');
 
 	const openNavbar = () => {
-		open_btn.classList.toggle('navbar-btn-pressed');
+		open_btn.classList.toggle('navbar-open');
+		setTimeout(() => open_btn.classList.toggle('navbar-btn-pressed'), 500);
 		if (isOpened){
 			navbar_btns.classList.add('hide-navbar');
 			setTimeout(()=>navbar_btns.classList.remove('hide-navbar', 'show-navbar'), 300);
@@ -45,8 +46,8 @@ const Navbar = props => {
 			});
 			const idx = Array.prototype.indexOf.call(childs, target);
 			const root = document.querySelector(':root');
-			root.style.setProperty('--navbar-from-dir', idx < prevIdx ? 'left' : 'right');
-			root.style.setProperty('--navbar-to-dir', idx < prevIdx ? 'right' : 'left');
+			root.style.setProperty('--navbar-from-dir', idx > prevIdx ? 'left' : 'right');
+			root.style.setProperty('--navbar-to-dir', idx > prevIdx ? 'right' : 'left');
 			return;
 		}
 
@@ -80,7 +81,7 @@ const Navbar = props => {
 						className='night_btn'
 						size={50}
 					/>
-					<FontAwesomeIcon id='navbar-mobile-btn' icon={solid('bars')} onClick={openNavbar}>
+					<FontAwesomeIcon id='navbar-mobile-btn' icon={regular('square-caret-down')} onClick={openNavbar}>
 					</FontAwesomeIcon>
 			
 				</div>
@@ -88,7 +89,7 @@ const Navbar = props => {
 			{(!isMobile) && (
 				<div className='navbar-head'>
 					<div style={{ width: '4px', background: 'red' }} title='WebSocket connection: ' className='websocketStatus' />
-					<h3 style={{ cursor: 'pointer' }}>CServer Webadmin</h3>
+					<h3 style={{ cursor: 'pointer' }}>CServer WebAdmin</h3>
 				</div>
 			)}
 			<div className='buttons'>

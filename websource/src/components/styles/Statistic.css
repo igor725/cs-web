@@ -21,13 +21,14 @@
 
 .lightmode .statistic-text {
     background: #69408f;
+    color: white;
 }
 
 .statistic-text {
     background: #5c456e;
     display: grid;
     padding: 12px;
-    color: white;
+    color: #e3e3e3;
     font-size: 16px;
     font-weight: 600;
     grid-template-columns: repeat(3, 1fr);

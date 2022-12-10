@@ -5,9 +5,11 @@ import { start_uptime } from './CWAP/CWAP';
 export let setCounter = (start_uptime) => { }
 
 const Statistic = ({ cwap }) => {
+    let curr_online = 0;
     const [count, setCount] = useState((Date.now() - start_uptime) / 1000);
-
+    
     useEffect(() => {
+        curr_online = document.getElementById("plist").childNodes.length
         const id = setInterval(() => setCount((oldCount) => oldCount + 1), 1000);
         return () => {
             clearInterval(id);
@@ -37,7 +39,7 @@ const Statistic = ({ cwap }) => {
                     <tbody>
                         <tr>
                             <td>Online: </td>
-                            <td>0 / 25</td>
+                            <td>{curr_online} / 25</td>
                         </tr>
                         <tr>
                             <td>RAM: </td>

@@ -42,7 +42,7 @@ const toBeResponded = {
 	}
 };
 
-const socketUrl = `ws://192.168.1.101:8887/ws`;
+const socketUrl = `ws://${window.location.hostname}:8887/ws`;
 let WebSocket = () => {
 	const reconnectBtn = ({ closeToast }) => (
 		<button
@@ -95,7 +95,7 @@ let WebSocket = () => {
 				pauseOnHover: true,
 				draggable: true,
 				progress: undefined,
-				theme: ((window.localStorage.getItem('DARKMODE_STATE') === 'true') || false ? 'dark':'light'),
+				theme: ((window.localStorage.getItem('DARKMODE_STATE') === 'true') || false ? 'dark' : 'light'),
 			});
 		},
 		shouldReconnect: () => true
@@ -114,7 +114,7 @@ let WebSocket = () => {
 		}
 
 		for (const arg of args) {
-			switch (typeof(arg)) {
+			switch (typeof (arg)) {
 				case 'boolean':
 					message += arg ? '1' : '0';
 					break;
@@ -125,7 +125,7 @@ let WebSocket = () => {
 					message += (arg).toString();
 					break;
 			}
-	
+
 			message += '\x00';
 		}
 

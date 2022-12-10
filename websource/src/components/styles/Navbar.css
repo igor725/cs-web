@@ -3,15 +3,10 @@ body {
 	margin: 0 auto;
 }
 
-.lightmode h3 {
-	color: #1b3350 !important;
-}
-
 .night_btn {
-	margin-right:15px;
-	margin-left: auto;
-	margin-top: auto;
-	margin-bottom: auto;
+    margin: auto 0;
+    margin-left: auto;
+    margin-right: 20px;
 }
 
 .navbar {
@@ -85,7 +80,6 @@ body {
 }
 
 .buttons a {
-	/* background: transparent; */
 	background-size: 200% 100%;
 	background-position: var(--navbar-to-dir);
 }
@@ -116,8 +110,6 @@ body {
 	background-position: var(--navbar-to-dir);
 	animation: makeItfadeIn 1s 0s forwards;
 }
-
-
 
 .navbar h3 {
 	margin-left: 15px;
@@ -244,19 +236,17 @@ body {
 		color: #3c3c3c;
 	}
 
+	.navbar-open{
+		rotate: 180deg;
+		color: #a16db3 !important;
+	}
+
 	#navbar-mobile-btn {
+		transition: 0.5s;
 		height: 55px;
 		padding: 10px;
 		width: 55px;
 		color: #6d7264;
 		margin: auto;
-	}
-
-	.light .navbar-btn-pressed {
-		background: #a3a3a38f;
-	}
-
-	.navbar-btn-pressed {
-		background: #5851518f;
 	}
 }
