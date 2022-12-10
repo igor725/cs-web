@@ -1,11 +1,35 @@
-.statistic{
+.lightmode .statistic {
+    background: #dddddd;
+}
+
+.darkmode .statistic {
     background: #2e2e2e;
 }
-.statistic-usage{
+
+.statistic {
+    border-radius: 12px;
+    padding: 12px;
+}
+/* 
+.statistic-usage {
     display: grid;
     grid-template-columns: 1fr 1fr;
     justify-items: center;
     margin-top: 30px;
+} */
+
+.lightmode .statistic-text {
+    background: #69408f;
+}
+
+.statistic-text {
+    background: #5c456e;
+    display: grid;
+    padding: 12px;
+    color: white;
+    font-size: 16px;
+    font-weight: 500;
+    grid-template-columns: repeat(2, 1fr);
 }
 
 @media only screen and (max-width: 600px) {

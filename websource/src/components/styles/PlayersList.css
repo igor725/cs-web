@@ -16,9 +16,7 @@
 }
 
 .playersOnline {
-	transition: 1s;
 	display: grid;
-	/* justify-self: end; */
 	grid-template-rows: 0fr 1fr;
 	width: 300px;
 	border: 1px solid rgb(56, 56, 56);

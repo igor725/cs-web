@@ -71,7 +71,7 @@ const Navbar = props => {
 				</div>
 			)}
 			<div className='buttons' onClick={(e) => {
-				const target = e.target
+				const target = e.target;
 				if (target.tagName === 'A' && !target.classList.contains((isDarkMode ? 'selected-dark':'selected'))) {
 					const path = target.getAttribute('href');
 					props.CWAP.switchState(path);

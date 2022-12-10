@@ -12,6 +12,10 @@ h1, h2, h3, a{
     margin: 20px auto 20px;
 }
 
+.homeMenu > div {
+	transition: box-shadow 1s;
+}
+
 .homeMenu > div:hover{
 	-webkit-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.3);
 	-moz-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.3);

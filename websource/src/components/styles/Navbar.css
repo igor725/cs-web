@@ -88,9 +88,26 @@ body {
 	transition: background-image 1s;
 }
 
-.navbar .buttons a:hover, .selected-dark {
-	background-image: linear-gradient(to right top, #40517e, #4b4e81, #584b83, #664682, #74407e);
-	box-shadow: 4px 4px 12px 0px rgba(0, 0, 0, 0.22);
+.buttons a{
+	/* background: transparent; */
+	background-size: 200% 100%;
+	background-position: right;
+}
+
+@keyframes makeItfadeIn {
+	100% {
+	  background-position: left;
+	  box-shadow: 4px 4px 12px 0px rgba(0, 0, 0, 0.22);
+	}
+}
+.navbar .buttons a:hover {
+	background-color: #3a373a;
+}
+.selected-dark {
+	background: linear-gradient(to right, #664682 50%, transparent 0);
+	background-size: 200% 100%;
+	background-position: right;
+	animation: makeItfadeIn 1s 0s forwards;
 }
 
 .light .buttons a:hover {

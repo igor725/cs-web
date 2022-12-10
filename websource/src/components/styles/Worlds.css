@@ -6,7 +6,6 @@
     background: rgb(46, 46, 46);
 	overflow-x: hidden;
     overflow-y: auto;
-    transition: 1s;
     width: 60%;
     min-width: 700px;
 	scrollbar-width: none; /* For Firefox */
@@ -41,7 +40,7 @@
 
 .lightmode .worlds {
 	border: 1px solid rgb(230, 230, 230);
-	background: rgb(228, 228, 228);
+	background: #dddddd;
 }
 
 .lightmode .worldCart_info{
