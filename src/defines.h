@@ -57,7 +57,6 @@ struct _CplState {
 	enum _WsState wsstate;
 	cs_bool authed;
 	cs_char lasttc[13];
-	cs_double time;
 };
 
 struct _HttpClient {

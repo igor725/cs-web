@@ -8,6 +8,7 @@ import { updateWorlds } from '../Worlds';
 export let playersList = [];
 export let worldsList = [];
 let softwareName = 'bebra/v1337';
+let currentPage = null;
 
 const getWorld = (worldName) => {
 	let wrld = undefined;
@@ -200,6 +201,7 @@ export let processCommand = (data) => {
 			case 'S':
 				const state = data_splitted[0].charAt(1);
 				console.log('switch state:', state);
+
 				switch (state) {
 					case 'H':
 						spcnt = 0;
@@ -234,6 +236,7 @@ export let processCommand = (data) => {
 						break;
 					
 					case 'E':
+					case 'C':
 						spcnt = 1;
 						break;
 
@@ -301,7 +304,16 @@ let CWAP = () => {
 		opPlayer: (name) => sendPacket('O', name, 1),
 		changeWeather: (world, weather) => sendPacket('W', world, weather),
 		deopPlayer: (name) => sendPacket('O', name, 0),
-		switchState: (path) => { console.log('switch state to ', path); sendPacket('S', state_paths[path]); },
+		switchState: (path) => {
+			console.log(path, currentPage);
+			if (currentPage !== path) {
+				sendPacket('S', state_paths[path]);
+				currentPage = path;
+				return true;
+			}
+
+			return false;
+		},
 		sendConsole: (value) => { sendPacket('C', value); return value; }
 	});
 }

@@ -6,7 +6,7 @@ h1, h2, h3, a{
 
 .homeMenu {
     display: grid;
-    grid-gap: 70px;
+    grid-gap: 40px;
     grid-template-columns: 0fr 0fr;
     width: fit-content;
     margin: 20px auto 20px;
@@ -22,7 +22,7 @@ h1, h2, h3, a{
 	box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.3);
 }
 
-html{
+html {
 	scrollbar-color: #222;
   	scrollbar-width: none;
 }

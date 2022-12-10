@@ -295,11 +295,11 @@ void handlewebsockmsg(struct _HttpClient *hc) {
 						break;
 
 					case WSS_CFGEDIT:
+						genpacket(&hc->nb, "SC^");
 						break;
 					
 					case WSS_PLUGINS:
-						hc->cpls->time = Time_GetMSecD() + 5.0;
-						sendinfo(&hc->nb, "Switch state packet will be delivered soon...");
+						genpacket(&hc->nb, "SE^");
 						break;
 
 					default:

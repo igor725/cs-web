@@ -88,25 +88,32 @@ body {
 	transition: background-image 1s;
 }
 
-.buttons a{
+:root {
+	--navbar-from-dir: left;
+	--navbar-to-dir: right;
+}
+
+.buttons a {
 	/* background: transparent; */
 	background-size: 200% 100%;
-	background-position: right;
+	background-position: var(--navbar-to-dir);
 }
 
 @keyframes makeItfadeIn {
 	100% {
-	  background-position: left;
-	  box-shadow: 4px 4px 12px 0px rgba(0, 0, 0, 0.22);
+		background-position: var(--navbar-from-dir);
+		box-shadow: 4px 4px 12px 0px rgba(0, 0, 0, 0.22);
 	}
 }
+
 .navbar .buttons a:hover {
 	background-color: #3a373a;
 }
+
 .selected-dark {
-	background: linear-gradient(to right, #664682 50%, transparent 0);
+	background: linear-gradient(to var(--navbar-to-dir), #664682 50%, transparent 0);
 	background-size: 200% 100%;
-	background-position: right;
+	background-position: var(--navbar-to-dir);
 	animation: makeItfadeIn 1s 0s forwards;
 }
 
@@ -183,14 +190,20 @@ body {
 		background: white;
 	}
 
-	.show-navbar{
+	.show-navbar {
 		display: grid !important;
+		animation: buttons-moveout 0.75s;
+		animation-delay: 0s;
+		animation-fill-mode: forwards;
 		-webkit-animation: buttons-moveout 0.75s;
 		-webkit-animation-delay: 0s;
 		-webkit-animation-fill-mode: forwards;
 	}
 
 	.hide-navbar {
+		animation: buttons-movein 0.75s;
+		animation-delay: 0s;
+		animation-fill-mode: backwards;
 		-webkit-animation: buttons-movein 0.75s;
 		-webkit-animation-delay: 0s;
 		-webkit-animation-fill-mode: backwards;

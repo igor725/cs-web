@@ -1,7 +1,7 @@
 .worlds {
     border: 1px solid rgb(56, 56, 56);
     border-radius: 12px;
-    height: 400px;
+    height: 430px;
     justify-self: center;
     background: rgb(46, 46, 46);
 	overflow-x: hidden;
@@ -24,7 +24,7 @@
     display: grid;
     grid-template-columns: 0fr 1fr 1fr;
     padding: 10px;
-	border-radius:12px;
+	border-radius: 12px;
 }
 
 .worldCart_players {
@@ -43,11 +43,11 @@
 	background: #dddddd;
 }
 
-.lightmode .worldCart_info{
+.lightmode .worldCart_info {
 	color: #142532;
 }
 
-.worldCart_info table td{
+.worldCart_info table td {
 	font-weight: bold;
 	padding: 5px 2px 5px 5px;
 }
@@ -59,7 +59,7 @@
 
 .worlds_list {
 	display: grid;
-	grid-gap: 33px;
+	grid-gap: 16px;
 	padding: 12px;
 }
 
@@ -126,7 +126,7 @@
 
 .world-grid:hover .world h2{
 	background: white;
-	color:black;
+	color: black;
 }
 
 .world-grid:hover .world .worldBG {

@@ -8,6 +8,7 @@ import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 
 let prev_colored;
 let isOpened = false;
+
 const Navbar = props => {
 	const DARKMODE_STATE = (window.localStorage.getItem('DARKMODE_STATE') === 'true') || false;
 	const [isDarkMode, setIsDarkMode] = useState(DARKMODE_STATE);
@@ -29,13 +30,33 @@ const Navbar = props => {
 			navbar_btns.classList.add('show-navbar');
 			isOpened = true;
 		}
-	}
-	useEffect(() => {
-		if (prev_colored){
-			prev_colored.className = '';
+	};
+
+	const processLink = (e) => {
+		const target = e.target;
+		const path = target.getAttribute('href');
+		if (target.tagName === 'A' && props.CWAP.switchState(path)) {
+			isMobile && openNavbar();
+
+			const childs = target.parentNode.childNodes;
+			const prevIdx = Array.prototype.findIndex.call(childs, (el, idx, arr) => {
+				if (el.classList.contains(isDarkMode ? 'selected-dark' : 'selected'))
+					return true;
+			});
+			const idx = Array.prototype.indexOf.call(childs, target);
+			const root = document.querySelector(':root');
+			root.style.setProperty('--navbar-from-dir', idx > prevIdx ? 'left' : 'right');
+			root.style.setProperty('--navbar-to-dir', idx > prevIdx ? 'right' : 'left');
+			return;
 		}
+
+		e.preventDefault();
+	};
+
+	useEffect(() => {
+		if (prev_colored) prev_colored.className = '';
 		var els = document.querySelectorAll(`a[href='${currentLocation}']`)[0];
-		if ((els !== undefined)) {
+		if (els !== undefined) {
 			if (isDarkMode){
 				els.classList.add('selected-dark');
 			} else{
@@ -50,7 +71,7 @@ const Navbar = props => {
 			{(isMobile) && (
 				<div className='navbar-head'>
 					<div className='navbar-title'>
-						<h3 style={{ cursor: 'pointer' }}>CServer Webadmin</h3>
+						<h3 style={{ cursor: 'pointer' }}>CServer WebAdmin</h3>
 						<div style={{ width: '4px', background: 'red' }} title='WebSocket connection: ' className='websocketStatus' />
 					</div>
 					<DarkModeToggle
@@ -70,30 +91,22 @@ const Navbar = props => {
 					<h3 style={{ cursor: 'pointer' }}>CServer Webadmin</h3>
 				</div>
 			)}
-			<div className='buttons' onClick={(e) => {
-				const target = e.target;
-				if (target.tagName === 'A' && !target.classList.contains((isDarkMode ? 'selected-dark':'selected'))) {
-					const path = target.getAttribute('href');
-					props.CWAP.switchState(path);
-					isMobile && openNavbar();
-				}
-			}}
-			>
-				<Link to='/'>
+			<div className='buttons'>
+				<Link to='/' onClick={processLink}>
 					<FontAwesomeIcon icon={solid("house")}/> Home
 				</Link>
-				<Link to='/console'> 
+				<Link to='/console' onClick={processLink}> 
 					<FontAwesomeIcon icon={solid("terminal")} /> Terminal 
 				</Link>
-				<Link to='/configeditor'> 
+				<Link to='/configeditor' onClick={processLink}> 
 					<FontAwesomeIcon icon={solid("pen-to-square")} /> Config Editor
 				</Link>
-				<Link to='/pluginmanager'>
+				<Link to='/pluginmanager' onClick={processLink}>
 					<FontAwesomeIcon icon={solid("bars-progress")} /> Plugin Manager
 				</Link>
 				{(!isMobile) && (
 					<DarkModeToggle
-						onChange={() => { setIsDarkMode(!isDarkMode); props.setTheme() }}
+						onChange={() => { setIsDarkMode(!isDarkMode); props.setTheme(); }}
 						isDarkMode={isDarkMode}
 						className='night_btn'
 						size={50}

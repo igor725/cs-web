@@ -22,12 +22,13 @@
 	border: 1px solid rgb(56, 56, 56);
 	border-radius: 12px;
 	padding: 10px;
-	height: 310px;
+	height: 410px;
 }
 
 .playersOnline h3 {
 	margin: 0 auto;
 	text-align: center;
+	font-size: 22px;
 }
 .plist, #plist{
 	scrollbar-width: thin;

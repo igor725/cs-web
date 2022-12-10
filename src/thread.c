@@ -157,14 +157,6 @@ THREAD_PUBFUNC(WebThread) {(void)param;
 						WL(Error, "WebSocket error: %s", WebSock_GetError(hc->wsh));
 						hc->state = CHS_CLOSING;
 					}
-					if (hc->cpls && hc->cpls->time != 0.0) {
-						if (Time_GetMSecD() > hc->cpls->time) {
-							if (hc->cpls->wsstate == WSS_PLUGINS)
-								genpacket(&hc->nb, "SE^");
-							hc->cpls->time = 0.0;
-							break;
-						}
-					}
 					break;
 				case CHS_REQUEST:
 						switch (NetBuffer_ReadLine(&hc->nb, buffer, 144)) {

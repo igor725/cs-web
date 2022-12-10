@@ -27,6 +27,6 @@ const PlayerDropdown = props => {
 			</li>
 		</div>
 	);
-}
+};
 
-export default PlayerDropdown
+export default PlayerDropdown;

@@ -7,12 +7,13 @@ import loading_bar from "../../static/noconnection.svg";
 // Я в ахуе что можно импортировать из файла, 
 // который импортирует из ЭТОГО файла
 import { processCommand } from './CWAP';
+
 const setBlur = (state) => {
 	document.getElementById('main').classList[(['add', 'remove'][state ? 0 : 1])]('blurry');
 	document.getElementsByClassName('layout-container')[0].classList[(['add', 'remove'][state ? 0 : 1])]('blurry');
 	if (state && document.getElementById('loading') === null) {
 		let loading = document.createElement('img');
-		loading.src = loading_bar
+		loading.src = loading_bar;
 		loading.id = 'loading';
 		document.body.appendChild(loading);
 		setTimeout(() => {
@@ -68,9 +69,13 @@ let WebSocket = () => {
 		},
 		onMessage: (msg) => {
 			msg.data.text().then((data) => {
-				let tbr = null;
-				if ((tbr = toBeResponded[data.charAt(0)]) && tbr.answered !== true) {
+				let tbr = undefined;
+				if ((tbr = toBeResponded[data.charAt(0)]) !== undefined) {
 					if (!tbr.timeout) setBlur(false);
+					else {
+						clearTimeout(tbr.timeout);
+						tbr.timeout = null;
+					}
 					tbr.answered = true;
 				}
 				processCommand(data);
@@ -101,6 +106,7 @@ let WebSocket = () => {
 		let message = id, tbr = undefined;
 		if ((tbr = toBeResponded[id]) !== undefined) {
 			tbr.answered = false;
+			if (tbr.timeout) clearTimeout(tbr.timeout);
 			tbr.timeout = setTimeout(() => {
 				tbr.timeout = null;
 				if (!tbr.answered)
@@ -125,6 +131,7 @@ let WebSocket = () => {
 		}
 
 		sendMessage(message, false);
+		console.log(`<< ${message}`);
 	};
 
 	const connectionStatus = {
