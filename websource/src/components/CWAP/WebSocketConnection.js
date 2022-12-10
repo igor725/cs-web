@@ -6,33 +6,29 @@ import './styles/WSC.css';
 // Я в ахуе что можно импортировать из файла, 
 // который импортирует из ЭТОГО файла
 import { processCommand } from './CWAP';
-let wasBlurred = false;
 const setBlur = (state) => {
-	if (wasBlurred){
-		let blurSvg = document.body.getElementById("loading");
-		document.body.removeChild(blurSvg);
-		toast.dismiss(); // уберет ВСЕ тосты висящие в момент
-	}
 	document.getElementById('main').classList[(['add', 'remove'][state ? 0 : 1])]('blurry');
-	document.getElementsByClassName("layout-container")[0].classList[(['add', 'remove'][state ? 0 : 1])]('blurry')
-	if (state){
-		let loading = document.createElement("img")
-		loading.id = "loading"
-		loading.src = "https://raw.githubusercontent.com/n3r4zzurr0/svg-spinners/main/svg-css/ring-resize.svg"
-		document.body.appendChild(loading)
-		setTimeout(()=>{
+	document.getElementsByClassName('layout-container')[0].classList[(['add', 'remove'][state ? 0 : 1])]('blurry');
+	if (state && document.getElementById('loading') === null) {
+		let loading = document.createElement('div');
+		loading.id = 'loading';
+		document.body.appendChild(loading);
+		setTimeout(() => {
 			toast.warn('Trying to get a response from server...', {
-				position: "top-center",
+				position: 'top-center',
 				autoClose: false,
 				hideProgressBar: false,
 				closeOnClick: false,
 				pauseOnHover: false,
 				draggable: false,
 				progress: undefined,
-				theme: "colored",
+				theme: 'colored',
 			});
 		}, 750);
-		wasBlurred = true;
+	} else if (!state) {
+		let blurSvg = document.getElementById('loading');
+		if (blurSvg !== null) document.body.removeChild(blurSvg);
+		toast.dismiss(); // уберет ВСЕ тосты висящие в момент
 	}
 }
 	
@@ -66,6 +62,7 @@ let WebSocket = () => {
 		},
 		onError: (err) => {
 			toast.error(err);
+			setBlur(true);
 		},
 		onMessage: (msg) => {
 			msg.data.text().then((data) => {

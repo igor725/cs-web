@@ -7,6 +7,7 @@ import { updateWorlds } from '../Worlds';
 
 export let playersList = [];
 export let worldsList = [];
+let softwareName = 'bebra/v1337';
 
 const getWorld = (worldName) => {
 	let wrld = undefined;
@@ -16,7 +17,7 @@ const getWorld = (worldName) => {
 			return false;
 		}
 		return true;
-	})
+	});
 	return wrld;
 };
 
@@ -28,7 +29,7 @@ const getPlayer = (playerId) => {
 			return false;
 		}
 		return true;
-	})
+	});
 	return pl;
 };
 
@@ -134,10 +135,7 @@ export let processCommand = (data) => {
 
 					case 'OK':
 						spcnt = 3;
-						const software = data_splitted[1];
-						const git_tag = data_splitted[2];
-
-						console.log(`Current software: ${software}/${git_tag}`);
+						softwareName = `${data_splitted[1]}/${data_splitted[2]}`;
 						(user_pass ? doAuthGood(true) : doAuthGood(false));
 						break;
 
@@ -183,7 +181,7 @@ export let processCommand = (data) => {
 						spcnt = 2;
 						playersList.every((player, index) => {
 							if (player.id === playerId) {
-								playersList.splice(index, 1)
+								playersList.splice(index, 1);
 								return false;
 							}
 							return true;
@@ -295,11 +293,13 @@ let CWAP = () => {
 	const [sendPacket] = WebSocket();
 
 	return ({
+		getSoftwareName: () => { return softwareName; },
+
 		sendAuth: (hash) => sendPacket('A', hash),
 		banPlayer: (name) => sendPacket('B', name, 'Banned by WebAdmin', 0),
 		kickPlayer: (name) => sendPacket('K', name),
 		opPlayer: (name) => sendPacket('O', name, 1),
-		changeWeather: (world, weather) => sendPacket("w", world, weather),
+		changeWeather: (world, weather) => sendPacket('W', world, weather),
 		deopPlayer: (name) => sendPacket('O', name, 0),
 		switchState: (path) => { console.log('switch state to ', path); sendPacket('S', state_paths[path]); },
 		sendConsole: (value) => { sendPacket('C', value); return value; }

@@ -23,24 +23,24 @@ const Auth = ({ cwap }) => {
 	showAuthError = () => {
 		showAuth();
 		setTimeout(() => {
-			loginBtn.classList.add('fancyLoginFailed')
+			loginBtn.classList.add('fancyLoginFailed');
 		}, 500);
 		setTimeout(() => {
 			authError.innerHTML = 'Wrong password';
-			authError.classList.add('badPassAnimation')
-			setTimeout(() => authError.classList.remove('badPassAnimation'), 260)
-			loginBtn.classList.remove('fancyLoginFailed', 'fancyLoginAnim')
-		}, 1000)
+			authError.classList.add('badPassAnimation');
+			setTimeout(() => authError.classList.remove('badPassAnimation'), 260);
+			loginBtn.classList.remove('fancyLoginFailed', 'fancyLoginAnim');
+		}, 1000);
 	};
 
 	doAuthGood = (localPass) => {
 		if (!localPass) {
 			setTimeout(() => {
 				authWindow.classList.add('fancyLoginSuccess');
-			}, 500)
+			}, 500);
 			setTimeout(() => {
 				authWindow.style.display = 'none';
-			}, 1500)
+			}, 1500);
 		} else {
 			authWindow.style.display = 'none';
 		}
@@ -51,7 +51,7 @@ const Auth = ({ cwap }) => {
 		if (!hash) {
 			loginBtn.classList.add('fancyLoginAnim');
 			loginBtn.innerHTML = 'Logging in...';
-			setTimeout(() => loginBtn.innerHTML = LOG_IN_MSG, 1000)
+			setTimeout(() => loginBtn.innerHTML = LOG_IN_MSG, 1000);
 			let pass = password.value;
 			if ((pass = password.value).length > 1) {
 				hash = MD5.generate(pass);
@@ -72,15 +72,11 @@ const Auth = ({ cwap }) => {
 					<h2>WebAdmin Password</h2>
 					<FontAwesomeIcon id='userlogo' icon={regular('user')} />
 					<input type='password' id='authPassword' placeholder='password' onKeyDown={(e) => {
-						if (e.key === 'Enter') {
-							doLogin()
-						}
+						if (e.key === 'Enter') doLogin();
 					}} />
 					<p id='status'></p>
 					<button className='btn41-43 btn-41 loginBtn' onClick={() => {
-						if (password.value.length > 1) {
-							doLogin();
-						}
+						if (password.value.length > 1) doLogin();
 					}}> {LOG_IN_MSG} </button>
 				</div>
 			</div>

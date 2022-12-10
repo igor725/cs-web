@@ -4,8 +4,8 @@ import { playersList, worldsList } from './CWAP/CWAP';
 import PlayerDropdown from './PlayerList/PlayerDropdown';
 import { prev_player } from './PlayersList';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+/*import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';*/
 
 
 export let updateWorlds = () => {}
@@ -19,8 +19,12 @@ const wTypes = {
 const World = props => {
 	const cwap = props.cwap;
 	const changeWeather = (e) => {
-		const newWeather = e.target.value;
-		cwap.changeWeather(props.name, newWeather);
+		Object.entries(wTypes).map(([key,value]) => {
+			if (value === e.target.value) {
+				cwap.changeWeather(props.name, key);
+				return false;
+			}
+		});
 	}
 	return (
 		<div className='world-grid'>
@@ -52,12 +56,12 @@ const World = props => {
 							<td>
 								<select value={wTypes[props.weather]} onChange={changeWeather}>
 									{
-										Object.entries(wTypes).map(([key,value])=>{
-											return(
+										Object.entries(wTypes).map(([key,value]) => {
+											return (
 												<option key={key} value={value}>
 													{value}
 												</option>
-											)
+											);
 										})
 									}
 								</select>
@@ -78,7 +82,7 @@ const World = props => {
 									isAdmin={player.isAdmin} 
 									cwap={cwap}
 								>{player.name}</PlayerDropdown>
-							)
+							);
 						}
 					})}
 				</ul>

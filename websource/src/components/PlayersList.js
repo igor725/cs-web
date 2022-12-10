@@ -65,7 +65,7 @@ const PlayersList = ({ cwap }) => {
 								isAdmin={player.isAdmin} 
 								cwap={cwap}
 							>{player.name}</PlayerDropdown>
-						)
+						);
 					})
 				}
 			</ul>

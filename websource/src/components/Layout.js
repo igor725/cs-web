@@ -10,7 +10,7 @@ export let setTheme = () => {};
 
 const Layout = ({ CWAP, children }) => {
 	const root = document.getElementsByTagName('body')[0];
-	root.className = ((window.localStorage.getItem('DARKMODE_STATE') === 'true') ? 'darkmode' : 'lightmode')
+	root.className = ((window.localStorage.getItem('DARKMODE_STATE') === 'true') ? 'darkmode' : 'lightmode');
 	setTheme = () => {
 		root.className = window.localStorage.getItem('DARKMODE_STATE') === 'true' ? 'lightmode' : 'darkmode';
 	};

@@ -9,14 +9,6 @@ const PlayerDropdown = props => {
 	const isAdmin = Boolean(props.isAdmin);
 	const cwap = props.cwap;
 
-	const opPlayer = (playerName) =>{
-		cwap.opPlayer(playerName)
-	}
-	
-	const deopPlayer = (playerName) => {
-		cwap.deopPlayer(playerName)
-	}
-
 	return (
 		<div className='playerDropdown' name={playerId}>
 			<li>
@@ -27,7 +19,10 @@ const PlayerDropdown = props => {
 				<div className='playerMenu'>
 					<button className='ban' onClick={() => cwap.banPlayer(playerName)}> Ban </button>
 					<button className='kick' onClick={() => cwap.kickPlayer(playerId)}> Kick </button>
-					<button className='op' onClick={() => (isAdmin ? deopPlayer : opPlayer)(playerName)}>{isAdmin ? 'de-op' : 'op'}</button>
+					<button className='op' onClick={
+						() => cwap[isAdmin ? 'deopPlayer' : 'opPlayer'](playerName)
+					}
+					>{isAdmin ? 'de-op' : 'op'}</button>
 				</div>
 			</li>
 		</div>

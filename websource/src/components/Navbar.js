@@ -20,7 +20,7 @@ const Navbar = props => {
 	const open_btn = document.getElementById('navbar-mobile-btn');
 
 	const openNavbar = () => {
-		open_btn.classList.toggle("navbar-btn-pressed")
+		open_btn.classList.toggle('navbar-btn-pressed');
 		if (isOpened){
 			navbar_btns.classList.add('hide-navbar');
 			setTimeout(()=>navbar_btns.classList.remove('hide-navbar', 'show-navbar'), 300);
@@ -39,7 +39,7 @@ const Navbar = props => {
 			if (isDarkMode){
 				els.classList.add('red');
 			} else{
-				els.classList.add('selected')
+				els.classList.add('selected');
 			}
 			prev_colored = els;
 		}

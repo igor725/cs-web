@@ -74,7 +74,7 @@ const Console = ({ CWAP }) => {
 
 	const showCopy = (e) => {
 		e.preventDefault();
-		if (prevCopy) prevCopy.classList.remove('selected-term-text')
+		if (prevCopy) prevCopy.classList.remove('selected-term-text');
 		e.target.classList.add('selected-term-text');
 		selectedCopy = e.target.innerText;
 		copyMenu.style.display = 'block';
@@ -87,7 +87,7 @@ const Console = ({ CWAP }) => {
 		copyMenu.style.display = 'hide';
 		navigator.clipboard.writeText(selectedCopy);
 		prevCopy.classList.add('selected-term-text');
-		toast.success('Copied to clipboard!')
+		toast.success('Copied to clipboard!');
 	}
 
 	return (

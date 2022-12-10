@@ -122,7 +122,7 @@ select {
 
 .worldBG {
 	position: relative;
-	background-image: url("/public/world_template.png");
+	background-image: url(/public/world_template.png);
 	background-size: cover;
 	-webkit-filter: blur(2px);
 	-moz-filter: blur(2px);

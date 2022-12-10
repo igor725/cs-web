@@ -9,7 +9,7 @@ const Home = ({ CWAP }) => {
 		<div className='homeMenu'>
 			<Worlds cwap={CWAP} />
 			<PlayersList cwap={CWAP} />
-			<Statistic />
+			<Statistic cwap={CWAP} />
 		</div>
 	);
 }

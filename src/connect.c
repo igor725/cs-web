@@ -4,8 +4,8 @@
 
 #include "defines.h"
 
-void Plugin_RecvInterface(cs_str name, void *ptr, cs_size size) {
 #ifdef CSWEB_USE_BASE
+void Plugin_RecvInterface(cs_str name, void *ptr, cs_size size) {
 	if (String_Compare(name, BASE_ITF_NAME)) {
 		switch (size) {
 			case sizeof(BaseItf):
@@ -21,8 +21,8 @@ void Plugin_RecvInterface(cs_str name, void *ptr, cs_size size) {
 				break;
 		}
 	}
-#endif
 }
+#endif
 
 void RequestIntefaces(void) {
 #	ifdef CSWEB_USE_BASE

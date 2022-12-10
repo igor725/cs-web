@@ -146,33 +146,63 @@ static void sendhomestate(struct _HttpClient *hc) {
 	}
 }
 
+static inline void sendinfo(NetBuffer *nb, cs_str str) {
+	genpacket(nb, "NI^s", str);
+}
+
+static inline void senderror(NetBuffer *nb, cs_str str) {
+	genpacket(nb, "NE^s", str);
+}
+
 static void kickplayer(NetBuffer *nb, ClientID id) {
 	Client *cl = Client_GetByID(id);
 	if (!cl) {
-		genpacket(nb, "NE^s", "Failed to kick specified player");
+		senderror(nb, "Failed to kick specified player");
 		return;
 	}
 	Client_Kick(cl, "Kicked by WebAdmin");
-	genpacket(nb, "NI^s", "Player kicked successfully");
+	sendinfo(nb, "Player kicked successfully");
 }
 
 #ifdef CSWEB_USE_BASE
+static cs_bool checkbase(NetBuffer *nb) {
+	if (WebState.iface_base) return true;
+	senderror(nb, "Base plugin is not installed on the server");
+	return false;
+}
+
 static void banplayer(NetBuffer *nb, cs_byte **data) {
-	if (!WebState.iface_base) return;
 	cs_str name = readstr(data);
 	/*cs_str reason = */readstr(data);
 	/*cs_int32 duration = */readint(data);
+	if (!checkbase(nb)) return;
 	if (WebState.iface_base->banUser(name))
-		genpacket(nb, "NI^s", "Player banned successfully");
+		sendinfo(nb, "Player banned successfully");
 	else
-		genpacket(nb, "NE^s", "Failed to ban specified player");
+		senderror(nb, "Failed to ban specified player");
 }
 
-static void opplayer(cs_byte **data) {
-	if (!WebState.iface_base) return;
+static void opplayer(NetBuffer *nb, cs_byte **data) {
 	cs_str name = readstr(data);
 	cs_bool state = (cs_bool)readint(data);
+	if (!checkbase(nb)) return;
 	(state ? WebState.iface_base->opUser : WebState.iface_base->deopUser)(name);
+}
+#else
+static void banplayer(NetBuffer *nb, cs_byte **data) {
+	readstr(data);readstr(data);readint(data);
+	senderror(nb, "The backend plugin was compiled without the base plugin integration");
+}
+
+static void opplayer(NetBuffer *nb, cs_byte **data) {
+	cs_str name = readstr(data);
+	cs_bool state = (cs_bool)readint(data);
+	Client *client = Client_GetByName(name);
+	if (!client) {
+		senderror(nb, "Specified player not found");
+		return;
+	}
+	Client_SetOP(client, state);
 }
 #endif
 
@@ -181,12 +211,26 @@ static inline cs_bool runcommand(cs_byte *cmd) {
 	return Command_Handle((cs_char *)cmd, NULL);
 }
 
+static inline void setweather(NetBuffer *nb, cs_byte **data) {
+	World *world = World_GetByName(readstr(data));
+	EWeather ww = (EWeather)readint(data);
+	if (!world) {
+		senderror(nb, "Specified world not found");
+		return;
+	}
+	if (!World_SetWeather(world, ww)) {
+		senderror(nb, "Invalid weather type specified");
+		return;
+	}
+	World_FinishEnvUpdate(world);
+}
+
 void handlewebsockmsg(struct _HttpClient *hc) {
 	cs_byte *data = (cs_byte *)hc->wsh->payload;
 	while (hc->state < CHS_CLOSING && (data - (cs_byte *)hc->wsh->payload) < hc->wsh->paylen) {
 		if (!hc->cpls->authed) {
 			if (*data != 'A') {
-				genpacket(&hc->nb, "NE^s", "You need to log in first");
+				senderror(&hc->nb, "You need to log in first");
 				break;
 			}
 
@@ -197,7 +241,7 @@ void handlewebsockmsg(struct _HttpClient *hc) {
 			}
 
 			if (hc->wsh->paylen < 34) {
-				genpacket(&hc->nb, "NE^s", "Invalid auth packet received");
+				senderror(&hc->nb, "Invalid auth packet received");
 				data += 34;
 				break;
 			}
@@ -221,25 +265,18 @@ void handlewebsockmsg(struct _HttpClient *hc) {
 				kickplayer(&hc->nb, (ClientID)readint(&data));
 				break;
 
-#ifdef CSWEB_USE_BASE
 			case 'B':
 				banplayer(&hc->nb, &data);
 				break;
 
 			case 'O':
-				opplayer(&data);
+				opplayer(&hc->nb, &data);
 				break;
-#else
-			case 'B':
-			case 'O':
-				genpacket(&hc->nb, "NE^s", "Unsupported action");
-				break;
-#endif
 
 			case 'S':
 				hc->cpls->wsstate = ustate(*readstr(&data));
 				if (prev == hc->cpls->wsstate) {
-					genpacket(&hc->nb, "NE^s", "You're already here");
+					senderror(&hc->nb, "You're already here");
 					break;
 				}
 				WebState.ustates[prev]--;
@@ -262,21 +299,25 @@ void handlewebsockmsg(struct _HttpClient *hc) {
 					
 					case WSS_PLUGINS:
 						hc->cpls->time = Time_GetMSecD() + 5.0;
-						genpacket(&hc->nb, "NI^s", "Switch state packet will be delivered soon...");
+						sendinfo(&hc->nb, "Switch state packet will be delivered soon...");
 						break;
 
 					default:
 					case WSS_MAXVAL:
 					case WSS_INVALID:
 						hc->state = CHS_CLOSING;
-						genpacket(&hc->nb, "NE^s", "Invalid state code received");
+						senderror(&hc->nb, "Invalid state code received");
 						break;
 				}
 				WL(Debug, "State changed to %d", hc->cpls->wsstate);
 				break;
 
+			case 'W':
+				setweather(&hc->nb, &data);
+				break;
+
 			default:
-				genpacket(&hc->nb, "NE^s", "Failed to handle unknown message");
+				senderror(&hc->nb, "Failed to handle unknown message");
 				data += hc->wsh->paylen;
 				break;
 		}
