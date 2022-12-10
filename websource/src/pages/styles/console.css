@@ -123,6 +123,9 @@
 }
 
 .terminal-text {
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 	margin: 0 auto;
 	text-align: center;
 	color: #838383;
@@ -164,29 +167,6 @@
 
 #console-out div {
 	transition: background-color 0.4s ease-in;
-}
-
-.lightmode .selected-term-text {
-	background: #e1cdcd;
-}
-
-.darkmode .selected-term-text {
-	background: #4d5568;
-}
-
-.console-copyboard {
-	display: none;
-	cursor: pointer;
-	position: absolute;
-	text-align: center;
-	background: blue;
-	font-size: 18px;
-	color: white;
-	text-align: center;
-	width: 24px;
-	height: 22px;
-	padding: 6px;
-	border-radius: 12px;
 }
 
 .dot {

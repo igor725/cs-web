@@ -13,10 +13,6 @@
 	cursor: pointer;
 }
 
-.admin .playerMenu > button {
-	cursor: not-allowed;
-}
-
 .admin {
 	color: red;
 }
@@ -44,17 +40,14 @@
 }
 
 .playerMenu > button {
-	width: 65px;
-	color: white;
-	border: none;
-	cursor: pointer;
-	border-radius: 8px;
-	font-size: 14px;
-	background: transparent;
-	transition: all 0.35s ease-in 0s;
-	height: 100%;
-	margin: 0;
-	padding: 0;
+    width: 65px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    background: transparent;
+    transition: all 0.35s ease-in 0s;
+    height: 100%;
 }
 
 .darkmode .playerMenu > button {

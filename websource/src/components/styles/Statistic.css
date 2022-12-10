@@ -42,6 +42,6 @@
     .statistic-text {
         grid-template-columns: none;
         grid-gap: 5px;
-        grid-template-rows: repeat(3, 1fr);
+        grid-template-rows: repeat(3, 0fr);
     }
 }

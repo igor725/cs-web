@@ -1,7 +1,5 @@
 import React, { useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
-import { toast } from 'react-toastify';
+import Clipboard, { doCopy } from '../components/clipboard/clipboard';
 import './styles/console.css';
 
 
@@ -22,12 +20,7 @@ var convert = new Convert({
 });
 
 let messages = [], history = [], hispos = 0;
-
-let copyMenu;
-let prevCopy;
-let selectedCopy;
-
-export let writeInConsole = () => {};
+export let writeInConsole = () => { };
 
 const Console = ({ CWAP }) => {
 	const [, updateState] = React.useState();
@@ -40,21 +33,10 @@ const Console = ({ CWAP }) => {
 		setTimeout(() => text.scrollTop = text.scrollHeight, 200);
 	};
 
-	useEffect(()=>{
-		copyMenu = document.getElementsByClassName('console-copyboard')[0];
+	useEffect(() => {
 		text = document.getElementById('console-out');
 		input_el = document.getElementById('console-in');
-
 		scrollToLatest();
-		window.onclick = (event) => {
-			if (!event.target.matches('.console-copyboard')) {
-				copyMenu.style.display = 'none';
-				if (prevCopy) prevCopy.classList.remove('selected-term-text');
-			}
-		};
-		return () => {
-			window.onclick = '';
-		};
 	});
 
 	const pushMessage = (msg) => {
@@ -72,29 +54,9 @@ const Console = ({ CWAP }) => {
 		scrollToLatest();
 	};
 
-	const showCopy = (e) => {
-		e.preventDefault();
-		if (prevCopy) prevCopy.classList.remove('selected-term-text');
-		e.target.classList.add('selected-term-text');
-		selectedCopy = e.target.innerText;
-		copyMenu.style.display = 'block';
-		copyMenu.style.left = e.pageX + 10 +'px';
-		copyMenu.style.top = e.pageY + 5 +  'px';
-		prevCopy = e.target;
-	};
-
-	const hideCopy = () => {
-		copyMenu.style.display = 'hide';
-		navigator.clipboard.writeText(selectedCopy);
-		prevCopy.classList.add('selected-term-text');
-		toast.success('Copied to clipboard!');
-	}
-
 	return (
 		<div className='console'>
-			<div className='console-copyboard' onClick={hideCopy}>
-				<FontAwesomeIcon icon={regular('clipboard')} />
-			</div>
+			<Clipboard />
 			<div className='console-top'>
 				<div className='console-exit'>
 					<span className='dot red'></span>
@@ -106,9 +68,9 @@ const Console = ({ CWAP }) => {
 				</div>
 			</div>
 			<div className='console-main'>
-				<div id='console-out' readOnly={true} onContextMenu={showCopy}>
+				<div id='console-out' readOnly={true} onContextMenu={doCopy}>
 					{messages.map((msg, i) => {
-						return React.cloneElement(msg, {key: i});
+						return React.cloneElement(msg, { key: i });
 					})}
 				</div>
 				<div className='inputting-field'>
@@ -135,7 +97,7 @@ const Console = ({ CWAP }) => {
 								input_el.value = history[hispos];
 								break;
 						}
-					}} autoComplete='off'/>
+					}} autoComplete='off' />
 				</div>
 			</div>
 		</div>

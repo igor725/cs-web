@@ -7,9 +7,9 @@ import Worlds from '../components/Worlds';
 const Home = ({ CWAP }) => {
 	return (
 		<div className='homeMenu'>
+			<Statistic cwap={CWAP} />
 			<Worlds cwap={CWAP} />
 			<PlayersList cwap={CWAP} />
-			<Statistic cwap={CWAP} />
 		</div>
 	);
 }
