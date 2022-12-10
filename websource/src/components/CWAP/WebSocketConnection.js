@@ -34,7 +34,6 @@ const setBlur = (state) => {
 		toast.dismiss(); // уберет ВСЕ тосты висящие в момент
 	}
 }
-	
 
 const toBeResponded = {
 	S: {
@@ -43,7 +42,7 @@ const toBeResponded = {
 	}
 };
 
-const socketUrl = `ws://${window.location.hostname}:8887/ws`;
+const socketUrl = `ws://192.168.1.101:8887/ws`;
 let WebSocket = () => {
 	const reconnectBtn = ({ closeToast }) => (
 		<button

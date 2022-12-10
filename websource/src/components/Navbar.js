@@ -45,8 +45,8 @@ const Navbar = props => {
 			});
 			const idx = Array.prototype.indexOf.call(childs, target);
 			const root = document.querySelector(':root');
-			root.style.setProperty('--navbar-from-dir', idx > prevIdx ? 'left' : 'right');
-			root.style.setProperty('--navbar-to-dir', idx > prevIdx ? 'right' : 'left');
+			root.style.setProperty('--navbar-from-dir', idx < prevIdx ? 'left' : 'right');
+			root.style.setProperty('--navbar-to-dir', idx < prevIdx ? 'right' : 'left');
 			return;
 		}
 

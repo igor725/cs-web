@@ -15,6 +15,10 @@
 	background: rgb(221, 221, 221);
 }
 
+.lightmode .playersOnline > div {
+	background: rgb(221, 221, 221);;
+}
+
 .playersOnline {
 	display: grid;
 	grid-template-rows: 0fr 1fr;
@@ -23,6 +27,15 @@
 	border-radius: 12px;
 	padding: 10px;
 	height: 410px;
+}
+
+.playersOnline > div {
+	position: sticky;
+	top: 0;
+}
+
+.darkmode .playersOnline > div {
+	background: rgb(46, 46, 46);
 }
 
 .playersOnline h3 {

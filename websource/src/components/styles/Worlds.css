@@ -15,6 +15,21 @@
 	display: none;
 }
 
+.lightmode .worlds-header-main {
+	background: #dddddd;
+}
+
+.worlds-header-main {
+	padding-top: 10px;
+	position: sticky;
+	top: 0;
+	z-index: 999999;
+}
+
+.darkmode .worlds-header-main {
+	background: rgb(46, 46, 46);
+}
+
 .lightmode .world-grid{
 	background: #d1cbd3;
 }
@@ -180,11 +195,6 @@
 		font-size: 18px;
 		grid-template-columns: none;
 		grid-template-rows: repeat(3, 0fr);
-	}
-
-	.world > h2{
-		position: sticky;
-		top:0;
 	}
 
 	.world {

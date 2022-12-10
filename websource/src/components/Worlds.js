@@ -107,7 +107,7 @@ const Worlds = props => {
 
 	return (
 		<div className='worlds'>
-			<div style={{paddingTop: '10px'}}>
+			<div className='worlds-header-main'>
 				<h3 className='worlds-header'>Worlds</h3>
 				<hr />
 			</div>

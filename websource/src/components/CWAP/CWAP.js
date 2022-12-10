@@ -4,7 +4,9 @@ import WebSocket from './WebSocketConnection';
 import { doAuthGood, showAuth, showAuthError, doLogin } from '../Auth';
 import { updateGlobalList } from '../PlayersList';
 import { updateWorlds } from '../Worlds';
+import { setCounter } from '../Statistic';
 
+export let start_uptime = 0;
 export let playersList = [];
 export let worldsList = [];
 let softwareName = 'bebra/v1337';
@@ -135,9 +137,11 @@ export let processCommand = (data) => {
 						break;
 
 					case 'OK':
-						spcnt = 3;
+						spcnt = 4;
 						softwareName = `${data_splitted[1]}/${data_splitted[2]}`;
 						(user_pass ? doAuthGood(true) : doAuthGood(false));
+						start_uptime = parseInt(data_splitted[3]);
+						setCounter(start_uptime)
 						break;
 
 					default:

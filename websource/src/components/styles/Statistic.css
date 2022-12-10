@@ -9,6 +9,7 @@
 .statistic {
     border-radius: 12px;
     padding: 12px;
+    grid-column: span 2;
 }
 /* 
 .statistic-usage {
@@ -28,12 +29,18 @@
     padding: 12px;
     color: white;
     font-size: 16px;
-    font-weight: 500;
-    grid-template-columns: repeat(2, 1fr);
+    font-weight: 600;
+    grid-template-columns: repeat(3, 1fr);
 }
 
 @media only screen and (max-width: 600px) {
     .statistic {
-        width: 100%
+        width: 100%;
+        grid-column: auto;
+    }
+    .statistic-text {
+        grid-template-columns: none;
+        grid-gap: 5px;
+        grid-template-rows: repeat(3, 1fr);
     }
 }

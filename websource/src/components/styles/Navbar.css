@@ -27,14 +27,6 @@ body {
 	background: #ffffff;
 }
 
-.selected{
-	font-weight: bold !important;
-	/* background: #ededed !important; */
-	/* border-bottom: 2px solid orange; */
-	box-shadow: 4px 4px 12px 0px rgba(0, 0, 0, 0.22);
-
-}
-
 .light h3 {
     color: black !important;
 
@@ -42,7 +34,6 @@ body {
 
 .light .buttons a {
 	color: black !important;
-	font-weight:500;
 	border-top-left-radius: 0px;
 	border-top-right-radius: 0px;
 }
@@ -106,20 +97,27 @@ body {
 	}
 }
 
-.navbar .buttons a:hover {
-	background-color: #3a373a;
+.light .buttons a:hover {
+	background-color: white;
+}
+
+.selected{
+	font-weight: bold;
+	background: linear-gradient(to var(--navbar-to-dir), #bf78fd 50%, transparent 0);
+	background-size: 200% 100%;
+	background-position: var(--navbar-to-dir);
+	animation: makeItfadeIn 1s 0s forwards;
 }
 
 .selected-dark {
+	font-weight: bold;
 	background: linear-gradient(to var(--navbar-to-dir), #664682 50%, transparent 0);
 	background-size: 200% 100%;
 	background-position: var(--navbar-to-dir);
 	animation: makeItfadeIn 1s 0s forwards;
 }
 
-.light .buttons a:hover {
-	background: none;
-}
+
 
 .navbar h3 {
 	margin-left: 15px;

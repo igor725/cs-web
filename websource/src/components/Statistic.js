@@ -1,7 +1,23 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './styles/Statistic.css';
+import { start_uptime } from './CWAP/CWAP';
 
-const Statistic = ({cwap}) => {
+export let setCounter = (start_uptime) => { }
+
+const Statistic = ({ cwap }) => {
+    const [count, setCount] = useState((Date.now() - start_uptime) / 1000);
+
+    useEffect(() => {
+        const id = setInterval(() => setCount((oldCount) => oldCount + 1), 1000);
+        return () => {
+            clearInterval(id);
+        };
+    }, []);
+
+    setCounter = (start_uptime) => {
+        setCount((Date.now() - start_uptime) / 1000)
+    }
+
     return (
         <div className='statistic'>
             <div className='statistic-text'>
@@ -13,7 +29,7 @@ const Statistic = ({cwap}) => {
                         </tr>
                         <tr>
                             <td>Uptime: </td>
-                            <td>09:56:11</td>
+                            <td id='counter'>{new Date(count * 1000).toISOString().slice(11, 19)}</td>
                         </tr>
                     </tbody>
                 </table>
