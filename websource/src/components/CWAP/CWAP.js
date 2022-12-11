@@ -121,23 +121,20 @@ const notyType = {
 };
 
 export let processCommand = (data) => {
-	console.log('RAW DATA: ', data);
+	console.log(`>> ${data}`);
 	let data_splitted = data.split('\x00');
 
 	while (data_splitted.length > 1) {
 		const packetId = data_splitted[0].at(0);
-		/* Тут число элементов массива, которое нужно пидорнуть после обработки пакета
-		** оно всегда должно быть равно {количеству полей в обрабатываемом пакете} + 1,
+		/* Тут число элементов массива, которое нужно пидорнуть после обработки пакета.
+		** Оно всегда должно быть равно {количеству полей в обрабатываемом пакете} + 1,
 		** в ином случае - гроб гроб кладбище пидор. Для пакетов, не имеющих полей,
-		** логично предположить, переменная равна просто 1.
-		** И да, A-пакет не имеет полей, так как у нас первое поле сливается с 
-		** идентификатором пакета. */
+		** логично предположить, переменная равна просто 1. */
 		let spcnt = 2;
 
 		switch (packetId) {
 			case 'A':
 				const status = data_splitted[0].substring(1);
-				console.log('Auth:', status);
 				const user_pass = localStorage.getItem('USER_PASSWORD');
 				spcnt = 1;
 
@@ -168,8 +165,8 @@ export let processCommand = (data) => {
 			case 'E':
 				spcnt = 5;
 				const pluginEventType = data_splitted[0].charAt(1);
-				const pluginId = data_splitted[1];
-				console.log('Plugin Manage | Type: ',pluginEventType,'ID: ',pluginId);
+				// const pluginId = data_splitted[1];
+
 				switch (pluginEventType) {
 					case 'A':
 						spcnt = createExtension(data_splitted, 1) + 1;
@@ -222,7 +219,7 @@ export let processCommand = (data) => {
 				break;
 			case 'S':
 				const state = data_splitted[0].charAt(1);
-				console.log('switch state:', state);
+				console.log('State switched to:', state);
 
 				switch (state) {
 					case 'H':
@@ -284,7 +281,6 @@ export let processCommand = (data) => {
 				const world = getWorld(worldName);
 				spcnt = 3;
 
-				console.log('World Management | Type:', worldEventType, 'worldName:', worldName);
 				switch (worldEventType) {
 					case 'A':
 						spcnt = createWorld(data_splitted, 1) + 1;
@@ -317,7 +313,6 @@ export let processCommand = (data) => {
 			default: throw { message: 'Unknown packet received', packetId: packetId };
 		}
 
-		console.log(data_splitted.length, spcnt);
 		spcnt = Math.max(1, spcnt);
 		if (data_splitted.length <= spcnt)
 			throw { message: 'Гроб гроб кладбище пидор!!!' };
@@ -341,7 +336,6 @@ let CWAP = () => {
 		changeWeather: (world, weather) => sendPacket('W', world, weather),
 		deopPlayer: (name) => sendPacket('O', name, 0),
 		switchState: (path) => {
-			console.log(path, currentPage);
 			if (currentPage !== path) {
 				sendPacket('S', state_paths[path]);
 				currentPage = path;

@@ -5,7 +5,8 @@
 
 cs_str const unk_err = "Failed to %s web service",
 alr_str = "Web service is already %s",
-succ_str = "Web service is successfully %s";
+succ_str = "Web service is successfully %s",
+chg_str = "The \"%s\" value will be changed to \"%s\" after reloading";
 
 COMMAND_FUNC(Web) {
 	COMMAND_SETUSAGE("/Web <enable/disable/reload/status/set> [option] [value]");
@@ -33,11 +34,18 @@ COMMAND_FUNC(Web) {
 		} else if (String_CaselessCompare(temparg, "set")) {
 			if (COMMAND_GETARG(temparg, 32, 1)) {
 				CEntry *ent = Config_GetEntry(WebState.cfg, temparg);
-				if (!ent) COMMAND_PRINT("Invalid config entry specified");
+				if (!ent) COMMAND_PRINT("Invalid config entry is specified");
 				if (COMMAND_GETARG(temparg, 32, 2)) {
 					Config_SetGeneric(ent, temparg); Config_Parse(ent, temparg, 32);
-					COMMAND_PRINTF("The \"%s\" value will be changed to \"%s\" after reloading", Config_GetEntryKey(ent), temparg);
+					COMMAND_PRINTF(chg_str, Config_GetEntryKey(ent), temparg);
 				}
+			}
+		} else if (String_CaselessCompare(temparg, "unset")) {
+			if (COMMAND_GETARG(temparg, 32, 1)) {
+				CEntry *ent = Config_GetEntry(WebState.cfg, temparg);
+				if (!ent) COMMAND_PRINT("Invalid config entry is specified");
+				Config_SetToDefault(ent); Config_Parse(ent, temparg, 32);
+				COMMAND_PRINTF(chg_str, Config_GetEntryKey(ent), temparg);
 			}
 		} else if (String_CaselessCompare(temparg, "status"))
 			COMMAND_PRINTF("Web service is %s", service(SERC_STATUS) == SERR_ON ? "&aON" : "&cOFF");
