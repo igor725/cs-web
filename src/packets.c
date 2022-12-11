@@ -5,6 +5,8 @@
 #include <command.h>
 #include <list.h>
 #include <world.h>
+#include <server.h>
+#include <plugin.h>
 
 #include "defines.h"
 
@@ -45,8 +47,11 @@ void genpacket(NetBuffer *nb, cs_str fmt, ...) {
 				}
 				break;
 			case 's':
-				if ((temps = va_arg(args, cs_str)) == NULL)
-					temps = "(nullptr)";
+				if ((temps = va_arg(args, cs_str)) == NULL) {
+					*NetBuffer_StartWrite(nb, 1) = '\0';
+					NetBuffer_EndWrite(nb, 1);
+					break;
+				}
 				size = (cs_int32)(String_Length(temps) + 1);
 				NetBuffer_EndWrite(nb, (cs_uint32)String_Copy(NetBuffer_StartWrite(
 					nb, (cs_uint32)size), (cs_uint32)size, temps
@@ -157,6 +162,19 @@ static void sendhomestate(struct _HttpClient *hc) {
 	}
 }
 
+static void sendpluginsstate(struct _HttpClient *hc) {
+	genpacket(&hc->nb, "SE^");
+
+	PluginInfo pi;
+	cs_int8 index = 0;
+	while ((index = Plugin_RequestInfo(&pi, index)) != 0) {
+		genpacket(&hc->nb, "iiss", index, pi.ver, pi.name, pi.home);
+		Plugin_DiscardInfo(&pi);
+	}
+
+	genpacket(&hc->nb, "!");
+}
+
 static inline void sendinfo(NetBuffer *nb, cs_str str) {
 	genpacket(nb, "NI^s", str);
 }
@@ -236,6 +254,18 @@ static inline void setweather(NetBuffer *nb, cs_byte **data) {
 	World_FinishEnvUpdate(world);
 }
 
+static void sendauthok(NetBuffer *nb) {
+	cs_int16 maxplayers = 0;
+	CEntry *ent;
+	if ((ent = Config_GetEntry(Server_Config, CFG_MAXPLAYERS_KEY)) != NULL)
+		maxplayers = (cs_int16)Config_GetInt(ent);
+
+	genpacket(nb, "AOK^ss6i",
+		ServInf.coreName, ServInf.coreGitTag,
+		Server_StartTime, maxplayers
+	);
+}
+
 void handlewebsockmsg(struct _HttpClient *hc) {
 	cs_byte *data = (cs_byte *)hc->wsh->payload;
 	while (hc->state < CHS_CLOSING && (data - (cs_byte *)hc->wsh->payload) < hc->wsh->paylen) {
@@ -246,7 +276,8 @@ void handlewebsockmsg(struct _HttpClient *hc) {
 			}
 
 			if (hc->wsh->paylen == 6 && String_Compare((cs_str)data, "ATEST")) {
-				genpacket(&hc->nb, "As", *WebState.pwhash != '\0' ? "REQ" : "OK");
+				if (hc->cpls->authed = (*WebState.pwhash == '\0')) sendauthok(&hc->nb);
+				else genpacket(&hc->nb, "AREQ^");
 				data += 6;
 				break;
 			}
@@ -258,7 +289,7 @@ void handlewebsockmsg(struct _HttpClient *hc) {
 			}
 
 			if ((hc->cpls->authed = Memory_Compare(WebState.pwhash, data + 1, 32)) == true)
-				genpacket(&hc->nb, "AOK^ss6", ServInf.coreName, ServInf.coreGitTag, Server_StartTime);
+				sendauthok(&hc->nb);
 			else genpacket(&hc->nb, "AFAIL^");
 
 			data += 34;
@@ -306,11 +337,11 @@ void handlewebsockmsg(struct _HttpClient *hc) {
 						break;
 
 					case WSS_CFGEDIT:
-						genpacket(&hc->nb, "SC^");
+						genpacket(&hc->nb, "SC^!");
 						break;
-					
+
 					case WSS_PLUGINS:
-						genpacket(&hc->nb, "SE^");
+						sendpluginsstate(hc);
 						break;
 
 					default:

@@ -44,7 +44,7 @@ const Auth = ({ cwap }) => {
 		} else {
 			authWindow.style.display = 'none';
 		}
-		!localPass && localStorage.setItem('USER_PASSWORD', pass_candidate);
+		localStorage.setItem('USER_PASSWORD', pass_candidate);
 		cwap.switchState(window.location.pathname);
 	};
 	doLogin = (hash) => {

@@ -23,10 +23,10 @@ export let showMenu = (e) => {
 	if ((playerEl !== prev_player) && prev_player) {
 		prev_player.classList.remove('show');
 	}
-	
+
 	playerEl.style.left = e.pageX + 'px';
 	playerEl.style.top = e.pageY + 'px';
-	
+
 	playerEl.classList.toggle('show');
 	prev_player = playerEl;
 };
@@ -37,7 +37,7 @@ export let updateGlobalList = () => {}
 const PlayersList = ({ cwap }) => {
 	const [, updateState] = React.useState();
 	const forceUpdate = React.useCallback(() => updateState({}), []);
-	
+
 	updateGlobalList = () =>{
 		forceUpdate();
 	}

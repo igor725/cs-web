@@ -64,7 +64,7 @@ let WebSocket = () => {
 		},
 		onError: (err) => {
 			toast.error(err);
-			setBlur(true);
+			// setBlur(true);
 		},
 		onMessage: (msg) => {
 			msg.data.text().then((data) => {

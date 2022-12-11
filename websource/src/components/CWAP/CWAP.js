@@ -4,9 +4,8 @@ import WebSocket from './WebSocketConnection';
 import { doAuthGood, showAuth, showAuthError, doLogin } from '../Auth';
 import { updateGlobalList } from '../PlayersList';
 import { updateWorlds } from '../Worlds';
-import { setCounter } from '../Statistic';
+import { setCounters } from '../Statistic';
 
-export let start_uptime = 0;
 export let playersList = [];
 export let worldsList = [];
 let softwareName = 'bebra/v1337';
@@ -36,11 +35,11 @@ const getPlayer = (playerId) => {
 	return pl;
 };
 
-const createPlayer = (data_splitted, startIndex) => {
-	let playerId = parseInt(data_splitted[startIndex]);
-	let playerName = data_splitted[startIndex + 1];
-	let playerOp = parseInt(data_splitted[startIndex + 2]);
-	let playerWorld = data_splitted[startIndex + 3];
+const createPlayer = (data, idx) => {
+	let playerId = parseInt(data[idx]);
+	let playerName = data[idx + 1];
+	let playerOp = parseInt(data[idx + 2]);
+	let playerWorld = data[idx + 3];
 	let player = undefined;
 
 	if ((player = getPlayer(playerId)) !== undefined) {
@@ -57,19 +56,19 @@ const createPlayer = (data_splitted, startIndex) => {
 	}
 
 	return 4;
-}
+};
 
-const createWorld = (data_splitted, startIndex) => {
-	let worldName = data_splitted[startIndex];
-	let texturepack = data_splitted[startIndex + 1] || 'Default';
-	let size = [data_splitted[startIndex + 2], data_splitted[startIndex + 3], data_splitted[startIndex + 4]].join('x');
+const createWorld = (data, idx) => {
+	let worldName = data[idx + 0];
+	let texturepack = data[idx + 1] || 'Default';
+	let size = [data[idx + 2], data[idx + 3], data[idx + 4]].join('x');
 	let spawn = [
-		parseFloat(data_splitted[startIndex + 5]).toFixed(2),
-		parseFloat(data_splitted[startIndex + 6]).toFixed(2),
-		parseFloat(data_splitted[startIndex + 7]).toFixed(2)
+		parseFloat(data[idx + 5]).toFixed(2),
+		parseFloat(data[idx + 6]).toFixed(2),
+		parseFloat(data[idx + 7]).toFixed(2)
 	].join(',');
-	let weather = parseInt(data_splitted[startIndex + 8]);
-	let status = parseInt(data_splitted[startIndex + 9]);
+	let weather = parseInt(data[idx + 8]);
+	let status = parseInt(data[idx + 9]);
 	let world = undefined;
 
 	if ((world = getWorld(worldName)) !== undefined) {
@@ -90,7 +89,18 @@ const createWorld = (data_splitted, startIndex) => {
 	}
 
 	return 10;
-}
+};
+
+const createExtension = (data, idx) => {
+	const extId = data[idx + 0];
+	const extVer = data[idx + 1];
+	const extName = data[idx + 2];
+	const extHome = data[idx + 3];
+
+	console.log('** EXT', extId, extVer, extName, extHome);
+
+	return 4;
+};
 
 const updateAll = () => {
 	updateGlobalList();
@@ -137,11 +147,10 @@ export let processCommand = (data) => {
 						break;
 
 					case 'OK':
-						spcnt = 4;
+						spcnt = 5;
 						softwareName = `${data_splitted[1]}/${data_splitted[2]}`;
 						(user_pass ? doAuthGood(true) : doAuthGood(false));
-						start_uptime = parseInt(data_splitted[3]);
-						setCounter(start_uptime)
+						setCounters(parseInt(data_splitted[3]), parseInt(data_splitted[4]));
 						break;
 
 					default:
@@ -156,19 +165,28 @@ export let processCommand = (data) => {
 				writeInConsole(msg);
 				spcnt = 1;
 				break;
-			/*case 'E':
+			case 'E':
 				spcnt = 5;
 				const pluginEventType = data_splitted[0].charAt(1);
 				const pluginId = data_splitted[1];
 				console.log('Plugin Manage | Type: ',pluginEventType,'ID: ',pluginId);
-				if (pluginEventType === 'A') {
-					const pluginName = data_splitted[2];
-					const pluginHtml = data_splitted[3];
-					const pluginVer = data_splitted[4];
-					console.log('pluginName:', pluginName, 'pluginHtml:', pluginHtml, 'pluginVer', pluginVer);
-
+				switch (pluginEventType) {
+					case 'A':
+						spcnt = createExtension(data_splitted, 1) + 1;
+						break;
+					case 'R':
+						spcnt = 2;
+						/*extList.every((ext, index) => {
+							if (ext.id === pluginId) {
+								extList.splice(index, 1);
+								return false;
+							}
+							return true;
+						});*/
+						break;
+					default: throw { message: 'Invalid extension event received', eventCode: playerEventType };
 				}
-				break;*/
+				break;
 			case 'N':
 				notyType[data_splitted[0].charAt(1)](data_splitted[1]);
 				break;
@@ -238,8 +256,21 @@ export let processCommand = (data) => {
 						for (let i = 2; i < spcnt; i++)
 							writeInConsole(data_splitted[i]);
 						break;
-					
+
 					case 'E':
+						spcnt = 0;
+						const exts = data.substring(3).split('\x01')[0].split('\x00');
+						if (exts.length > 0 && exts[0].length > 0) {
+							for (let i = 0; ;) {
+								if (!exts[i]) break;
+								const ido = createExtension(exts, i);
+								spcnt += ido; i += ido;
+							}
+						}
+
+						spcnt += 1;
+						break;
+
 					case 'C':
 						spcnt = 1;
 						break;
@@ -287,6 +318,7 @@ export let processCommand = (data) => {
 		}
 
 		console.log(data_splitted.length, spcnt);
+		spcnt = Math.max(1, spcnt);
 		if (data_splitted.length <= spcnt)
 			throw { message: 'Гроб гроб кладбище пидор!!!' };
 		data_splitted.splice(0, spcnt);

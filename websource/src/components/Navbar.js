@@ -83,7 +83,6 @@ const Navbar = props => {
 					/>
 					<FontAwesomeIcon id='navbar-mobile-btn' icon={regular('square-caret-down')} onClick={openNavbar}>
 					</FontAwesomeIcon>
-			
 				</div>
 			)}
 			{(!isMobile) && (

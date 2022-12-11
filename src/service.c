@@ -1,6 +1,7 @@
 #include <core.h>
 #include <config.h>
 #include <log.h>
+#include <hash.h>
 
 #include "defines.h"
 
@@ -14,8 +15,24 @@ static enum _SerResponse serr_start(void) {
 
 	cs_str ip = Config_GetStrByKey(WebState.cfg, "ip");
 	cs_uint16 port = (cs_uint16)Config_GetIntByKey(WebState.cfg, "port");
-	// cs_str password = Config_GetStrByKey(WebState.cfg, "password");
-	String_Copy((cs_char *)WebState.pwhash, 33, "098f6bcd4621d373cade4e832627b4f6");
+	cs_str password = Config_GetStrByKey(WebState.cfg, "password");
+
+	if (*password != '\0') {
+		MD5_CTX hash;
+		cs_byte final[16];
+		if (!MD5_Start(&hash)) {
+			WL(Error, "Failed to initialize MD5_CTX struct");
+			return SERR_FAIL;
+		}
+		MD5_PushData(&hash, password, (cs_ulong)String_Length(password));
+		MD5_End((void *)&final, &hash);
+		static cs_byte hex[] = "0123456789abcdef";
+		WebState.pwhash[32] = '\0';
+		for (cs_int32 i = 0; i < 16; i++) {
+			WebState.pwhash[i * 2 + 0] = hex[(final[i] >> 4) & 0x0F];
+			WebState.pwhash[i * 2 + 1] = hex[final[i] & 0x0F];
+		}
+	}
 
 	WebState.mutex = Mutex_Create();
 	WebState.fd = Socket_New();

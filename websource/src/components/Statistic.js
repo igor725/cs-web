@@ -1,54 +1,55 @@
 import React, { useState, useEffect } from 'react';
 import './styles/Statistic.css';
-import { playersList, start_uptime } from './CWAP/CWAP';
+import { playersList } from './CWAP/CWAP';
 
-export let setCounter = (start_uptime) => { }
+let maxPlayers = 0, startupTime = 0;
+export let setCounters = (_stup, _maxp) => {};
 
 const Statistic = ({ cwap }) => {
-    let curr_online = playersList.length
-    const [count, setCount] = useState((Date.now() - start_uptime) / 1000);
-    
-    useEffect(() => {
-        const id = setInterval(() => setCount((oldCount) => oldCount + 1), 1000);
-        return () => {
-            clearInterval(id);
-        };
-    }, []);
+	let curp = playersList.length
+	const [count, setCount] = useState((Date.now() - startupTime) / 1000);
+	const [maxp, setMaxp] = useState(maxPlayers);
 
-    setCounter = (start_uptime) => {
-        setCount((Date.now() - start_uptime) / 1000)
-    }
+	useEffect(() => {
+		const id = setInterval(() => setCount((oldCount) => oldCount + 1), 1000);
+		return () => clearInterval(id);
+	}, []);
 
-    return (
-        <div className='statistic'>
-            <div className='statistic-text'>
-                <table>
-                    <tbody>
-                        <tr>
-                            <td>Software: </td>
-                            <td>{cwap.getSoftwareName()}</td>
-                        </tr>
-                        <tr>
-                            <td>Uptime: </td>
-                            <td id='counter'>{new Date(count * 1000).toISOString().slice(11, 19)}</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <table>
-                    <tbody>
-                        <tr>
-                            <td>Online: </td>
-                            <td>{curr_online} / 25</td>
-                        </tr>
-                        <tr>
-                            <td>RAM: </td>
-                            <td>228MB / 1596GB</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    );
+	setCounters = (_stup, _maxp) => {
+		setCount((Date.now() - _stup) / 1000); setMaxp(_maxp);
+		startupTime = _stup; maxPlayers = _maxp;
+	};
+
+	return (
+		<div className='statistic'>
+			<div className='statistic-text'>
+				<table>
+					<tbody>
+						<tr>
+							<td>Software: </td>
+							<td>{cwap.getSoftwareName()}</td>
+						</tr>
+						<tr>
+							<td>Uptime: </td>
+							<td id='counter'>{new Date(count * 1000).toISOString().slice(11, 19)}</td>
+						</tr>
+					</tbody>
+				</table>
+				<table>
+					<tbody>
+						<tr>
+							<td>Online: </td>
+							<td>{curp} / {maxp}</td>
+						</tr>
+						<tr>
+							<td>RAM: </td>
+							<td>228MB / 1596GB</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	);
 };
 
 export default Statistic;
