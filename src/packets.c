@@ -275,24 +275,28 @@ void handlewebsockmsg(struct _HttpClient *hc) {
 				break;
 			}
 
-			if (hc->wsh->paylen == 6 && String_Compare((cs_str)data, "ATEST")) {
-				if (hc->cpls->authed = (*WebState.pwhash == '\0')) sendauthok(&hc->nb);
-				else genpacket(&hc->nb, "AREQ^");
-				data += 6;
-				break;
+			switch (hc->wsh->paylen) {
+				case 6:
+					if (Memory_Compare(data, (void *)"ATEST", 6)) {
+						if ((hc->cpls->authed = (*WebState.pwhash == '\0')) == false) {
+							genpacket(&hc->nb, "AREQ^");
+							data += 6;
+							continue;
+						}
+					}
+					break;
+				case 34:
+					hc->cpls->authed = *WebState.pwhash == '\0' ||
+						Memory_Compare(WebState.pwhash, data + 1, 32);
+					break;
 			}
 
-			if (hc->wsh->paylen < 34) {
-				senderror(&hc->nb, "Invalid auth packet received");
-				data += 34;
-				break;
-			}
-
-			if ((hc->cpls->authed = Memory_Compare(WebState.pwhash, data + 1, 32)) == true)
+			data += hc->wsh->paylen;
+			if (hc->cpls->authed)
 				sendauthok(&hc->nb);
-			else genpacket(&hc->nb, "AFAIL^");
+			else
+				genpacket(&hc->nb, "AFAIL^");
 
-			data += 34;
 			continue;
 		}
 
