@@ -20,7 +20,8 @@
 } */
 
 .lightmode .statistic-text {
-    background: #69408f;
+    /* background: #69408f; */
+    background: #fd4c4c;
     color: white;
 }
 

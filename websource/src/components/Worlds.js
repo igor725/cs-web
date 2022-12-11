@@ -113,9 +113,7 @@ const Worlds = props => {
 			</div>
 			<div className='worlds_list'>
 				{
-					worldsList.map((world, i) => {
-						return <World cwap={cwap} {...world} key={i} pos={i+1} />
-					})
+					worldsList.map((world, i) => <World cwap={cwap} {...world} key={i} pos={i+1} />)
 				}
 			</div>
 		</div>

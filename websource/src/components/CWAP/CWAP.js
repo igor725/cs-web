@@ -4,10 +4,15 @@ import WebSocket from './WebSocketConnection';
 import { doAuthGood, showAuth, showAuthError, doLogin } from '../Auth';
 import { updateGlobalList } from '../PlayersList';
 import { updateWorlds } from '../Worlds';
+import { updatePlugins } from '../../pages/pmanager';
 import { setCounters } from '../Statistic';
 
 export let playersList = [];
 export let worldsList = [];
+
+export let pluginsList = [];
+export let scriptsList = [];
+
 let softwareName = 'bebra/v1337';
 let currentPage = null;
 
@@ -36,10 +41,10 @@ const getPlayer = (playerId) => {
 };
 
 const createPlayer = (data, idx) => {
-	let playerId = parseInt(data[idx]);
-	let playerName = data[idx + 1];
-	let playerOp = parseInt(data[idx + 2]);
-	let playerWorld = data[idx + 3];
+	const playerId = parseInt(data[idx]);
+	const playerName = data[idx + 1];
+	const playerOp = parseInt(data[idx + 2]);
+	const playerWorld = data[idx + 3];
 	let player = undefined;
 
 	if ((player = getPlayer(playerId)) !== undefined) {
@@ -59,16 +64,16 @@ const createPlayer = (data, idx) => {
 };
 
 const createWorld = (data, idx) => {
-	let worldName = data[idx + 0];
-	let texturepack = data[idx + 1] || 'Default';
-	let size = [data[idx + 2], data[idx + 3], data[idx + 4]].join('x');
-	let spawn = [
+	const worldName = data[idx + 0];
+	const texturepack = data[idx + 1] || 'Default';
+	const size = [data[idx + 2], data[idx + 3], data[idx + 4]].join('x');
+	const spawn = [
 		parseFloat(data[idx + 5]).toFixed(2),
 		parseFloat(data[idx + 6]).toFixed(2),
 		parseFloat(data[idx + 7]).toFixed(2)
 	].join(',');
-	let weather = parseInt(data[idx + 8]);
-	let status = parseInt(data[idx + 9]);
+	const weather = parseInt(data[idx + 8]);
+	const status = parseInt(data[idx + 9]);
 	let world = undefined;
 
 	if ((world = getWorld(worldName)) !== undefined) {
@@ -92,12 +97,17 @@ const createWorld = (data, idx) => {
 };
 
 const createExtension = (data, idx) => {
-	const extId = data[idx + 0];
-	const extVer = data[idx + 1];
+	const extId = parseInt(data[idx + 0]);
+	const extVer = parseInt(data[idx + 1]);
 	const extName = data[idx + 2];
 	const extHome = data[idx + 3];
 
-	console.log('** EXT', extId, extVer, extName, extHome);
+	const plugin_arr = { extId, extVer, extName, extHome };
+
+	if (pluginsList.filter(e => e.extId === extId).length === 0) {
+		pluginsList.push(plugin_arr)
+	}
+	console.log('** EXT', { extId, extVer, extName, extHome });
 
 	return 4;
 };
@@ -181,7 +191,7 @@ export let processCommand = (data) => {
 							return true;
 						});*/
 						break;
-					default: throw { message: 'Invalid extension event received', eventCode: playerEventType };
+					default: throw { message: 'Invalid extension event received', eventCode: pluginEventType };
 				}
 				break;
 			case 'N':
@@ -266,6 +276,7 @@ export let processCommand = (data) => {
 						}
 
 						spcnt += 1;
+						updatePlugins();
 						break;
 
 					case 'C':

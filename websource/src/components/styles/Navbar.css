@@ -72,7 +72,6 @@ body {
 	border-radius: 50px;
 	height: 40px;
 	margin: auto 0;
-	transition: background-image 1s;
 }
 
 :root {

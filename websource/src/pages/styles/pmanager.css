@@ -1,0 +1,22 @@
+.plugins-main {
+    padding-top: 50px;
+}
+
+.plugins-grid{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-items: center;
+}
+
+.plugins-grid > div{
+    display: grid;
+    overflow-y: auto;
+    max-height: 500px;
+    grid-gap: 25px;
+    background: grey;
+    padding: 12px;
+}
+
+.plugins > h3 {
+    margin: 0 auto;
+}

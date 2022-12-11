@@ -2,40 +2,66 @@
 	position: absolute;
 	left: 50%;
 	top: 50%;
-	width: 350px;
-	height: 400px;
+	width: 700px;
+	height: 409px;
 	z-index: 999;
-	-webkit-transform: translate(-50%, -50%);
 	transform: translate(-50%, -50%);
+	font-family: -apple-system, BlinkMacSystemFont, 'Open Sans', sans-serif;
+	font-size: 18px;
+	font-weight: 800;
+	border-radius: 0.25em;
+	letter-spacing: -2px;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+	color: #fff;
+	background: linear-gradient(110deg, #a60af3 40%, rgba(0, 0, 0, 0) 30%), radial-gradient(farthest-corner at 0% 0%, #7a00cc 70%, #c03fff 70%);
+}
+
+.authWindow>div {
+	display: grid;
+	grid-template-columns: 0.5fr 1fr;
+}
+
+.auth-text h3 {
+	margin: 10px auto;
+	text-align: center;
+	font-weight: bold;
+	font-size: 44px;
+	background: black;
+}
+
+.auth-text>p {
+	font-family: "Archivo Black", sans-serif;
+	padding: 12px;
+	color: #ff8f6d;
+	letter-spacing: -1.75px;
 }
 
 @keyframes move {
 	0% {
-	  transform: translateX(25%);
-	  font-size:20px;
+		transform: translateX(25%);
+		font-size: 20px;
 	}
+
 	50% {
 		transform: translateX(-25%)
 	}
+
 	100% {
 		transform: translateX(0%)
 	}
 }
 
-.authWindowG{
+.authWindowG {
 	display: none;
 	width: 100%;
 	height: 100%;
 	position: fixed;
 	backdrop-filter: blur(6px);
 	z-index: 1000;
-	background: rgba(46,46,46, 0.3)
+	background: rgba(46, 46, 46, 0.3)
 }
 
 .authWindowMain {
-	-webkit-backdrop-filter: blur(12px);
-	backdrop-filter: blur(12px);
-	background: #7a79ab70;
 	padding: 12px;
 	height: 100%;
 	align-items: center;
@@ -44,33 +70,29 @@
 }
 
 #userlogo {
-    background: #ffffff38;
-    border-radius: 50%;
-	-webkit-backdrop-filter: blur(28px);
-    backdrop-filter: blur(28px);
-    width: 70px;
-    height: 70px;
-    margin-top: 35px;
-    padding: 12px;
+	background: #00000057;
+	border-radius: 50%;
+	width: 70px;
+	height: 70px;
+	margin-top: 35px;
+	padding: 12px;
 }
 
 #userlogo::before {
-	font-size: 50px;;
+	font-size: 50px;
 }
 
 .authWindowMain h2 {
-	font-size:26px;
-	font-weight: 100;
 	color: rgb(255, 255, 255);
 }
 
-::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+::placeholder {
 	color: rgba(255, 255, 255, 0.39);
-	opacity: 1; /* Firefox */
+	opacity: 1;
 }
 
-::-ms-input-placeholder { /* Microsoft Edge */
-	color: white;
+::-ms-input-placeholder {
+	color: rgba(255, 255, 255, 0.39);
 }
 
 #authPassword {
@@ -89,12 +111,13 @@
 
 @keyframes translate {
 	0% {
-	  margin-top: 10px;
+		margin-top: 10px;
 	}
+
 	100% {
 		margin-top: -80px;
 		background: white;
-		color:black;
+		color: black;
 	}
 }
 
@@ -102,42 +125,42 @@
 	0% {
 		margin-top: -80px;
 		background: white;
-		color:black;
+		color: black;
 	}
+
 	100% {
 		margin-top: 10px;
 	}
 }
+
 @keyframes translate-top {
 	0% {
-	  margin-top: -80px;
-	  background: white;
-	  color:black;
+		margin-top: -80px;
+		background: white;
+		color: black;
 	}
+
 	100% {
 		margin-top: -10000px;
 	}
 }
 
-.fancyLoginAnim, .fancyLoginFailed, .fancyLoginSuccess {
-	cursor: default;
-}
 .fancyLoginAnim {
 	animation: translate 0.5s;
 	animation-delay: 0s;
 	animation-fill-mode: forwards;
 	-webkit-animation: translate 0.5s;
-    -webkit-animation-delay: 0s;
-    -webkit-animation-fill-mode: forwards;
+	-webkit-animation-delay: 0s;
+	-webkit-animation-fill-mode: forwards;
 }
 
-.fancyLoginFailed{
+.fancyLoginFailed {
 	animation: translate-back 0.5s;
 	animation-delay: 0s;
 	animation-fill-mode: backwards;
 	-webkit-animation: translate-back 0.5s;
-    -webkit-animation-delay: 0s;
-    -webkit-animation-fill-mode: backwards;
+	-webkit-animation-delay: 0s;
+	-webkit-animation-fill-mode: backwards;
 }
 
 .fancyLoginSuccess {
@@ -145,67 +168,37 @@
 	animation-delay: 0s;
 	animation-fill-mode: forwards;
 	-webkit-animation: translate-top 1s;
-    -webkit-animation-delay: 0s;
-    -webkit-animation-fill-mode: forwards;
+	-webkit-animation-delay: 0s;
+	-webkit-animation-fill-mode: forwards;
 }
+
 .loginBtn {
-	margin-top:10px;
-	text-align: center;
+	justify-content: center;
+	display: flex;
+	width: 100%;
+}
+
+.loginBtn>.btn {
+	position: fixed;
+	width: 270px;
+}
+
+.loginBtn>.btn:hover {
+	color: white;
 }
 
 #status {
-	margin-top:10px;
+	margin-top: 10px;
 	height: 25px;
 	width: 270px;
 	color: #ff4141;
 }
+
 .badPassAnimation {
 	animation: 0.25s linear move;
 }
-
-.btn41-43 {
-	padding: 10px 25px;
-	font-family: "Roboto", sans-serif;
-	font-weight: 500;
-	background: transparent;
-	outline: none !important;
-	cursor: pointer;
-	transition: all 0.3s ease;
-	position: relative;
-	display: inline-block;
-}
-
-.btn-41 {
-	width: 300px;
-	border: 2px solid rgb(255, 255, 255);
-	z-index: 1;
-	color: white;
-	font-weight: bold;
-}
-
-.btn-41:after {
-	position: absolute;
-	content: "";
-	width: 0;
-	height: 100%;
-	top: 0;
-	left: 0;
-	direction: rtl;
-	z-index: -1;
-	background: rgb(255, 255, 255);
-	transition: all 0.3s ease;
-}
-
-.btn-41:hover {
-	color: rgb(0, 0, 0);
-}
-
-.btn-41:hover:after {
-	left: auto;
-	right: 0;
-	width: 100%;
-}
-
-.btn-41:active {
-	top: 2px;
+@media only screen and (max-width: 600px) {
+	.authWindow > div{
+		grid-template-columns: 0px 1fr;
+	}
 }

@@ -1,0 +1,29 @@
+.plugin {
+    display: grid;
+    background: white;
+    width: 360px;
+    word-break: break-word;
+    grid-template-rows: 0fr 1fr 0fr;
+}
+
+.plugin .btn {
+    position: sticky;
+    font-size: 14px;
+    height: 18px;
+    color: black;
+    transition: all 1s;
+}
+
+.plugin .btn::before{
+    transition: all 1s;
+}
+
+.plugin > h4 {
+    margin: 10px auto;
+}
+
+.plugin-buttons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    padding: 0 12px 10px 12px;
+}

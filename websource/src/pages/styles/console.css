@@ -1,3 +1,9 @@
+@font-face {
+	font-family: "UbuntuMono";
+	src: local("UbuntuMono"),
+	url("../../fonts/UbuntuMono-Regular.ttf") format("truetype");
+	font-weight: 400;
+}
 .console {
 	padding-top: 50px;
 	padding-bottom: 50px;
@@ -90,6 +96,7 @@
 
 #console-out,
 #console-in {
+	font-family: "UbuntuMono";
 	scrollbar-width: none;
 	/* For Firefox */
 	overflow: auto;

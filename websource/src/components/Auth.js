@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 
 import './styles/Auth.css';
+import Slidebutton from './buttons/slidebutton.js';
 
 export let showAuth = () => { };
 export let showAuthError = () => { };
@@ -17,7 +18,8 @@ const Auth = ({ cwap }) => {
 	const authWindow = document.getElementsByClassName('authWindowG')[0];
 	const authError = document.getElementById('status');
 	const password = document.getElementById('authPassword');
-	const loginBtn = document.getElementsByClassName('loginBtn')[0];
+	const loginBtn = document.getElementsByClassName('btn')[0];
+
 	showAuth = () => authWindow.style.display = 'block';
 
 	showAuthError = () => {
@@ -68,16 +70,30 @@ const Auth = ({ cwap }) => {
 	return (
 		<div className='authWindowG'>
 			<div className='authWindow'>
-				<div className='authWindowMain'>
-					<h2>WebAdmin Password</h2>
-					<FontAwesomeIcon id='userlogo' icon={regular('user')} />
-					<input type='password' id='authPassword' placeholder='password' onKeyDown={(e) => {
-						if (e.key === 'Enter') doLogin();
-					}} />
-					<p id='status'></p>
-					<button className='btn41-43 btn-41 loginBtn' onClick={() => {
-						if (password.value.length > 1) doLogin();
-					}}> {LOG_IN_MSG} </button>
+				<div>
+					<div className='auth-text'>
+						<h3>cserver</h3>
+						{/* <p>
+							Another Minecraft Classic server in C. The server is still under development (see Projects tab)!
+
+							The goal of this project is to create a stable, customizable and future-rich multiplatform Minecraft Classic server with a minimum dependencies.
+						</p> */}
+					</div>
+					<div className='authWindowMain'>
+						<h2>WebAdmin Password</h2>
+						<FontAwesomeIcon id='userlogo' icon={regular('user')} />
+						<input type='password' id='authPassword' placeholder='password' onKeyDown={(e) => {
+							if (e.key === 'Enter') doLogin();
+						}} />
+						<p id='status'></p>
+						<div className='loginBtn'>
+							<Slidebutton bgcolor='white' slidecolor='black' to='right' onClick={()=>{
+								if (password.value.length > 1) doLogin();
+							}}>
+								{LOG_IN_MSG}
+							</Slidebutton>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>

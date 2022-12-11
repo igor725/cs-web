@@ -1,0 +1,33 @@
+:root {
+    --translate-to: 100%;
+    --bg-color: transparent;
+    --slide-color: black;
+}
+.btn {
+    text-decoration: none;
+    text-align: center;
+    background: var(--bg-color);
+    padding: 10px 20px;
+    cursor: pointer;;
+    border-radius: 25px;
+    position: relative;
+    transition: all 1s;
+    overflow: hidden;
+}
+  
+.btn::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--slide-color);
+    transition: all 0.5s;
+    z-index: -1;
+    transform: translateX(var(--translate-to));
+}
+  
+.btn:hover::before {
+    transform: translateX(0);
+}
