@@ -5,3 +5,7 @@
 .darkmode {
 	background: rgb(36, 36, 36)
 }
+
+.layout-container {
+	padding: 12px 26px;
+}

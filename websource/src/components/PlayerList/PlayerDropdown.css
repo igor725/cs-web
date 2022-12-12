@@ -40,12 +40,13 @@
 }
 
 .playerMenu > button {
-    width: 65px;
+	width: 65px;
     color: white;
     border: none;
     cursor: pointer;
     font-size: 14px;
     background: transparent;
+	font-family: "NunitoExtraBold";
     transition: all 0.35s ease-in 0s;
     height: 100%;
 }

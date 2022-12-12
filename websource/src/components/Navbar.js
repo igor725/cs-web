@@ -61,9 +61,9 @@ const Navbar = props => {
 				transition = setTimeout(() => {
 					childs[prevIdx].className = ""; 
 					transition = null;
-				}, 999)
-			}, 1);
-			return;
+				}, 1000)
+			}, 0); // таймаут нужен тут потому что потому, не пытайся его убирать,
+			return;// он просто перестанет работать, проверенно. Особенности жс? можеш погуглить¯\_(ツ)_/¯
 		}
 
 		e.preventDefault();
@@ -102,8 +102,8 @@ const Navbar = props => {
 			)}
 			{(!isMobile) && (
 				<div className='navbar-head'>
-					<div style={{ width: '4px', background: 'red' }} title='WebSocket connection: ' className='websocketStatus' />
 					<h3 style={{ cursor: 'pointer' }}>CServer WebAdmin</h3>
+					<div style={{ width: '100%', background: 'red', height: "4px" }} title='WebSocket connection: ' className='websocketStatus' />
 				</div>
 			)}
 			<div className='buttons'>

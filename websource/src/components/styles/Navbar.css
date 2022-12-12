@@ -7,6 +7,7 @@ body {
 	margin: auto 0;
 	margin-left: auto;
 	margin-right: 20px;
+	outline: none;
 }
 
 .navbar {
@@ -14,7 +15,6 @@ body {
 	width: 100%;
 	display: grid;
 	grid-gap: 25px;
-	background: rgb(42, 44, 39);
 	grid-template-columns: 0fr 1fr;
 }
 
@@ -136,23 +136,21 @@ body {
 }
 
 .navbar h3 {
-	margin-left: 15px;
+	font-weight: bold;
 	white-space: nowrap;
+	font-size:22px;
 	color: rgb(200, 238, 127);
 }
 
 .navbar-head {
 	display: grid;
+	grid-template-rows: 1fr 0fr;
 }
 
 @media only screen and (min-width: 601px) {
 	.navbar .buttons {
 		display: inline-flex;
 		grid-gap: 30px;
-	}
-
-	.navbar-head {
-		grid-template-columns: 0fr 1fr;
 	}
 }
 
@@ -178,6 +176,12 @@ body {
 }
 
 @media only screen and (max-width: 600px) {
+	.layout-container {
+		padding: 0;
+	}
+	.navbar-title {
+		padding-left: 10px;
+	}
 	.navbar {
 		grid-template-columns: none;
 		background: none;
@@ -194,11 +198,6 @@ body {
 
 	.night_btn {
 		margin: auto auto;
-	}
-
-	.navbar-title {
-		display: grid;
-		grid-template-rows: 1fr 0fr;
 	}
 
 	.light {
