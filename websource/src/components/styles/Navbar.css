@@ -79,19 +79,44 @@ body {
 	--navbar-to-dir: right;
 }
 
-.buttons a {
-	background-size: 200% 100%;
-	background-position: var(--navbar-to-dir);
-}
-
-@keyframes makeItfadeIn {
+@keyframes makeItFadeIn {
 	100% {
 		background-position: var(--navbar-from-dir);
 		box-shadow: 4px 4px 12px 0px rgba(0, 0, 0, 0.22);
 	}
 }
 
-.light .buttons a:hover{
+@keyframes makeItFadeOut {
+	100% {
+		background-position: var(--navbar-to-dir);
+		box-shadow: 4px 4px 12px 0px rgba(0, 0, 0, 0.22);
+	}
+}
+
+.selected-dark {
+	--navbar-select-color: #664682;
+}
+
+.selected {
+	--navbar-select-color: #bf78fd;
+}
+
+.buttons a.anim-backwards {
+	background: linear-gradient(to var(--navbar-from-dir), var(--navbar-select-color) 50%, transparent 0) !important;
+	background-position: var(--navbar-from-dir);
+	animation: makeItFadeOut 1s 0s forwards;
+}
+
+.buttons a.anim-forwards {
+	background-position: var(--navbar-to-dir);
+	animation: makeItFadeIn 1s 0s forwards;
+}
+
+.buttons a {
+	background-size: 200% 100%;
+}
+
+.light .buttons a:hover {
 	color: rgba(51, 51, 51, 0.808);
 }
 
@@ -102,19 +127,11 @@ body {
 .selected {
 	font-weight: bold;
 	color: black !important;
-	background: linear-gradient(to var(--navbar-to-dir), #bf78fd 50%, transparent 0);
-	background-size: 200% 100%;
-	background-position: var(--navbar-to-dir);
-	animation: makeItfadeIn 1s 0s forwards;
 }
 
 .selected-dark {
-	color: white !important;
 	font-weight: bold;
-	background: linear-gradient(to var(--navbar-to-dir), #664682 50%, transparent 0);
-	background-size: 200% 100%;
-	background-position: var(--navbar-to-dir);
-	animation: makeItfadeIn 1s 0s forwards;
+	color: white !important;
 }
 
 .navbar h3 {
