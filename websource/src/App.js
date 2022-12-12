@@ -5,7 +5,7 @@ import Auth from './components/Auth';
 
 let App = () => {
 	const cwap = CWAP();
-  
+
 	return (
 		<React.Fragment>
 			<Auth cwap={cwap}/>

@@ -95,10 +95,10 @@ const Navbar = props => {
 				<Link to='/' onClick={processLink}>
 					<FontAwesomeIcon icon={solid("house")}/> Home
 				</Link>
-				<Link to='/console' onClick={processLink}> 
-					<FontAwesomeIcon icon={solid("terminal")} /> Terminal 
+				<Link to='/console' onClick={processLink}>
+					<FontAwesomeIcon icon={solid("terminal")} /> Terminal
 				</Link>
-				<Link to='/configeditor' onClick={processLink}> 
+				<Link to='/configeditor' onClick={processLink}>
 					<FontAwesomeIcon icon={solid("pen-to-square")} /> Config Editor
 				</Link>
 				<Link to='/pluginmanager' onClick={processLink}>

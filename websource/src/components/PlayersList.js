@@ -37,15 +37,10 @@ export let updateGlobalList = () => {}
 const PlayersList = ({ cwap }) => {
 	const [, updateState] = React.useState();
 	const forceUpdate = React.useCallback(() => updateState({}), []);
-
-	updateGlobalList = () =>{
-		forceUpdate();
-	}
+	updateGlobalList = forceUpdate;
 
 	useEffect(() => {
-		document.getElementById('plist').onscroll = (e) => {
-			prev_player && prev_player.classList.remove('show');
-		}
+		document.getElementById('plist').onscroll = (e) => prev_player && prev_player.classList.remove('show');
 	});
 
 	return (
@@ -56,13 +51,13 @@ const PlayersList = ({ cwap }) => {
 			</div>
 			<ul id='plist'>
 				{
-					playersList.map((player)=>{
+					playersList.map((player) => {
 						return (
-							<PlayerDropdown 
+							<PlayerDropdown
 								key={player.id}
-								id={player.id} 
-								world={player.world} 
-								isAdmin={player.isAdmin} 
+								id={player.id}
+								world={player.world}
+								isAdmin={player.isAdmin}
 								cwap={cwap}
 							>{player.name}</PlayerDropdown>
 						);

@@ -18,7 +18,7 @@ const World = props => {
 	const changeWeather = (e) => {
 		Object.entries(wTypes).every(([key,value]) => {
 			if (value === e.target.value) {
-				cwap.changeWeather(props.name, key);
+				cwap.changeWeather(props.id, key);
 				return false;
 			}
 			return true;
@@ -26,9 +26,9 @@ const World = props => {
 	}
 	return (
 		<div className='world-grid'>
-			<div className='world' name={props.name} style={{ zIndex: props.pos }}>
+			<div className='world' name={props.id} style={{ zIndex: props.pos }}>
 				<div className={props.status === 0 ? 'worldBG blurry' : 'worldBG'}></div>
-				<h2>{props.name}</h2>
+				<h2>{props.id}</h2>
 			</div>
 			<div className='worldCart_info'>
 				<table>
@@ -71,17 +71,19 @@ const World = props => {
 			<div className='worldCart_players'>
 				<h4 id='wName'>Players</h4>
 				<ul className='plist' id='pList2'>
-					{ playersList.map((player)=>{
-						if (player.world === props.name){
+					{ playersList.map((player) => {
+						if (player.world === props.id) {
 							return (
-								<PlayerDropdown 
+								<PlayerDropdown
 									key={player.id}
 									id={player.id}
-									isAdmin={player.isAdmin} 
+									isAdmin={player.isAdmin}
 									cwap={cwap}
 								>{player.name}</PlayerDropdown>
 							);
 						}
+
+						return null;
 					})}
 				</ul>
 			</div>
@@ -92,11 +94,8 @@ const World = props => {
 const Worlds = props => {
 	const [, updateState] = React.useState();
 	const forceUpdate = React.useCallback(() => updateState({}), []);
+	updateWorlds = forceUpdate;
 	const cwap = props.cwap;
-
-	updateWorlds = () => {
-		forceUpdate();
-	}
 
 	useEffect(() => {
 		const listElement = document.getElementById('pList2');

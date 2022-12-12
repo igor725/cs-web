@@ -16,28 +16,10 @@ export let scriptsList = [];
 let softwareName = 'bebra/v1337';
 let currentPage = null;
 
-const getWorld = (worldName) => {
-	let wrld = undefined;
-	worldsList.every((world, index) => {
-		if (world.name === worldName) {
-			wrld = worldsList[index];
-			return false;
-		}
-		return true;
-	});
-	return wrld;
-};
-
-const getPlayer = (playerId) => {
-	let pl = undefined;
-	playersList.every((player, index) => {
-		if (player.id === playerId) {
-			pl = playersList[index];
-			return false;
-		}
-		return true;
-	});
-	return pl;
+const getObject = (arr, id) => {
+	return arr.find((cobj) => {
+		return cobj.id === id;
+	}) || null;
 };
 
 const createPlayer = (data, idx) => {
@@ -45,18 +27,18 @@ const createPlayer = (data, idx) => {
 	const playerName = data[idx + 1];
 	const playerOp = parseInt(data[idx + 2]);
 	const playerWorld = data[idx + 3];
-	let player = undefined;
+	let player = null;
 
-	if ((player = getPlayer(playerId)) !== undefined) {
+	if ((player = getObject(playersList, playerId)) !== null) {
 		player.name = playerName;
 		player.world = playerWorld;
 		player.isAdmin = playerOp;
 	} else {
 		playersList.push({
-			'name': playerName,
-			'id': playerId,
-			'world': playerWorld,
-			'isAdmin': playerOp
+			name: playerName,
+			id: playerId,
+			world: playerWorld,
+			isAdmin: playerOp
 		});
 	}
 
@@ -74,9 +56,9 @@ const createWorld = (data, idx) => {
 	].join(',');
 	const weather = parseInt(data[idx + 8]);
 	const status = parseInt(data[idx + 9]);
-	let world = undefined;
+	let world = null;
 
-	if ((world = getWorld(worldName)) !== undefined) {
+	if ((world = getObject(worldsList, worldName)) !== null) {
 		world.texturepack = texturepack;
 		world.size = size;
 		world.spawn = spawn;
@@ -84,12 +66,12 @@ const createWorld = (data, idx) => {
 		world.status = status;
 	} else {
 		worldsList.push({
-			'name': worldName,
-			'texturepack': texturepack,
-			'size': size,
-			'spawn': spawn,
-			'weather': weather,
-			'status': status
+			id: worldName,
+			texturepack: texturepack,
+			size: size,
+			spawn: spawn,
+			weather: weather,
+			status: status
 		});
 	}
 
@@ -101,13 +83,20 @@ const createExtension = (data, idx) => {
 	const extVer = parseInt(data[idx + 1]);
 	const extName = data[idx + 2];
 	const extHome = data[idx + 3];
+	let ext = null;
 
-	const plugin_arr = { extId, extVer, extName, extHome };
-
-	if (pluginsList.filter(e => e.extId === extId).length === 0) {
-		pluginsList.push(plugin_arr)
+	if ((ext = getObject(pluginsList, extId)) != null) {
+		ext.version = extVer;
+		ext.home = extHome;
+		ext.name = extName;
+	} else {
+		pluginsList.push({
+			id: extId,
+			version: extVer,
+			name: extName,
+			home: extHome
+		});
 	}
-	console.log('** EXT', { extId, extVer, extName, extHome });
 
 	return 4;
 };
@@ -200,7 +189,7 @@ export let processCommand = (data) => {
 			case 'P':
 				const playerEventType = data_splitted[0].charAt(1);
 				const playerId = parseInt(data_splitted[1]);
-				const player = getPlayer(playerId);
+				const player = getObject(playersList, playerId);
 				spcnt = 3;
 
 				switch (playerEventType) {
@@ -289,7 +278,7 @@ export let processCommand = (data) => {
 			case 'W':
 				const worldEventType = data_splitted[0].charAt(1);
 				const worldName = data_splitted[1];
-				const world = getWorld(worldName);
+				const world = getObject(worldsList, worldName);
 				spcnt = 3;
 
 				switch (worldEventType) {
@@ -299,7 +288,7 @@ export let processCommand = (data) => {
 					case 'R':
 						spcnt = 2;
 						worldsList.every((eworld, index) => {
-							if (eworld.name === worldName) {
+							if (eworld.id === worldName) {
 								worldsList.splice(index, 1);
 								return false;
 							}

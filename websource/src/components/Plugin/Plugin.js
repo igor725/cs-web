@@ -3,24 +3,19 @@ import './Plugin.css';
 import Slidebutton from "../buttons/slidebutton";
 
 const Plugin = props => {
-    console.log(props.type)
     return (
         <div className="plugin">
-            <h4>{props.extName}</h4>
+            <h4>{props.name}</h4>
             <div className="plugin-info">
                 <table>
                     <tbody>
                         <tr>
                             <td>Version: </td>
-                            <td>{props.extVer}</td>
+                            <td>{props.version}</td>
                         </tr>
                         <tr>
                             <td>Homepage: </td>
-                            <td><a href={props.extHome} target="_blank">{props.extHome}</a></td>
-                        </tr>
-                        <tr>
-                            <td>RAM usage: </td>
-                            <td>{props.ram_usage}</td>
+                            <td><a href={props.home} target="_blank" rel='noreferrer'>{props.home}</a></td>
                         </tr>
                     </tbody>
                 </table>

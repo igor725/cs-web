@@ -87,7 +87,7 @@ const Auth = ({ cwap }) => {
 						}} />
 						<p id='status'></p>
 						<div className='loginBtn'>
-							<Slidebutton bgcolor='white' slidecolor='black' to='right' onClick={()=>{
+							<Slidebutton bgcolor='white' slidecolor='black' to='right' onClick={() => {
 								if (password.value.length > 1) doLogin();
 							}}>
 								{LOG_IN_MSG}

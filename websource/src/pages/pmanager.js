@@ -8,11 +8,9 @@ export let updatePlugins = () => { }
 const PManager = ({ CWAP }) => {
     const [, updateState] = React.useState();
     const forceUpdate = React.useCallback(() => updateState({}), []);
+    updatePlugins = forceUpdate;
 
-    updatePlugins = () => {
-        forceUpdate();
-    };
-    console.log(pluginsList)
+    console.log(pluginsList);
     return (
         <div className="plugins-main">
             <div className="plugins-grid">

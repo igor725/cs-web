@@ -12,7 +12,7 @@ const PlayerDropdown = props => {
 	return (
 		<div className='playerDropdown' name={playerId}>
 			<li>
-				<p style={{display: 'contents'}} 
+				<p style={{display: 'contents'}}
 				onClick={showMenu}>
 						<b className={'dropbtn ' + (isAdmin ? 'admin':'')} name={playerName}>{playerName}</b> in world <b>{playerWorld}</b>
 				</p>

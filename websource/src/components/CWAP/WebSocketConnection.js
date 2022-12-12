@@ -4,7 +4,7 @@ import useWebSocket, { ReadyState } from 'react-use-websocket';
 import './styles/WSC.css';
 import loading_bar from "../../static/noconnection.svg";
 
-// Я в ахуе что можно импортировать из файла, 
+// Я в ахуе что можно импортировать из файла,
 // который импортирует из ЭТОГО файла
 import { processCommand } from './CWAP';
 
