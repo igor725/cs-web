@@ -77,37 +77,38 @@ body {
 :root {
 	--navbar-from-dir: left;
 	--navbar-to-dir: right;
+
+	--back-from-dir: right;
+	--back-to-dir: left;
+
+	--navbar-select-color: none;
 }
 
 @keyframes makeItFadeIn {
-	100% {
+	0% {
 		background-position: var(--navbar-from-dir);
 		box-shadow: 4px 4px 12px 0px rgba(0, 0, 0, 0.22);
 	}
 }
 
 @keyframes makeItFadeOut {
-	100% {
-		background-position: var(--navbar-to-dir);
+	0% {
 		box-shadow: 4px 4px 12px 0px rgba(0, 0, 0, 0.22);
+	}
+	100% {
+		background-position: var(--back-to-dir);
+		box-shadow: none;
 	}
 }
 
-.selected-dark {
-	--navbar-select-color: #664682;
-}
-
-.selected {
-	--navbar-select-color: #bf78fd;
-}
-
-.buttons a.anim-backwards {
-	background: linear-gradient(to var(--navbar-from-dir), var(--navbar-select-color) 50%, transparent 0) !important;
-	background-position: var(--navbar-from-dir);
+.anim-backwards {
+	background: linear-gradient(to var(--back-to-dir), var(--navbar-select-color) 50%, transparent 0);
+	background-position: var(--back-from-dir);
 	animation: makeItFadeOut 1s 0s forwards;
 }
 
-.buttons a.anim-forwards {
+.anim-forwards {
+	background: linear-gradient(to var(--navbar-from-dir), var(--navbar-select-color) 50%, transparent 0);
 	background-position: var(--navbar-to-dir);
 	animation: makeItFadeIn 1s 0s forwards;
 }

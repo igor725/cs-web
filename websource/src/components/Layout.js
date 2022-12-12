@@ -10,9 +10,19 @@ export let setTheme = () => {};
 
 const Layout = ({ CWAP, children }) => {
 	const root = document.getElementsByTagName('body')[0];
-	root.className = ((window.localStorage.getItem('DARKMODE_STATE') === 'true') ? 'darkmode' : 'lightmode');
+	
+	const switchNavBtnColor = (isDarkMode) =>{
+		root.style.setProperty("--navbar-select-color", isDarkMode ? "#664682":"#bf78fd")
+	}
+	// Не заносить isDarkMode в общую переменную - оно меняется каждый вызов
+	const isDarkMode = window.localStorage.getItem('DARKMODE_STATE') === 'true'
+	root.className = (isDarkMode ? 'darkmode' : 'lightmode');
+	switchNavBtnColor(isDarkMode);
+
 	setTheme = () => {
-		root.className = window.localStorage.getItem('DARKMODE_STATE') === 'true' ? 'lightmode' : 'darkmode';
+		const isDarkMode = window.localStorage.getItem('DARKMODE_STATE') === 'true'
+		root.className = isDarkMode ? 'lightmode' : 'darkmode';
+		switchNavBtnColor(!isDarkMode);
 	};
 
 	return (

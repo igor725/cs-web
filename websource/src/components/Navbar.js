@@ -8,17 +8,18 @@ import { solid, regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 
 let prev_colored;
 let isOpened = false;
+let transition;
 
 const Navbar = props => {
 	const DARKMODE_STATE = (window.localStorage.getItem('DARKMODE_STATE') === 'true') || false;
 	const [isDarkMode, setIsDarkMode] = useState(DARKMODE_STATE);
 
 	window.localStorage.setItem('DARKMODE_STATE', isDarkMode);
-
 	const currentLocation = useLocation().pathname;
 	const isMobile = (window.screen.width <= 600);
 	const navbar_btns = document.getElementsByClassName('buttons')[0];
 	const open_btn = document.getElementById('navbar-mobile-btn');
+	const root = document.querySelector(':root');
 
 	const openNavbar = () => {
 		open_btn.classList.toggle('navbar-open');
@@ -45,9 +46,23 @@ const Navbar = props => {
 					return true;
 			});
 			const idx = Array.prototype.indexOf.call(childs, target);
-			const root = document.querySelector(':root');
-			root.style.setProperty('--navbar-from-dir', idx > prevIdx ? 'left' : 'right');
-			root.style.setProperty('--navbar-to-dir', idx > prevIdx ? 'right' : 'left');
+
+			const moveTo = idx > prevIdx ? 'left' : 'right';
+			const moveToOpposite = idx < prevIdx ? 'left' : 'right';
+			
+			root.style.setProperty('--navbar-from-dir', moveToOpposite);
+			root.style.setProperty('--navbar-to-dir', moveTo);
+			
+			if (transition) clearTimeout(transition);
+			setTimeout(()=>{
+				childs[prevIdx].classList.add("anim-backwards");
+				root.style.setProperty('--back-from-dir', moveToOpposite);
+				root.style.setProperty('--back-to-dir', moveTo);
+				transition = setTimeout(() => {
+					childs[prevIdx].className = ""; 
+					transition = null;
+				}, 999)
+			}, 1);
 			return;
 		}
 
@@ -59,9 +74,9 @@ const Navbar = props => {
 		var els = document.querySelectorAll(`a[href='${currentLocation}']`)[0];
 		if (els !== undefined) {
 			if (isDarkMode){
-				els.classList.add('selected-dark');
+				els.classList.add('selected-dark', 'anim-forwards');
 			} else{
-				els.classList.add('selected');
+				els.classList.add('selected', 'anim-forwards');
 			}
 			prev_colored = els;
 		}
