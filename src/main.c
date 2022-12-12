@@ -5,9 +5,14 @@
 #include <command.h>
 #include <config.h>
 #include <server.h>
+#include <plugin.h>
 
-#include "plhdr.h"
 #include "defines.h"
+
+Plugin_SetVersion(1);
+#if PLUGIN_API_NUM > 1
+Plugin_SetURL("https://github.com/igor725/cs-web");
+#endif
 
 ServerInfo ServInf = {0};
 

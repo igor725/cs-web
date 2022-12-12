@@ -9,7 +9,7 @@ succ_str = "Web service is successfully %s",
 chg_str = "The \"%s\" value will be changed to \"%s\" after reloading";
 
 COMMAND_FUNC(Web) {
-	COMMAND_SETUSAGE("/Web <enable/disable/reload/status/set> [option] [value]");
+	COMMAND_SETUSAGE("/Web <enable/disable/reload/status/set/unset> [option] [value]");
 	cs_char temparg[32];
 
 	if (COMMAND_GETARG(temparg, 32, 0)) {
