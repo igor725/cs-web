@@ -1,5 +1,6 @@
 .copyboard {
-	display: none;
+	transition: all 0.25s;
+	visibility: hidden;
 	cursor: pointer;
 	position: absolute;
 	text-align: center;
@@ -7,6 +8,7 @@
 	font-size: 18px;
 	color: white;
 	text-align: center;
+	opacity: 0;
 	width: 24px;
 	height: 22px;
 	padding: 6px;
@@ -17,6 +19,5 @@
 	background: #23262ecc;
 }
 .lightmode .selected-text {
-    background: #000000;
-    color: white;
+    background: #adadad;
 }

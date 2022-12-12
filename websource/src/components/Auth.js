@@ -73,11 +73,6 @@ const Auth = ({ cwap }) => {
 				<div>
 					<div className='auth-text'>
 						<h3>cserver</h3>
-						{/* <p>
-							Another Minecraft Classic server in C. The server is still under development (see Projects tab)!
-
-							The goal of this project is to create a stable, customizable and future-rich multiplatform Minecraft Classic server with a minimum dependencies.
-						</p> */}
 					</div>
 					<div className='authWindowMain'>
 						<h2>WebAdmin Password</h2>
@@ -87,7 +82,7 @@ const Auth = ({ cwap }) => {
 						}} />
 						<p id='status'></p>
 						<div className='loginBtn'>
-							<Slidebutton bgcolor='white' slidecolor='black' to='right' onClick={() => {
+							<Slidebutton onClick={() => {
 								if (password.value.length > 1) doLogin();
 							}}>
 								{LOG_IN_MSG}

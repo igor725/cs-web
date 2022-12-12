@@ -9,11 +9,20 @@ let copyMenu, prevCopy, selectedCopy;
 export let doCopy = (e) => { };
 
 const Clipboard = () => {
+    const showElement = (show) => {
+        if (show) {
+            copyMenu.style.visibility = 'visible';
+            copyMenu.style.opacity = "1"
+        } else {
+            copyMenu.style.visibility = 'hidden';
+            copyMenu.style.opacity = "0";
+        }
+    }
     useEffect(() => {
         copyMenu = document.getElementsByClassName('copyboard')[0];
         window.onclick = (event) => {
             if (!event.target.matches(".copyboard")) {
-                copyMenu.style.display = 'none';
+                showElement(false);
                 if (prevCopy) prevCopy.classList.remove('selected-text');
             }
         };
@@ -26,14 +35,14 @@ const Clipboard = () => {
         if (prevCopy) prevCopy.classList.remove('selected-text');
         e.target.classList.add('selected-text');
         selectedCopy = e.target.innerText;
-        copyMenu.style.display = 'block';
+        showElement(true);
         copyMenu.style.left = e.pageX + 10 + 'px';
         copyMenu.style.top = e.pageY + 5 + 'px';
         prevCopy = e.target;
     };
 
     const hideCopy = () => {
-        copyMenu.style.display = 'hide';
+        showElement(false);
         navigator.clipboard.writeText(selectedCopy);
         prevCopy.classList.add('selected-text');
         toast.success('Copied to clipboard!');

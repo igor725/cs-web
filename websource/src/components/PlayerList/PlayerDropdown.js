@@ -14,7 +14,7 @@ const PlayerDropdown = props => {
 			<li>
 				<p style={{display: 'contents'}}
 				onClick={showMenu}>
-						<b className={'dropbtn ' + (isAdmin ? 'admin':'')} name={playerName}>{playerName}</b> in world <b>{playerWorld}</b>
+						<b className={'dropbtn ' + (isAdmin ? 'admin':'')} style={{fontFamily: "NunitoExtraBold"}}name={playerName}>{playerName}</b> in world <b>{playerWorld}</b>
 				</p>
 				<div className='playerMenu'>
 					<button className='ban' onClick={() => cwap.banPlayer(playerName)}> Ban </button>

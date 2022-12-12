@@ -33,7 +33,6 @@ body {
 }
 
 .light .websocketStatus {
-	color: green !important;
 	border: 1px solid #b3b3b3;
 }
 
@@ -136,10 +135,11 @@ body {
 }
 
 .navbar h3 {
-	font-weight: bold;
 	white-space: nowrap;
 	font-size:22px;
-	color: rgb(200, 238, 127);
+	color: white;
+	/* color: rgb(200, 238, 127); */
+	margin: 12px 0;
 }
 
 .navbar-head {
@@ -190,12 +190,6 @@ body {
 		transition: all .5s ease-in-out;
 	}
 
-	.navbar .buttons a {
-		display: grid;
-		grid-template-columns: 0fr 1fr;
-		border-radius: 0 !important;
-	}
-
 	.night_btn {
 		margin: auto auto;
 	}
@@ -229,13 +223,14 @@ body {
 
 	.websocketStatus {
 		width: 100% !important;
-		height: 8px;
+		height: 3px;
 		grid-row: 2;
 	}
 
 	.navbar h3 {
-		font-size: 22px;
+		font-size: 25px;
 		width: 100%;
+		margin: revert;
 	}
 
 	.buttons {
@@ -244,15 +239,22 @@ body {
 		grid-gap: 8px;
 		border: 2px solid #343434;
 		border-radius: 12px;
-		border-top: none;
+		border-top-color: transparent;
+		border-top-left-radius: 0px;
+		border-top-right-radius: 0px;
 	}
 
 	.light .buttons {
-		border: 2px solid #d9d9d9;
+		border-color: #d9d9d9;
+		border-top-color: transparent;
+		border-top-left-radius: 0px;
+		border-top-right-radius: 0px;
 	}
 
-	.buttons>a {
-		width: 100% !important;
+	.buttons > a {
+		display: grid;
+		grid-template-columns: 0fr 1fr;
+		width: 90% !important;
 		font-size: 20px;
 	}
 

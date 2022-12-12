@@ -6,9 +6,7 @@
 	height: 409px;
 	z-index: 999;
 	transform: translate(-50%, -50%);
-	font-family: -apple-system, BlinkMacSystemFont, 'Open Sans', sans-serif;
 	font-size: 18px;
-	font-weight: 800;
 	border-radius: 0.25em;
 	letter-spacing: -2px;
 	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
@@ -25,15 +23,8 @@
 	margin: 10px auto;
 	text-align: center;
 	font-weight: bold;
-	font-size: 44px;
+	font-size: 48px;
 	background: black;
-}
-
-.auth-text>p {
-	font-family: "Archivo Black", sans-serif;
-	padding: 12px;
-	color: #ff8f6d;
-	letter-spacing: -1.75px;
 }
 
 @keyframes move {
@@ -76,14 +67,6 @@
 	height: 70px;
 	margin-top: 35px;
 	padding: 12px;
-}
-
-#userlogo::before {
-	font-size: 50px;
-}
-
-.authWindowMain h2 {
-	color: rgb(255, 255, 255);
 }
 
 ::placeholder {
@@ -173,32 +156,39 @@
 }
 
 .loginBtn {
-	justify-content: center;
-	display: flex;
-	width: 100%;
+	display: contents;
 }
 
-.loginBtn>.btn {
-	position: fixed;
+.loginBtn .btn {
 	width: 270px;
-}
-
-.loginBtn>.btn:hover {
-	color: white;
+	border-radius: 50px;
 }
 
 #status {
 	margin-top: 10px;
 	height: 25px;
 	width: 270px;
+	font-family: "NunitoExtraBold";
+	letter-spacing: 0.025em;
 	color: #ff4141;
 }
 
 .badPassAnimation {
 	animation: 0.25s linear move;
 }
+
 @media only screen and (max-width: 600px) {
-	.authWindow > div{
-		grid-template-columns: 0px 1fr;
+	.auth-text {
+		display: none;
+	}
+
+	.authWindow>div {
+		grid-template-columns: 1fr;
+		margin: 50% 0;
+	}
+
+	.authWindow {
+		width: 100%;
+		height: 100%;
 	}
 }
