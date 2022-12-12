@@ -8,7 +8,9 @@
                 "${workspaceFolder}/../**"
             ],
             "defines": [
-                "CORE_BUILD_PLUGIN"
+                "CORE_BUILD_PLUGIN",
+                "CSWEB_USE_BASE",
+                "CSWEB_USE_LUA"
             ],
             "cStandard": "c11",
             "cppStandard": "c++14",
@@ -23,7 +25,9 @@
             ],
             "defines": [
                 "_DEBUG",
-                "CORE_BUILD_PLUGIN"
+                "CORE_BUILD_PLUGIN",
+                "CSWEB_USE_BASE",
+                "CSWEB_USE_LUA"
             ],
             "cStandard": "c17",
             "cppStandard": "c++17",
@@ -38,7 +42,9 @@
             ],
             "defines": [
                 "_DEBUG",
-                "CORE_BUILD_PLUGIN"
+                "CORE_BUILD_PLUGIN",
+                "CSWEB_USE_BASE",
+                "CSWEB_USE_LUA"
             ],
             "cStandard": "c17",
             "cppStandard": "c++17",

@@ -3,6 +3,7 @@
 #include <list.h>
 #include <world.h>
 #include <client.h>
+#include <plugin.h>
 
 #include "defines.h"
 
@@ -176,6 +177,34 @@ static void evtonutype(Client *client) {
 	}
 }
 
+static void evtplugload(PluginInfo *pi) {
+	if (WebState.alive && WebState.clients) {
+		AListField *tmp;
+		Mutex_Lock(WebState.mutex);
+
+		List_Iter(tmp, WebState.clients) {
+			struct _HttpClient *hc = AList_GetValue(tmp).ptr;
+			if (!hc->cpls || hc->cpls->wsstate != WSS_PLUGINS) continue;
+			genpacket(&hc->nb, "EA^0^iiss", pi->id, pi->version, pi->name, pi->home);
+		}
+		Mutex_Unlock(WebState.mutex);
+	}
+}
+
+static void evtplugunload(cs_uint32 *id) {
+	if (WebState.alive && WebState.clients) {
+		AListField *tmp;
+		Mutex_Lock(WebState.mutex);
+
+		List_Iter(tmp, WebState.clients) {
+			struct _HttpClient *hc = AList_GetValue(tmp).ptr;
+			if (!hc->cpls || hc->cpls->wsstate != WSS_PLUGINS) continue;
+			genpacket(&hc->nb, "ER^0^i", *id);
+		}
+		Mutex_Unlock(WebState.mutex);
+	}
+}
+
 Event_DeclarePubBunch(events) {
 	EVENT_BUNCH_ADD('v', EVT_POSTSTART, evtpoststart),
 	EVENT_BUNCH_ADD('v', EVT_ONLOG, evtonlog),
@@ -187,6 +216,50 @@ Event_DeclarePubBunch(events) {
 	EVENT_BUNCH_ADD('v', EVT_ONDISCONNECT, evtondisc),
 	EVENT_BUNCH_ADD('v', EVT_ONSPAWN, evtonspawn),
 	EVENT_BUNCH_ADD('v', EVT_ONUSERTYPECHANGE, evtonutype),
+	EVENT_BUNCH_ADD('v', EVT_ONPLUGINLOAD, evtplugload),
+	EVENT_BUNCH_ADD('v', EVT_ONPLUGINUNLOAD, evtplugunload),
 
 	EVENT_BUNCH_END
 };
+
+#ifdef CSWEB_USE_LUA
+static void evtluascriptadd(const LuaInfo *li) {
+	if (WebState.alive && WebState.clients) {
+		AListField *tmp;
+		Mutex_Lock(WebState.mutex);
+
+		List_Iter(tmp, WebState.clients) {
+			struct _HttpClient *hc = AList_GetValue(tmp).ptr;
+			if (!hc->cpls || hc->cpls->wsstate != WSS_PLUGINS) continue;
+			genpacket(&hc->nb, "EA^1^iiiss", li->id, li->version, li->hotreload, li->name, li->home);
+		}
+		Mutex_Unlock(WebState.mutex);
+	}
+}
+
+static void evtluascriptremove(cs_uint32 id) {
+	if (WebState.alive && WebState.clients) {
+		AListField *tmp;
+		Mutex_Lock(WebState.mutex);
+
+		List_Iter(tmp, WebState.clients) {
+			struct _HttpClient *hc = AList_GetValue(tmp).ptr;
+			if (!hc->cpls || hc->cpls->wsstate != WSS_PLUGINS) continue;
+			genpacket(&hc->nb, "ER^1^i", id);
+		}
+		Mutex_Unlock(WebState.mutex);
+	}
+}
+
+void luaeventcallback(ELuaEvent type, const void *ptr) {
+	switch (type) {
+		case LUAEVENT_UPDATEINFO:
+		case LUAEVENT_ADDSCRIPT:
+			evtluascriptadd(ptr);
+			break;
+		case LUAEVENT_REMOVESCRIPT:
+			evtluascriptremove(*(cs_uint32 *)ptr);
+			break;
+	}
+}
+#endif

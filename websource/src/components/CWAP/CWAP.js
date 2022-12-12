@@ -85,7 +85,7 @@ const createExtension = (data, idx) => {
 	const extHome = data[idx + 3];
 	let ext = null;
 
-	if ((ext = getObject(pluginsList, extId)) != null) {
+	if ((ext = getObject(pluginsList, extId)) !== null) {
 		ext.version = extVer;
 		ext.home = extHome;
 		ext.name = extName;
@@ -99,6 +99,31 @@ const createExtension = (data, idx) => {
 	}
 
 	return 4;
+};
+
+const createLuaExtension = (data, idx) => {
+	const extId = parseInt(data[idx + 0]);
+	const extVer = parseInt(data[idx + 1]);
+	const extHotReload = parseInt(data[idx + 2]) > 0;
+	const extName = data[idx + 3];
+	const extHome = data[idx + 4];
+	let ext = null;
+
+	if ((ext = getObject(scriptsList, extId)) !== null) {
+		ext.home = extHome;
+		ext.version = extVer;
+		ext.hotReload = extHotReload;
+	} else {
+		scriptsList.push({
+			id: extId,
+			version: extVer,
+			hotReload: extHotReload,
+			name: extName,
+			home: extHome
+		});
+	}
+
+	return 5;
 };
 
 const updateAll = () => {
@@ -162,26 +187,29 @@ export let processCommand = (data) => {
 				spcnt = 1;
 				break;
 			case 'E':
-				spcnt = 5;
-				const pluginEventType = data_splitted[0].charAt(1);
-				// const pluginId = data_splitted[1];
+				spcnt = 3;
+				const extEventType = data_splitted[0].charAt(1);
+				const extType = parseInt(data_splitted[1]) % 2;
 
-				switch (pluginEventType) {
+				switch (extEventType) {
 					case 'A':
-						spcnt = createExtension(data_splitted, 1) + 1;
+						spcnt = [createExtension, createLuaExtension][extType](data_splitted, 2) + 2;
 						break;
 					case 'R':
-						spcnt = 2;
-						/*extList.every((ext, index) => {
-							if (ext.id === pluginId) {
-								extList.splice(index, 1);
+						const extId = parseInt(data_splitted[2]);
+						let list = [pluginsList, scriptsList][extType];
+						list.every((ext, index) => {
+							if (ext.id === extId) {
+								list.splice(index, 1);
 								return false;
 							}
 							return true;
-						});*/
+						});
 						break;
-					default: throw { message: 'Invalid extension event received', eventCode: pluginEventType };
+					default: throw { message: 'Invalid extension event received', eventCode: extEventType };
 				}
+
+				updatePlugins();
 				break;
 			case 'N':
 				notyType[data_splitted[0].charAt(1)](data_splitted[1]);
@@ -243,7 +271,7 @@ export let processCommand = (data) => {
 							}
 						}
 
-						spcnt += 1;
+						spcnt += 2;
 						updateAll();
 						break;
 
@@ -255,16 +283,27 @@ export let processCommand = (data) => {
 
 					case 'E':
 						spcnt = 0;
-						const exts = data.substring(3).split('\x01')[0].split('\x00');
-						if (exts.length > 0 && exts[0].length > 0) {
+						const exts = data.substring(3).split('\x01');
+
+						const native = exts[0].split('\x00');
+						if (native.length > 0 && native[0].length > 0) {
 							for (let i = 0; ;) {
-								if (!exts[i]) break;
-								const ido = createExtension(exts, i);
+								if (!native[i]) break;
+								const ido = createExtension(native, i);
 								spcnt += ido; i += ido;
 							}
 						}
 
-						spcnt += 1;
+						const lua = exts[1].split('\x00');
+						if (lua.length > 0 && lua[0].length > 0) {
+							for (let i = 0; ;) {
+								if (!lua[i]) break;
+								const ido = createLuaExtension(lua, i);
+								spcnt += ido; i += ido;
+							}
+						}
+
+						spcnt += 2;
 						updatePlugins();
 						break;
 
@@ -317,9 +356,6 @@ export let processCommand = (data) => {
 		if (data_splitted.length <= spcnt)
 			throw { message: 'Гроб гроб кладбище пидор!!!' };
 		data_splitted.splice(0, spcnt);
-
-		if (data_splitted[0].at(0) === '\x01')
-			data_splitted[0] = data_splitted[0].slice(1);
 	}
 };
 

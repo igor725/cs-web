@@ -13,6 +13,10 @@
 #	include "cs-base/src/base_itf.h"
 #endif
 
+#ifdef CSWEB_USE_LUA
+#	include "cs-lua/src/luaitf.h"
+#endif
+
 #define WL(I, T, ...) Log_##I("WebPanel: " T,  ##__VA_ARGS__)
 
 enum _HttpStatus {
@@ -90,12 +94,16 @@ struct _WebState {
 #ifdef CSWEB_USE_BASE
 	BaseItf *iface_base;
 #endif
+#ifdef CSWEB_USE_LUA
+	LuaItf *iface_lua;
+#endif
 };
 
 extern ServerInfo ServInf;
 extern struct _WebState WebState;
 extern EventRegBunch events[];
 extern CommandRegBunch cmds[];
+void luaeventcallback(ELuaEvent type, const void *ptr);
 void genpacket(NetBuffer *nb, cs_str fmt, ...);
 void handlewebsockmsg(struct _HttpClient *hc);
 cs_int32 service(enum _SerCommand sc);

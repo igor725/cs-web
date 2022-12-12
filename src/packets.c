@@ -9,6 +9,9 @@
 #include <plugin.h>
 
 #include "defines.h"
+#ifdef CSWEB_USE_LUA
+#	include "cs-lua/src/luaitf.h"
+#endif
 
 void genpacket(NetBuffer *nb, cs_str fmt, ...) {
 	va_list args;
@@ -154,7 +157,7 @@ static void sendhomestate(struct _HttpClient *hc) {
 		World *world = AList_GetValue(tmp).ptr;
 		SVec dims; World_GetDimensions(world, &dims);
 		Vec spawn; World_GetSpawn(world, &spawn, NULL);
-		genpacket(&hc->nb, List_Next(tmp) ? "ssiiifffii" : "ssiiifffii!",
+		genpacket(&hc->nb, List_Next(tmp) ? "ssiiifffii" : "ssiiifffii!^",
 			World_GetName(world), World_GetTexturePack(world),
 			dims.x, dims.y, dims.z, spawn.x, spawn.y, spawn.z,
 			World_GetWeather(world), World_IsReadyToPlay(world)
@@ -166,13 +169,27 @@ static void sendpluginsstate(struct _HttpClient *hc) {
 	genpacket(&hc->nb, "SE^");
 
 	PluginInfo pi;
-	cs_int8 index = 0;
+	cs_int32 index = 0;
 	while ((index = Plugin_RequestInfo(&pi, index)) != 0) {
-		genpacket(&hc->nb, "iiss", index, pi.ver, pi.name, pi.home);
+		genpacket(&hc->nb, "iiss", pi.id, pi.version, pi.name, pi.home);
 		Plugin_DiscardInfo(&pi);
 	}
 
+#ifdef CSWEB_USE_LUA
+	LuaItf *lif = WebState.iface_lua;
 	genpacket(&hc->nb, "!");
+	LuaInfo li;
+	index = 0;
+	while ((index = lif->requestScriptInfo(&li, index)) != 0) {
+		genpacket(&hc->nb, "iiiss", li.id, li.version,
+			li.hotreload, li.name, li.home
+		);
+		lif->discardScriptInfo(&li);
+	}
+	genpacket(&hc->nb, "!^");
+#else
+	genpacket(&hc->nb, "!!^");
+#endif
 }
 
 static inline void sendinfo(NetBuffer *nb, cs_str str) {

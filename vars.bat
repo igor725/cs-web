@@ -1,5 +1,13 @@
+SET CFLAGS=!CFLAGS! /I../
+
 IF EXIST "..\cs-base\src\base_itf.h" (
-	SET CFLAGS=!CFLAGS! /DCSWEB_USE_BASE /I../
+	SET CFLAGS=!CFLAGS! /DCSWEB_USE_BASE
+)
+
+IF EXIST "..\cs-lua\src\luaitf.h" (
+	SET CFLAGS=!CFLAGS! /DCSWEB_USE_LUA
+	SET CSLUA_ONLY_INCLUDES=1
+	CALL ..\cs-lua\vars.bat
 )
 
 IF "%PLUGIN_INSTALL%"=="1" (
