@@ -253,8 +253,7 @@ static void evtluascriptremove(cs_uint32 id) {
 
 void luaeventcallback(ELuaEvent type, const void *ptr) {
 	switch (type) {
-		case LUAEVENT_UPDATEINFO:
-		case LUAEVENT_ADDSCRIPT:
+		case LUAEVENT_UPDATESCRIPT:
 			evtluascriptadd(ptr);
 			break;
 		case LUAEVENT_REMOVESCRIPT:
