@@ -35,7 +35,7 @@ const Plugin = props => {
                 ) || (
                     <Slidebutton slidecolor='#ff2b2b' bgcolor='black' isDisabled={!props.hotReload}>Reload</Slidebutton>)
                 }
-                <Slidebutton slidecolor='#6529cd'bgcolor='black'>Settings</Slidebutton>
+                <Slidebutton slidecolor='#6529cd' bgcolor='black'>Settings</Slidebutton>
             </div>
         </div>
     )

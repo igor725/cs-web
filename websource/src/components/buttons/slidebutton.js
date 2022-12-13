@@ -7,11 +7,10 @@ const Slidebutton = props => {
     const bgcolor = props.bgcolor;
     const slidecolor = props.slidecolor;
     const slidetextcolor = props.slidetextcolor;
-    const disabled = props.isDisable || false;
-
+    const disabled = props.isDisabled || false;
     return (
         // eslint-disable-next-line
-        <a className={"btn "+ (disabled ? "disabled":"")}onClick={onclick} style={{"--bgcolor": bgcolor, "--slidecolor": slidecolor, "--slidetextcolor": slidetextcolor}}>
+        <a className={"btn " + (disabled ? "disabled" : "")} onClick={onclick} style={{ "--bgcolor": bgcolor, "--slidecolor": slidecolor, "--slidetextcolor": slidetextcolor }}>
             {children}
         </a>
     )

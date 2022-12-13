@@ -9,7 +9,6 @@ const PManager = ({ CWAP }) => {
     const [, updateState] = React.useState();
     const forceUpdate = React.useCallback(() => updateState({}), []);
     updatePlugins = forceUpdate;
-    console.log(scriptsList)
     return (
         <div className="plugins-main">
             <div className="plugins-grid">
