@@ -37,13 +37,13 @@
 .world-grid {
     background: #3a373a;
     display: grid;
-    grid-template-columns: 0fr 1fr 1fr;
+    grid-template-columns: 0fr 1fr 0fr;
     padding: 10px;
 	border-radius: 12px;
 }
 
 .worldCart_players {
-	width: fit-content;
+	width: 220px;
 }
 
 /* а это уже конкретный мир, выгруженный */
@@ -60,6 +60,22 @@
 
 .lightmode .worldCart_info {
 	color: #142532;
+}
+
+.worldCart_info table td a {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 185px;
+	color: white;
+    display: inline-block;
+	word-wrap:normal;
+}
+
+.worldCart_info table td:nth-child(2) {
+	overflow: hidden;
+	width: 185px;
+	word-wrap: break-word;
+	display: inline-block;
 }
 
 .worldCart_info table td {
@@ -84,7 +100,7 @@
 }
 
 #wName {
-    width: 250px;
+    width: 100%;
     color: #dbdbdb;
     word-wrap: break-word;
     margin: 0;

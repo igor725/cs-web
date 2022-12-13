@@ -47,7 +47,11 @@ const World = props => {
 						</tr>
 						<tr>
 							<td>Textures: </td>
-							<td>{props.texturepack}</td>
+							<td id='wTextureLink'>
+								{props.texturepack !== 'Default' && (
+									<a href={props.texturepack}>{props.texturepack}</a>
+								) || ("Default")}
+							</td>
 						</tr>
 						<tr>
 							<td>Weather: </td>

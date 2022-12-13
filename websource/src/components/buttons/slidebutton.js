@@ -6,7 +6,8 @@ const Slidebutton = props => {
     const onclick = props.onClick;
 
     return (
-        <a href='#' class="btn" onClick={onclick}>
+        // eslint-disable-next-line
+        <a className="btn" onClick={onclick}>
             {children}
         </a>
     )
