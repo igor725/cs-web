@@ -9,7 +9,7 @@ const PManager = ({ CWAP }) => {
     const [, updateState] = React.useState();
     const forceUpdate = React.useCallback(() => updateState({}), []);
     updatePlugins = forceUpdate;
-
+    console.log(scriptsList)
     return (
         <div className="plugins-main">
             <div className="plugins-grid">
@@ -22,7 +22,7 @@ const PManager = ({ CWAP }) => {
                 <div className="scripts">
                     <h3>Lua scripts</h3>
                     <div className="plugins-list">
-                        {scriptsList.map((pl, index) => <Plugin type='script' key={index} {...pl} />)}
+                        {scriptsList.map((sc, index) => <Plugin type='script' key={index} {...sc} />)}
                     </div>
                 </div>
             </div>
