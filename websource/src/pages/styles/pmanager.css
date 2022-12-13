@@ -2,21 +2,63 @@
     padding-top: 50px;
 }
 
-.plugins-grid{
+.plugins-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-gap: 50px;
+    grid-template-rows: 1fr 1fr;
     justify-items: center;
 }
 
-.plugins-grid > div{
+.plugins,
+.scripts {
     display: grid;
-    overflow-y: auto;
-    max-height: 500px;
-    grid-gap: 25px;
-    background: grey;
-    padding: 12px;
+    grid-template-rows: 0fr 1fr;
+    width: 75%;
 }
 
-.plugins > h3 {
-    margin: 0 auto;
+.darkmode .plugins-grid>div {
+    border-radius: 12px;
+}
+
+.darkmode .plugins-grid > div{
+    height: min-content;
+    border-radius: 50px;
+    background-color: #35313c;
+    box-shadow: 10px 10px 21px #1f1f1f,
+                -10px -10px 21px #242424;
+}
+.lightmode .plugins-grid > div{
+    height: min-content;
+    border-radius: 50px;
+    background-color: #f0f0f3;
+    box-shadow: 10px 10px 21px #d3d3d6,
+                -10px -10px 21px #fff;
+}
+
+.plugins-list {
+    margin: 22px;
+    display: grid;
+    height: min-content;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    grid-gap: 50px;
+}
+
+:is(.plugins, .scripts) h3 {
+    margin-left: 45px;
+    font-size: 36px;
+}
+
+:is(.darkmode) :is(.plugins, .scripts) :is(h3) {
+    color: white;
+}
+
+:is(.lightmode) :is(.plugins, .scripts) :is(h3) {
+    color: black;
+}
+
+@media only screen and (max-width: 600px) {
+    .plugins,
+    .scripts {
+        width: 95%;
+    }
 }

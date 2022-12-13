@@ -71,11 +71,8 @@
 	word-wrap:normal;
 }
 
-.worldCart_info table td:nth-child(2) {
-	overflow: hidden;
-	width: 185px;
-	word-wrap: break-word;
-	display: inline-block;
+.lightmode .worldCart_info table td a {
+	color: black;
 }
 
 .worldCart_info table td {
@@ -238,8 +235,8 @@
 	}
 
 	.worldCart_players ul{
+		padding-left:20px;
 		height: auto;
-		min-height: 100px;
 		max-height: 150px;
 	}
 }

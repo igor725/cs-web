@@ -4,7 +4,7 @@ import Slidebutton from "../buttons/slidebutton";
 
 const Plugin = props => {
     return (
-        <div className="plugin">
+        <div className="plugin" name={props.name}>
             <h4>{props.name}</h4>
             <div className="plugin-info">
                 <table>
@@ -15,25 +15,16 @@ const Plugin = props => {
                         </tr>
                         <tr>
                             <td>Homepage: </td>
-                            <td><a href={props.home} target="_blank" rel='noreferrer'>{props.home}</a></td>
+                            <td id='link'>
+                                {props.home && (<a href={props.home} target="_blank" rel='noreferrer'>Author's link</a>) || ("Not included")}</td>
                         </tr>
                     </tbody>
                 </table>
-                {/* <div className="plugin-info-header">
-                    <p>Version: </p>
-                    <p>Homepage:</p>
-                    {props.type == 'script' && (<p>RAM usage: </p>)}
-                </div>
-                <div className="plugin-info-values">
-                    <p>{props.extVer}</p>
-                    <a href={props.extHome} target="_blank">{props.extHome}</a>
-                    {props.type == 'script' && (<p>{props.ram_usage}</p>)}
-                </div> */}
             </div>
             <div className="plugin-buttons">
-                <Slidebutton slidecolor='red'>Unload</Slidebutton>
-                <Slidebutton slidecolor='red'>Disable</Slidebutton>
-                <Slidebutton slidecolor='blue'>Settings</Slidebutton>
+                <Slidebutton slidecolor='#ff2b2b' bgcolor='black'>Unload</Slidebutton>
+                <Slidebutton slidecolor='#ff2b2b' bgcolor='black'>Disable</Slidebutton>
+                <Slidebutton slidecolor='#6529cd'bgcolor='black'>Settings</Slidebutton>
             </div>
         </div>
     )

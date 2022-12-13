@@ -84,7 +84,7 @@
 	background: #838383;
 }
 
-@media only screen and (max-width: 600px) {
+media only screen and (max-width: 600px) {
 	.playersOnline {
 		justify-self: center;
 		min-height: 200px;

@@ -1,7 +1,11 @@
+:root {
+    --bgcolor: black;
+    --slidecolor: white;
+    --slidetextcolor: white;
+}
 .btn {
     text-decoration: none;
     padding: 10px 0;
-    background: transparent;
     text-align: center;
     outline: none !important;
     cursor: pointer;
@@ -11,6 +15,7 @@
     display: inline-block;
     border: 2px solid rgb(255, 255, 255);
     z-index: 1;
+    background: var(--bgcolor);
     color: white;
 }
 
@@ -23,12 +28,12 @@
     left: 0;
     direction: rtl;
     z-index: -1;
-    background: rgb(255, 255, 255);
+    background: var(--slidecolor);
     transition: all 0.5s ease;
 }
 
 .btn:hover {
-    color: rgb(0, 0, 0);
+    color: var(--slidetextcolor);
 }
 
 .btn:hover:after {
