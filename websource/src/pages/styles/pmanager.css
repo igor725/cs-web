@@ -59,6 +59,18 @@
 @media only screen and (max-width: 600px) {
     .plugins,
     .scripts {
-        width: 95%;
+        width: 100%;
+    }
+
+    .plugins-grid {
+        justify-items: normal;
+    }
+
+    .plugins-list {
+        margin: 10px;
+    }
+
+    .plugins-list:last-child {
+        margin-bottom: 30px;
     }
 }

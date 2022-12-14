@@ -179,9 +179,6 @@ body {
 	.layout-container {
 		padding: 0;
 	}
-	.navbar-title {
-		padding-left: 10px;
-	}
 	.navbar {
 		grid-template-columns: none;
 		background: none;
@@ -228,7 +225,7 @@ body {
 	}
 
 	.navbar h3 {
-		font-size: 25px;
+		font-size: 21px;
 		width: 100%;
 		margin: revert;
 	}
@@ -260,7 +257,7 @@ body {
 
 	.navbar-head {
 		width: 100%;
-		grid-gap: 5px;
+		grid-gap: 10px;
 		grid-template-columns: repeat(3, 1fr);
 		z-index: 999;
 		background: rgb(42, 44, 39);
@@ -281,10 +278,8 @@ body {
 
 	#navbar-mobile-btn {
 		transition: 0.5s;
-		height: 55px;
-		padding: 10px;
-		width: 55px;
+		height: 50px;
 		color: #6d7264;
-		margin: auto;
+		margin: 15px;
 	}
 }

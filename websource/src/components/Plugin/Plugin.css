@@ -90,3 +90,9 @@
 .lightmode .plugin-buttons .disabled::after{
 	background: grey;
 }
+
+@media only screen and (max-width: 600px) {
+	/* .plugin {
+		width: 300px;
+	} */
+}

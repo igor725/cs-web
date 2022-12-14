@@ -86,6 +86,8 @@ const Navbar = props => {
 		<div className={((window.localStorage.getItem('DARKMODE_STATE') === 'true') || false) ? 'navbar' : 'navbar light'}>
 			{(isMobile) && (
 				<div className='navbar-head'>
+					<FontAwesomeIcon id='navbar-mobile-btn' icon={regular('square-caret-down')} onClick={openNavbar}>
+					</FontAwesomeIcon>
 					<div className='navbar-title'>
 						<h3 style={{ cursor: 'pointer' }}>CServer WebAdmin</h3>
 						<div style={{ width: '4px', background: 'red' }} title='WebSocket connection: ' className='websocketStatus' />
@@ -96,8 +98,6 @@ const Navbar = props => {
 						className='night_btn'
 						size={50}
 					/>
-					<FontAwesomeIcon id='navbar-mobile-btn' icon={regular('square-caret-down')} onClick={openNavbar}>
-					</FontAwesomeIcon>
 				</div>
 			)}
 			{(!isMobile) && (
