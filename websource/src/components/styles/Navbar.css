@@ -235,7 +235,7 @@ body {
 		grid-auto-flow: row;
 		grid-gap: 8px;
 		border: 2px solid #343434;
-		border-radius: 12px;
+		border-radius: 21px;
 		border-top-color: transparent;
 		border-top-left-radius: 0px;
 		border-top-right-radius: 0px;
@@ -260,7 +260,7 @@ body {
 		grid-gap: 10px;
 		grid-template-columns: repeat(3, 1fr);
 		z-index: 999;
-		background: rgb(42, 44, 39);
+		background: rgb(36 36 36);
 	}
 
 	.light #navbar-mobile-btn {

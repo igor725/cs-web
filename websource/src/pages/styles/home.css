@@ -55,11 +55,13 @@
 		grid-gap: 35px;
 		width: 100%;
 	}
-	.homeMenu > div{
-		min-width: 360px;
-		max-width: 90vw;
-	}
-	.statistic {
+
+	.homeMenu > div {
 		justify-self: center;
 	}
+
+	.statistic, .worlds, .playersOnline {
+		width: 95%;
+	}
+
 }
