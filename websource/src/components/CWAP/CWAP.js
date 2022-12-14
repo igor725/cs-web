@@ -365,6 +365,8 @@ let CWAP = () => {
 	return ({
 		getSoftwareName: () => { return softwareName; },
 
+		unloadExtension: (type, id) => sendPacket('E', 'U', type, id),
+		reldisExtension: (type, id) => sendPacket('E', 'D', type, id),
 		sendAuth: (hash) => sendPacket('A', hash),
 		banPlayer: (name) => sendPacket('B', name, 'Banned by WebAdmin', 0),
 		kickPlayer: (name) => sendPacket('K', name),

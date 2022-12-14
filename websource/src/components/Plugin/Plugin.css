@@ -1,92 +1,92 @@
 .plugin {
-    display: grid;
-    border-radius: 12px;
-    padding: 12px;
-    transition: box-shadow 0.75s;
-    grid-template-rows: 0fr 1fr 0fr;
+	display: grid;
+	border-radius: 12px;
+	padding: 12px;
+	transition: box-shadow 0.75s;
+	grid-template-rows: 0fr 1fr 0fr;
 }
 
 .lightmode .plugin {
-    background: #dddddd12;
-    box-shadow: 10px 10px 21px #d3d3d6,
-        -10px -10px 21px #fff;
+	background: #dddddd12;
+	box-shadow: 10px 10px 21px #d3d3d6,
+		-10px -10px 21px #fff;
 }
 
 .darkmode .plugin {
-    background: #464050;
+	background: #464050;
 }
 .darkmode .plugin:hover {
-    box-shadow: 10px 10px 21px #272727,
-        -10px -10px 21px #2e2e2e;
+	box-shadow: 10px 10px 21px #272727,
+		-10px -10px 21px #2e2e2e;
 }
 
 .plugin .btn {
-    border: 0;
-    font-size: 14px;
-    height: 18px;
+	border: 0;
+	font-size: 14px;
+	height: 18px;
 }
 
 .darkmode .plugin-info>table td a:is(:visited, :link) {
-    color: white;
+	color: white;
 }
 
 .lightmode .plugin-info>table td a:is(:visited, :link) {
-    color: black;
+	color: black;
 }
 
 .darkmode .plugin-info>table {
-    color: white;
+	color: white;
 }
 
 .plugin-info>table {
-    font-family: "NunitoExtraBold";
-    max-width: 100%;
+	font-family: "NunitoExtraBold";
+	max-width: 100%;
 }
 
 .darkmode .plugin>h4 {
-    color: white;
+	color: white;
 }
 
 .plugin>h4 {
-    font-family: "NunitoExtraBold";
-    margin: 10px auto;
-    font-size: 20px;
+	font-family: "NunitoExtraBold";
+	margin: 10px auto;
+	font-size: 20px;
 }
 
 .plugin-buttons {
-    display: grid;
-    grid-gap: 5px;
-    margin-top: 10px;
-    grid-template-columns: repeat(3, 1fr);
-    padding: 0 12px 10px 12px;
+	display: grid;
+	grid-gap: 5px;
+	margin-top: 10px;
+	grid-template-columns: repeat(3, 1fr);
+	padding: 0 12px 10px 12px;
 }
 
 .plugin-buttons a {
-    border-radius: 50px;
+	border-radius: 50px;
 }
 
 .darkmode .plugin-buttons a {
-    background: #6e5993;
+	background: #6e5993;
 }
 
 .plugin-buttons .disabled:hover{
-    cursor: default;
+	cursor: default;
 }
 
 .darkmode .plugin-buttons .disabled::after{
-    background: #4a3c63;
+	background: #4a3c63;
 }
 
 .darkmode .plugin-buttons .disabled{
-    background: #4a3c63 !important;
-    color: rgb(129, 112, 112);
+	background: #4a3c63 !important;
+	color: rgb(129, 112, 112);
 }
 
 .lightmode .plugin-buttons .disabled {
-    background: grey;
-    color: rgb(59, 59, 59);
+	background: grey;
+	color: rgb(59, 59, 59);
 }
 
 .lightmode .plugin-buttons .disabled::after{
-    background: grey;
+	background: grey;
 }

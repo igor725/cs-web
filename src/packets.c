@@ -271,6 +271,43 @@ static inline void setweather(NetBuffer *nb, cs_byte **data) {
 	World_FinishEnvUpdate(world);
 }
 
+#ifdef CSWEB_USE_LUA
+static cs_bool unloadluascript(cs_uint32 id) {
+	LuaItf *lua = WebState.iface_lua;
+	return lua && lua->runScriptCommand(LUACOMMAND_UNLOAD, id);
+}
+
+static cs_bool reloadluascript(cs_uint32 id) {
+	LuaItf *lua = WebState.iface_lua;
+	return lua && lua->runScriptCommand(LUACOMMAND_RELOAD, id);
+}
+#endif
+
+static inline void handleextcommand(NetBuffer *nb, cs_byte **data) {
+	cs_str cmd = readstr(data);
+	cs_uint32 ptype = readint(data);
+	cs_uint32 id = readint(data);
+
+	switch (ptype) {
+		case 0 /*Native*/:
+			senderror(nb, "Not implemented yet");
+			return;
+#ifdef CSWEB_USE_LUA
+		case 1 /*Lua*/:
+			switch (*cmd) {
+				case 'U' /*Unload*/:
+					if (unloadluascript(id))
+						return;
+				case 'D' /*Reload*/:
+					if (reloadluascript(id))
+						return;
+			}
+			break;
+#endif
+	}
+	senderror(nb, "Invalid extension command received");
+}
+
 static void sendauthok(NetBuffer *nb) {
 	cs_int16 maxplayers = 0;
 	CEntry *ent;
@@ -319,17 +356,21 @@ void handlewebsockmsg(struct _HttpClient *hc) {
 
 		enum _WsState prev = hc->cpls->wsstate;
 		switch (*data++) {
+			case 'B':
+				banplayer(&hc->nb, &data);
+				break;
+
 			case 'C':
 				if (!runcommand((cs_byte *)readstr(&data)))
 					genpacket(&hc->nb, "Cs", Sstor_Get("CMD_UNK"));
 				break;
 
-			case 'K':
-				kickplayer(&hc->nb, (ClientID)readint(&data));
+			case 'E':
+				handleextcommand(&hc->nb, &data);
 				break;
 
-			case 'B':
-				banplayer(&hc->nb, &data);
+			case 'K':
+				kickplayer(&hc->nb, (ClientID)readint(&data));
 				break;
 
 			case 'O':

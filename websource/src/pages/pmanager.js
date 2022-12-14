@@ -15,13 +15,13 @@ const PManager = ({ CWAP }) => {
                 <div className="plugins">
                     <h3>Plugins</h3>
                     <div className="plugins-list">
-                        {pluginsList.map((pl, index) => <Plugin type='plugin' key={index} {...pl} />)}
+                        {pluginsList.map((pl, index) => <Plugin type='plugin' cwap={CWAP} key={index} {...pl} />)}
                     </div>
                 </div>
                 <div className="scripts">
                     <h3>Lua scripts</h3>
                     <div className="plugins-list">
-                        {scriptsList.map((sc, index) => <Plugin type='script' key={index} {...sc} />)}
+                        {scriptsList.map((sc, index) => <Plugin type='script' cwap={CWAP} key={index} {...sc} />)}
                     </div>
                 </div>
             </div>
