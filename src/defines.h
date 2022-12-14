@@ -103,7 +103,9 @@ extern ServerInfo ServInf;
 extern struct _WebState WebState;
 extern EventRegBunch events[];
 extern CommandRegBunch cmds[];
+#ifdef CSWEB_USE_LUA
 void luaeventcallback(ELuaEvent type, const void *ptr);
+#endif
 void genpacket(NetBuffer *nb, cs_str fmt, ...);
 void handlewebsockmsg(struct _HttpClient *hc);
 cs_int32 service(enum _SerCommand sc);
