@@ -255,7 +255,6 @@
 	.worlds_list {
 		padding: 34px;
 		grid-gap: 50px;
-		justify-content: center;
 	}
 
 	.worlds-header-main {

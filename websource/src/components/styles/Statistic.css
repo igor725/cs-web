@@ -18,6 +18,7 @@
 }
 
 .statistic-text {
+    font-family: "NunitoExtraBOld";
     background: #5c456e;
     display: grid;
     padding: 12px;
@@ -25,7 +26,6 @@
     color: #e3e3e3;
     justify-items: center;
     font-size: 16px;
-    font-weight: bold;
     grid-template-columns: repeat(3, 1fr);
 }
 
