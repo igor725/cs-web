@@ -16,10 +16,6 @@
     width: 75%;
 }
 
-.darkmode .plugins-grid>div {
-    border-radius: 12px;
-}
-
 .darkmode .plugins-grid > div{
     height: min-content;
     border-radius: 50px;
@@ -37,10 +33,11 @@
 
 .plugins-list {
     margin: 22px;
-    display: grid;
+    display: flex;
+    flex-wrap: wrap;
     height: min-content;
     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    grid-gap: 50px;
+    grid-gap: 25px;
 }
 
 :is(.plugins, .scripts) h3 {

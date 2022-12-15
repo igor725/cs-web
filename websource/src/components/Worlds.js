@@ -112,7 +112,6 @@ const Worlds = props => {
 		<div className='worlds'>
 			<div className='worlds-header-main'>
 				<h3 className='worlds-header'>Worlds</h3>
-				<hr />
 			</div>
 			<div className='worlds_list'>
 				{

@@ -12,6 +12,7 @@
 
 .homeMenu > div {
 	transition: box-shadow 1s;
+	border-radius: 50px;
 }
 
 .homeMenu > div:hover{
@@ -53,15 +54,11 @@
 	.homeMenu {
 		grid-template-columns: none !important;
 		grid-gap: 35px;
-		width: 100%;
+		width: 90%;
 	}
 
 	.homeMenu > div {
 		justify-self: center;
-	}
-
-	.statistic, .worlds, .playersOnline {
-		width: 95%;
 	}
 
 }

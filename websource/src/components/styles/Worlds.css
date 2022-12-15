@@ -1,7 +1,6 @@
 .worlds {
     border: 1px solid rgb(56, 56, 56);
-    border-radius: 12px;
-    height: 430px;
+    height: 590px;
     justify-self: center;
     background: rgb(46, 46, 46);
 	overflow-x: hidden;
@@ -20,7 +19,7 @@
 }
 
 .worlds-header-main {
-	padding-top: 10px;
+	padding: 14px;
 	position: sticky;
 	top: 0;
 	z-index: 999;
@@ -37,9 +36,9 @@
 .world-grid {
     background: #3a373a;
     display: grid;
-    grid-template-columns: 0.6fr 1fr 0fr;
-    padding: 10px;
-	border-radius: 12px;
+    grid-template-columns: 0.65fr 1fr 0fr;
+    padding: 18px;
+	border-radius: 50px;
 }
 
 .worldCart_players {
@@ -93,6 +92,7 @@
 	display: grid;
 	grid-gap: 16px;
 	padding: 12px;
+	padding-top: 0px;
 }
 
 .lightmode #wName {
@@ -106,6 +106,8 @@
     word-wrap: break-word;
     margin: 0;
     text-align: center;
+	border-radius: 50px;
+	padding: 3px;
     font-size: 20px;
     background: #318976;
 }
@@ -181,7 +183,6 @@
 	text-align: center;
 	color: white;
 	font-size: 22px;
-	font-weight: 600;
 }
 
 .worlds hr {
@@ -193,7 +194,7 @@
 
 @media only screen and (max-width: 600px) {
 	#wName{
-		width: 80%;
+		width: 90%;
 		margin: auto;
 		height: 30px;
 	}
@@ -218,6 +219,11 @@
 	.world {
 		width: 100%;
 		height: 125px;
+		box-shadow: none;
+	}
+
+	.world-grid:hover .world .worldBG {
+		box-shadow: none;
 	}
 
 	.world h2 {
@@ -253,7 +259,7 @@
 	}
 
 	.worlds-header-main {
-		border-radius: 12px;
+		border-radius: 50px;
 	}
 
 	.worldCart_info table td {

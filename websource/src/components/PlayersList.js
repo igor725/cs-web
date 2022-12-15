@@ -47,7 +47,6 @@ const PlayersList = ({ cwap }) => {
 		<div className='playersOnline'>
 			<div>
 				<h3>Current online</h3>
-				<hr />
 			</div>
 			<ul id='plist'>
 				{

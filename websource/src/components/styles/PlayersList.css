@@ -24,8 +24,7 @@
 	grid-template-rows: 0fr 1fr;
 	width: 300px;
 	border: 1px solid rgb(56, 56, 56);
-	border-radius: 12px;
-	padding: 10px;
+	padding: 14px;
 	height: 410px;
 }
 
@@ -84,16 +83,10 @@
 	background: #838383;
 }
 
-media only screen and (max-width: 600px) {
+@media only screen and (max-width: 600px) {
 	.playersOnline {
-		justify-self: center;
-		min-height: 200px;
 		width: 100%;
-		height: auto;
-		max-height: 400px;
-		padding:8px 0 0 8px;
 	}
-
 	.playersOnline h3 {
 		font-size: 26px;
 	}

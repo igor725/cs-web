@@ -91,7 +91,9 @@
 #console-in {
 	font-family: "UbuntuMono";
 	scrollbar-width: none;
-	/* For Firefox */
+	-webkit-user-select: none; /* Safari */
+	-ms-user-select: none; /* IE 10+ */
+	user-select: none;
 	overflow: auto;
 	border: 1px solid #4d4c50;
 	border-bottom: none;
@@ -201,9 +203,6 @@
 	#console-out,
 	#console-in {
 		font-size: 18px;
-		-webkit-user-select: none; /* Safari */
-		-ms-user-select: none; /* IE 10+ */
-		user-select: none;
 	}
 
 	#console-out {
