@@ -78,18 +78,18 @@ const Plugin = props => {
 				</table>
 			</div>
 			<div className='plugin-buttons' onMouseOver={mouseOver}>
-				<Slidebutton slidecolor='#ff2b2b' bgcolor='black'
+				<Slidebutton slidecolor='#ff2b2b' bgcolor='#323232'
 					onClick={() => cwap.unloadExtension(extTypeNum, extId, shiftPressed && extType != 'plugin')}
 				>Unload</Slidebutton>
 				{extType === 'plugin' && (
-					<Slidebutton slidecolor='#ff2b2b' bgcolor='black' onClick={() => cwap.reldisExtension(extTypeNum, extId, false)}>Disable</Slidebutton>
+					<Slidebutton slidecolor='#ff2b2b' bgcolor='#323232' onClick={() => cwap.reldisExtension(extTypeNum, extId, false)}>Disable</Slidebutton>
 				) || (
-						<Slidebutton slidecolor='#ff2b2b' bgcolor='black' isDisabled={!props.hotReload}
+						<Slidebutton slidecolor='#ff2b2b' bgcolor='#323232' isDisabled={!props.hotReload}
 							title={props.hotReload ? '' : 'This script cannot be hot reloaded'}
 							onClick={() => cwap.reldisExtension(extTypeNum, extId, shiftPressed)}
 						>Reload</Slidebutton>)
 				}
-				<Slidebutton slidecolor='#6529cd' bgcolor='black'>Settings</Slidebutton>
+				<Slidebutton slidecolor='#6529cd' bgcolor='#323232'>Settings</Slidebutton>
 			</div>
 		</div>
 	)

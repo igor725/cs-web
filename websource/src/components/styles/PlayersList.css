@@ -86,6 +86,7 @@
 @media only screen and (max-width: 600px) {
 	.playersOnline {
 		width: 100%;
+		grid-template-rows: 0.123fr 1fr;
 	}
 	.playersOnline h3 {
 		font-size: 26px;

@@ -80,8 +80,12 @@
 	width: auto;
 }
 
-.worldCart_info table a {
+.darkmode .worldCart_info table a {
 	color: white;
+}
+
+.lightmode .worldCart_info table a {
+	color: black;
 }
 
 .worldCart_info {
@@ -238,7 +242,7 @@
 	}
 
 	.worldCart_info > table {
-		font-size: 20px;
+		font-size: 18px;
 	}
 
 	.worldCart_players {

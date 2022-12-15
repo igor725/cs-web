@@ -36,7 +36,7 @@
 }
 
 .console-in-dot {
-	transition: 1s;
+	transition: 0.5s;
 	margin: 0;
 	font-size: 40px;
 	border-left: 1px solid #4d4c50;
@@ -118,6 +118,8 @@
 
 #console-in {
 	border-bottom-right-radius: 12px;
+	border-top-left-radius: 0px;
+	border-bottom-left-radius: 0px;
 }
 
 #console-out:hover {

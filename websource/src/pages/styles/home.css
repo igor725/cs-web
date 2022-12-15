@@ -54,12 +54,12 @@
 	.homeMenu {
 		grid-template-columns: none !important;
 		grid-gap: 35px;
-		margin:10px auto;
-		width: 90%;
+		padding: 12px;
 	}
-
+	
 	.homeMenu > div {
 		justify-self: center;
+		box-sizing: border-box;
 	}
 
 }
