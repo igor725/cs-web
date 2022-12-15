@@ -91,7 +91,7 @@ static inline void applyheaders(NetBuffer *nb, cs_uint32 code, cs_int32 len, cs_
 THREAD_PUBFUNC(WebThread) {(void)param;
 	WebState.stopped = false;
 
-	while (true) {
+	while (!WebState.stopped || WebState.clients != NULL) {
 		Mutex_Lock(WebState.mutex);
 		struct sockaddr_in ssa;
 		Socket fdc;
@@ -242,7 +242,6 @@ THREAD_PUBFUNC(WebThread) {(void)param;
 		}
 
 		Mutex_Unlock(WebState.mutex);
-		if (WebState.stopped && WebState.clients == NULL) break;
 		Thread_Sleep(60);
 	}
 

@@ -178,14 +178,17 @@ static void sendpluginsstate(struct _HttpClient *hc) {
 #ifdef CSWEB_USE_LUA
 	LuaItf *lif = WebState.iface_lua;
 	genpacket(&hc->nb, "!");
-	LuaInfo li;
-	index = 0;
-	while ((index = lif->requestScriptInfo(&li, index)) != 0) {
-		genpacket(&hc->nb, "iiiss", li.id, li.version,
-			li.hotreload, li.name, li.home
-		);
-		lif->discardScriptInfo(&li);
+	if (lif) {
+		LuaInfo li;
+		index = 0;
+		while ((index = lif->requestScriptInfo(&li, index)) != 0) {
+			genpacket(&hc->nb, "iiiss", li.id, li.version,
+				li.hotreload, li.name, li.home
+			);
+			lif->discardScriptInfo(&li);
+		}
 	}
+
 	genpacket(&hc->nb, "!^");
 #else
 	genpacket(&hc->nb, "!!^");
@@ -273,13 +276,13 @@ static inline void setweather(NetBuffer *nb, cs_byte **data) {
 
 #ifdef CSWEB_USE_LUA
 static cs_bool unloadluascript(cs_uint32 id) {
-	LuaItf *lua = WebState.iface_lua;
-	return lua && lua->runScriptCommand(LUACOMMAND_UNLOAD, id);
+	LuaItf *lif = WebState.iface_lua;
+	return lif && lif->runScriptCommand(LUACOMMAND_UNLOAD, id);
 }
 
 static cs_bool reloadluascript(cs_uint32 id) {
-	LuaItf *lua = WebState.iface_lua;
-	return lua && lua->runScriptCommand(LUACOMMAND_RELOAD, id);
+	LuaItf *lif = WebState.iface_lua;
+	return lif && lif->runScriptCommand(LUACOMMAND_RELOAD, id);
 }
 #endif
 
