@@ -169,7 +169,7 @@ static void sendpluginsstate(struct _HttpClient *hc) {
 	genpacket(&hc->nb, "SE^");
 
 	PluginInfo pi;
-	cs_int32 index = 0;
+	cs_uint32 index = 0;
 	while ((index = Plugin_RequestInfo(&pi, index)) != 0) {
 		genpacket(&hc->nb, "iiss", pi.id, pi.version, pi.name, pi.home);
 		Plugin_DiscardInfo(&pi);
@@ -287,11 +287,21 @@ static inline void handleextcommand(NetBuffer *nb, cs_byte **data) {
 	cs_str cmd = readstr(data);
 	cs_uint32 ptype = readint(data);
 	cs_uint32 id = readint(data);
+	PluginInfo pi;
 
 	switch (ptype) {
 		case 0 /*Native*/:
-			senderror(nb, "Not implemented yet");
-			return;
+			if (Plugin_RequestInfo(&pi, id)) {
+				if (!Plugin_PerformUnload(pi.name, *cmd == 'D')) {
+					senderror(nb, "Failed to unload spefcified plugin");
+					return;
+				}
+
+				return;
+			} else {
+				senderror(nb, "Specified plugin is not loaded");
+				return;
+			}
 #ifdef CSWEB_USE_LUA
 		case 1 /*Lua*/:
 			switch (*cmd) {

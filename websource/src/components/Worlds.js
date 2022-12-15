@@ -50,7 +50,7 @@ const World = props => {
 							<td id='wTextureLink'>
 								{props.texturepack !== 'Default' && (
 									<a href={props.texturepack}>Texturepack link</a>
-								) || ("Default")}
+								) || ('Default')}
 							</td>
 						</tr>
 						<tr>

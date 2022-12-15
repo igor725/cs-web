@@ -12,7 +12,7 @@ const Layout = ({ CWAP, children }) => {
 	const root = document.getElementsByTagName('body')[0];
 	
 	const switchNavBtnColor = (isDarkMode) =>{
-		root.style.setProperty("--navbar-select-color", isDarkMode ? "#664682":"#bf78fd")
+		root.style.setProperty('--navbar-select-color', isDarkMode ? '#664682':'#bf78fd')
 	}
 	// Не заносить isDarkMode в общую переменную - оно меняется каждый вызов
 	const isDarkMode = window.localStorage.getItem('DARKMODE_STATE') === 'true'

@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react';
 import './Plugin.css';
-import Slidebutton from "../buttons/slidebutton";
+import Slidebutton from '../buttons/slidebutton';
 
 let shiftPressed = false;
 let pressedEl;
@@ -12,7 +12,7 @@ const states = {
 }
 
 const Plugin = props => {
-	let isAnswer = false;
+	let unTimer = null;
 	const cwap = props.cwap;
 	const extId = props.id;
 	const extType = props.type;
@@ -22,7 +22,7 @@ const Plugin = props => {
 	const mouseOver = (e) => {
 		const btnObj = e.target;
 		if (btnObj.className === 'btn ') {
-			if (shiftPressed) {
+			if (shiftPressed && extType != 'plugin') {
 				const prev = btnObj.innerHTML;
 				if (btnObj !== pressedEl) {
 					pressedEl && (pressedEl.innerHTML = prevEl);
@@ -34,52 +34,29 @@ const Plugin = props => {
 				}
 			}
 		}
-	}
-	const reload = (e) => {
-		if (shiftPressed) {
-			console.log("FORCE RELOAD")
-		} else {
-			cwap.reldisExtension(extTypeNum, extId)
-		}
-	}
-	const unload = (e) => {
-		const btnObj = e.target;
-		const extName = btnObj.parentElement.parentElement.getAttribute("name");
-		if (extName === "web.dll") {
-			if (isAnswer) {
-				btnObj.innerHTML = "Ok";
-				isAnswer = false;
-				setTimeout(() => btnObj.innerHTML = "Unload", 1000)
-				cwap.unloadExtension(extTypeNum, extId);
-				return;
-			}
-			btnObj.innerHTML = "Are You Sure?";
-			isAnswer = true;
-			return;
-		}
-		if (shiftPressed) {
-			console.log("FORCE UNLOAD")
-			// do stuff
-			return;
-		}
-		cwap.unloadExtension(extTypeNum, extId);
-	}
+	};
 
 	useEffect(() => {
 		document.onkeydown = (e) => {
 			if (e.shiftKey) shiftPressed = true;
-		}
+		};
+
 		document.onkeyup = (e) => {
 			if (!e.shiftkey) {
-				shiftPressed = false
-				pressedEl && (pressedEl.innerHTML = prevEl)
-			};
+				shiftPressed = false;
+				pressedEl && (pressedEl.innerHTML = prevEl);
+			}
+		};
+
+		if (unTimer && !extName.startsWith('web.')) {
+			clearTimeout(unTimer);
+			unTimer = null;
 		}
 
 		return () => {
 			document.onkeydown = '';
 			document.onkeyup = '';
-		}
+		};
 	})
 
 	return (
@@ -95,19 +72,21 @@ const Plugin = props => {
 						<tr>
 							<td>Homepage: </td>
 							<td id='link'>
-								{props.home && (<a href={props.home} target="_blank" rel='noreferrer'>Author's link</a>) || ("Not included")}</td>
+								{props.home && (<a href={props.home} target='_blank' rel='noreferrer'>Author's link</a>) || ('Not included')}</td>
 						</tr>
 					</tbody>
 				</table>
 			</div>
-			<div className="plugin-buttons" onMouseOver={mouseOver}>
-				<Slidebutton slidecolor='#ff2b2b' bgcolor='black' onClick={unload}>Unload</Slidebutton>
+			<div className='plugin-buttons' onMouseOver={mouseOver}>
+				<Slidebutton slidecolor='#ff2b2b' bgcolor='black'
+					onClick={() => cwap.unloadExtension(extTypeNum, extId, shiftPressed && extType != 'plugin')}
+				>Unload</Slidebutton>
 				{extType === 'plugin' && (
-					<Slidebutton slidecolor='#ff2b2b' bgcolor='black' onClick={() => cwap.reldisExtension(extTypeNum, extId)}>Disable</Slidebutton>
+					<Slidebutton slidecolor='#ff2b2b' bgcolor='black' onClick={() => cwap.reldisExtension(extTypeNum, extId, false)}>Disable</Slidebutton>
 				) || (
 						<Slidebutton slidecolor='#ff2b2b' bgcolor='black' isDisabled={!props.hotReload}
 							title={props.hotReload ? '' : 'This script cannot be hot reloaded'}
-							onClick={reload}
+							onClick={() => cwap.reldisExtension(extTypeNum, extId, shiftPressed)}
 						>Reload</Slidebutton>)
 				}
 				<Slidebutton slidecolor='#6529cd' bgcolor='black'>Settings</Slidebutton>

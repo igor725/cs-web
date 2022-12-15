@@ -77,6 +77,7 @@ struct _HttpClient {
 #define LOGLIST_SIZE 40
 
 struct _WebState {
+	cs_uint32 self;
 	cs_bool stopped, alive;
 	Mutex *mutex;
 	CStore *cfg;

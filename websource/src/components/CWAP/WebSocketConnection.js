@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { toast } from 'react-toastify';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 import './styles/WSC.css';
-import loading_bar from "../../static/noconnection.svg";
+import loading_bar from '../../static/noconnection.svg';
 
 // Я в ахуе что можно импортировать из файла,
 // который импортирует из ЭТОГО файла

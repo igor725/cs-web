@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { toast } from 'react-toastify';
-import "./clipboard.css"
+import './clipboard.css'
 
 
 let copyMenu, prevCopy, selectedCopy;
@@ -12,16 +12,16 @@ const Clipboard = () => {
     const showElement = (show) => {
         if (show) {
             copyMenu.style.visibility = 'visible';
-            copyMenu.style.opacity = "1"
+            copyMenu.style.opacity = '1'
         } else {
             copyMenu.style.visibility = 'hidden';
-            copyMenu.style.opacity = "0";
+            copyMenu.style.opacity = '0';
         }
     }
     useEffect(() => {
         copyMenu = document.getElementsByClassName('copyboard')[0];
         window.onclick = (event) => {
-            if (!event.target.matches(".copyboard")) {
+            if (!event.target.matches('.copyboard')) {
                 showElement(false);
                 if (prevCopy) prevCopy.classList.remove('selected-text');
             }

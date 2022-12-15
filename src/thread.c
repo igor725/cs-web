@@ -90,6 +90,7 @@ static inline void applyheaders(NetBuffer *nb, cs_uint32 code, cs_int32 len, cs_
 
 THREAD_PUBFUNC(WebThread) {(void)param;
 	WebState.stopped = false;
+
 	while (true) {
 		Mutex_Lock(WebState.mutex);
 		struct sockaddr_in ssa;

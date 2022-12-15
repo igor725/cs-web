@@ -55,11 +55,11 @@ const Navbar = props => {
 			
 			if (transition) clearTimeout(transition);
 			setTimeout(()=>{
-				childs[prevIdx].classList.add("anim-backwards");
+				childs[prevIdx].classList.add('anim-backwards');
 				root.style.setProperty('--back-from-dir', moveToOpposite);
 				root.style.setProperty('--back-to-dir', moveTo);
 				transition = setTimeout(() => {
-					childs[prevIdx].className = ""; 
+					childs[prevIdx].className = ''; 
 					transition = null;
 				}, 1000)
 			}, 0); // таймаут нужен тут потому что потому, не пытайся его убирать,
@@ -103,21 +103,21 @@ const Navbar = props => {
 			{(!isMobile) && (
 				<div className='navbar-head'>
 					<h3 style={{ cursor: 'pointer' }}>CServer WebAdmin</h3>
-					<div style={{ width: '100%', background: 'red', height: "4px" }} title='WebSocket connection: ' className='websocketStatus' />
+					<div style={{ width: '100%', background: 'red', height: '4px' }} title='WebSocket connection: ' className='websocketStatus' />
 				</div>
 			)}
 			<div className='buttons'>
 				<Link to='/' onClick={processLink}>
-					<FontAwesomeIcon icon={solid("house")}/> Home
+					<FontAwesomeIcon icon={solid('house')}/> Home
 				</Link>
 				<Link to='/console' onClick={processLink}>
-					<FontAwesomeIcon icon={solid("terminal")} /> Terminal
+					<FontAwesomeIcon icon={solid('terminal')} /> Terminal
 				</Link>
 				<Link to='/configeditor' onClick={processLink}>
-					<FontAwesomeIcon icon={solid("pen-to-square")} /> Config Editor
+					<FontAwesomeIcon icon={solid('pen-to-square')} /> Config Editor
 				</Link>
 				<Link to='/pluginmanager' onClick={processLink}>
-					<FontAwesomeIcon icon={solid("bars-progress")} /> Plugin Manager
+					<FontAwesomeIcon icon={solid('bars-progress')} /> Plugin Manager
 				</Link>
 				{(!isMobile) && (
 					<DarkModeToggle

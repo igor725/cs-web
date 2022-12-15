@@ -25,7 +25,7 @@ struct _WebState WebState = {
 	}
 };
 
-cs_bool Plugin_Load(void) {
+cs_bool Plugin_LoadEx(cs_uint32 id) {
 	if (!Server_GetInfo(&ServInf, sizeof(ServInf))) {
 		WL(Warn, "Failed to get server version info");
 		ServInf.coreGitTag = "unknown";
@@ -33,6 +33,7 @@ cs_bool Plugin_Load(void) {
 		ServInf.coreFlags = 0;
 	}
 
+	WebState.self = id;
 	WebState.cfg = Config_NewStore("web");
 
 	CEntry *ent;
@@ -64,7 +65,8 @@ cs_bool Plugin_Load(void) {
 	Command_RegisterBunch(cmds);
 }
 
-cs_bool Plugin_Unload(cs_bool force) {(void)force;
+cs_bool Plugin_Unload(cs_bool force) {
+	if (!force) return false;
 	Config_Save(WebState.cfg, false);
 	Config_DestroyStore(WebState.cfg);
 	Event_UnregisterBunch(events);

@@ -1,5 +1,5 @@
-import React from "react";
-import "./fancyselect.css";
+import React from 'react';
+import './fancyselect.css';
 
 
 const Fancyselect = props => {
