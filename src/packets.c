@@ -278,9 +278,9 @@ static inline void setweather(NetBuffer *nb, cs_byte **data) {
 }
 
 #ifdef CSWEB_USE_LUA
-static cs_bool unloadluascript(cs_uint32 id) {
+static cs_bool unloadluascript(cs_uint32 id, cs_bool force) {
 	LuaItf *lif = WebState.iface_lua;
-	return lif && lif->runScriptCommand(LUACOMMAND_UNLOAD, id);
+	return lif && lif->runScriptCommand(force ? LUACOMMAND_FORCEUNLOAD : LUACOMMAND_UNLOAD, id);
 }
 
 static cs_bool reloadluascript(cs_uint32 id) {
@@ -293,6 +293,7 @@ static inline void handleextcommand(NetBuffer *nb, cs_byte **data) {
 	cs_str cmd = readstr(data);
 	cs_uint32 ptype = readint(data);
 	cs_uint32 id = readint(data);
+	cs_bool force = readint(data) > 0;
 	PluginInfo pi;
 
 	switch (ptype) {
@@ -312,7 +313,7 @@ static inline void handleextcommand(NetBuffer *nb, cs_byte **data) {
 		case 1 /*Lua*/:
 			switch (*cmd) {
 				case 'U' /*Unload*/:
-					if (unloadluascript(id))
+					if (unloadluascript(id, force))
 						return;
 				case 'D' /*Reload*/:
 					if (reloadluascript(id))

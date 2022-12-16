@@ -375,9 +375,8 @@ let CWAP = () => {
 		sendAuth: (hash) => sendPacket('A', hash),
 		banPlayer: (name) => sendPacket('B', name, 'Banned by WebAdmin', 0),
 		kickPlayer: (name) => sendPacket('K', name),
-		opPlayer: (name) => sendPacket('O', name, 1),
+		setUserState: (name, state) => sendPacket('O', name, state),
 		changeWeather: (world, weather) => sendPacket('W', world, weather),
-		deopPlayer: (name) => sendPacket('O', name, 0),
 		switchState: (path) => {
 			if (currentPage !== path) {
 				sendPacket('S', statePaths[path]);

@@ -20,7 +20,7 @@ const PlayerDropdown = props => {
 					<button className='ban' onClick={() => cwap.banPlayer(playerName)}> Ban </button>
 					<button className='kick' onClick={() => cwap.kickPlayer(playerId)}> Kick </button>
 					<button className='op' onClick={
-						() => cwap[isAdmin ? 'deopPlayer' : 'opPlayer'](playerName)
+						() => cwap.setUserState(playerName, !isAdmin)
 					}
 					>{isAdmin ? 'de-op' : 'op'}</button>
 				</div>
