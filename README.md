@@ -1,6 +1,6 @@
-# WebAdmin for CServer
+# WebAdmin for cserver
 
-This plugin implements web-based user interface for [CServer](https://github.com/igor725/cserver).
+This plugin implements web-based user interface for [cserver](https://github.com/igor725/cserver).
 WebAdmin allows you to manage your server via browser.
 
 There are three tabs:
@@ -14,7 +14,7 @@ Since [cserver v0.7.0](https://github.com/igor725/cserver/releases/tag/v0.7.0) (
 
 # Dependicies
 
-**Frontend (These modules will be automatically downloaded on building):**
+**Frontend (these modules will be automatically downloaded at the building stage):**
 
 0. nodejs + npm
 1. react >= 18.2.0
@@ -29,7 +29,7 @@ Since [cserver v0.7.0](https://github.com/igor725/cserver/releases/tag/v0.7.0) (
 
 **Backend:**
 
-0. [CServer](https://github.com/igor725/cserver) >= 0.7.0
+0. [cserver](https://github.com/igor725/cserver) >= 0.7.0
 1. [cs-base](https://github.com/igor725/cs-base) (optional)
 2. [cs-lua](https://github.com/igor725/cs-lua) (optional)
 
