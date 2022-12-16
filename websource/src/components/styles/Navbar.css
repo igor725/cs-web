@@ -6,8 +6,109 @@ body {
 .night_btn {
 	margin: auto 0;
 	margin-left: auto;
-	margin-right: 20px;
 	outline: none;
+}
+
+@keyframes authors-moveout {
+	0% {
+		margin-top: -50%;
+	}
+
+	100% {
+		margin-top: 60px;
+	}
+}
+
+@keyframes authors-movein {
+	0% {
+		margin-top: 60px;
+	}
+
+	100% {
+		margin-top: -50%;
+	}
+}
+
+.hide-authors {
+	display: grid !important;
+	animation: authors-movein 750ms 0s forwards;
+}
+
+.show-authors {
+	display: grid !important;
+	animation: authors-moveout 750ms 0s forwards;
+}
+
+.darkmode .authors {
+	background: #2e2e2e;
+	border: 1px solid #242424;
+}
+
+.lightmode .authors {
+	background: white;
+	border: 1px solid #cdcdcd;
+}
+
+.authors {
+	display: none;
+	width: 206px;
+	z-index: 9999;
+	position: absolute;
+	box-shadow: 0px 6px 36px 2px rgba(0, 0, 0, 0.4);
+	-webkit-box-shadow: 0px 6px 36px 2px rgba(0, 0, 0, 0.4);
+	-moz-box-shadow: 0px 6px 36px 2px rgba(0, 0, 0, 0.4);
+	border-top: none;
+	border-bottom-left-radius: 12px;
+	border-bottom-right-radius: 12px;
+}
+
+.lightmode .author>p {
+	color: black;
+}
+
+.author {
+	font-size: 12px;
+	font-family: 'NunitoRegular';
+	padding: 16px;
+	color: white;
+	display: grid;
+	grid-template-rows: 0fr 0fr;
+}
+
+.author-head {
+	display: grid;
+	grid-template-columns: 0fr 1fr;
+	grid-gap: 15px;
+}
+
+.author-head>div {
+	display: grid;
+	width: 100%;
+	grid-template-rows: 0fr 1fr;
+}
+
+.lightmode .author-head>div>a {
+	color: rgb(0 0 0 / 90%);
+}
+
+.author-head>div>a {
+	color: silver;
+}
+
+
+.author-head>div>p {
+	background: #c10dff;
+	border-radius: 50px;
+	letter-spacing: 0.1em;
+	font-family: 'NunitoExtraBold';
+	font-size: 11px;
+	padding: 6px;
+	text-align: center;
+}
+
+.author img {
+	margin: auto;
+	width: 55px;
 }
 
 .navbar {
@@ -94,6 +195,7 @@ body {
 	0% {
 		box-shadow: 4px 4px 12px 0px rgba(0, 0, 0, 0.22);
 	}
+
 	100% {
 		background-position: var(--back-to-dir);
 		box-shadow: none;
@@ -136,7 +238,7 @@ body {
 
 .navbar h3 {
 	white-space: nowrap;
-	font-size:22px;
+	font-size: 22px;
 	color: white;
 	/* color: rgb(200, 238, 127); */
 	margin: 12px 0;
@@ -179,6 +281,7 @@ body {
 	.layout-container {
 		padding: 0;
 	}
+
 	.navbar {
 		grid-template-columns: none;
 		background: none;
@@ -248,7 +351,7 @@ body {
 		border-top-right-radius: 0px;
 	}
 
-	.buttons > a {
+	.buttons>a {
 		display: grid;
 		grid-template-columns: 0fr 1fr;
 		width: 90% !important;
@@ -281,5 +384,39 @@ body {
 		height: 50px;
 		color: #6d7264;
 		margin: 15px;
+	}
+
+	.authors {
+		width: 280px; 
+		z-index: 0;
+	}
+
+	.author {
+		padding: 8px;
+		font-size: 16px;
+	}
+
+	.author>p{
+		height: 0;
+	}
+
+	@keyframes authors-moveout {
+		0% {
+			margin-top: -100%;
+		}
+	
+		100% {
+			margin-top: 0px;
+		}
+	}
+	
+	@keyframes authors-movein {
+		0% {
+			margin-top: 0px;
+		}
+	
+		100% {
+			margin-top: -100%;
+		}
 	}
 }

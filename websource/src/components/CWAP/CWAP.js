@@ -13,6 +13,9 @@ export let worldsList = [];
 export let pluginsList = [];
 export let scriptsList = [];
 
+export let webId;
+export let startupTime = 0;
+
 let softwareName = 'loading...';
 let currentPage = null;
 
@@ -131,7 +134,7 @@ const updateAll = () => {
 	updateWorlds();
 };
 
-const state_paths = {
+const statePaths = {
 	'/': 'H',
 	'/configeditor': 'C',
 	'/console': 'R',
@@ -168,10 +171,12 @@ export let processCommand = (data) => {
 						break;
 
 					case 'OK':
-						spcnt = 5;
+						spcnt = 6;
 						softwareName = `${data_splitted[1]}/${data_splitted[2]}`;
+						webId = parseInt(data_splitted[5]);
 						(user_pass ? doAuthGood(true) : doAuthGood(false));
-						setCounters(parseInt(data_splitted[3]), parseInt(data_splitted[4]));
+						startupTime = parseInt(data_splitted[3]);
+						setCounters(parseInt(data_splitted[4]));
 						break;
 
 					default:
@@ -365,7 +370,7 @@ let CWAP = () => {
 	return ({
 		getSoftwareName: () => { return softwareName; },
 
-		unloadExtension: (type, id) => sendPacket('E', 'U', type, id),
+		unloadExtension: (type, id, force) => sendPacket('E', 'U', type, id, force),
 		reldisExtension: (type, id) => sendPacket('E', 'D', type, id),
 		sendAuth: (hash) => sendPacket('A', hash),
 		banPlayer: (name) => sendPacket('B', name, 'Banned by WebAdmin', 0),
@@ -375,7 +380,7 @@ let CWAP = () => {
 		deopPlayer: (name) => sendPacket('O', name, 0),
 		switchState: (path) => {
 			if (currentPage !== path) {
-				sendPacket('S', state_paths[path]);
+				sendPacket('S', statePaths[path]);
 				currentPage = path;
 				return true;
 			}

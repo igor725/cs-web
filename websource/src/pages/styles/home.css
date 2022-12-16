@@ -1,21 +1,28 @@
 .homeMenu {
-    display: grid;
-    grid-gap: 40px;
-    grid-template-columns: 0fr 0fr;
-    width: fit-content;
-    margin: 20px auto 20px;
+	display: grid;
+	grid-gap: 40px;
+	grid-template-columns: 0fr 0fr;
+	width: fit-content;
+	margin: 20px auto 20px;
 }
 
-.lightmode .homeMenu > div h3 {
+.lightmode .homeMenu>div h3 {
 	color: #1b3350;
 }
 
-.homeMenu > div {
+:is(#link, #wTextureLink) :where(a) {
+	color: #796de1;
+	border-radius: 50px;
+	padding: 8px;
+	border: none;
+}
+
+.homeMenu>div {
 	transition: box-shadow 1s;
 	border-radius: 50px;
 }
 
-.homeMenu > div:hover{
+.homeMenu>div:hover {
 	-webkit-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.6);
 	-moz-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.6);
 	box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.6);
@@ -26,7 +33,7 @@
 	display: unset;
 }
 
-.darkmode::-webkit-scrollbar-track{
+.darkmode::-webkit-scrollbar-track {
 	background: #222;
 }
 
@@ -35,7 +42,7 @@
 	border-radius: 12px;
 }
 
-.darkmode ::-webkit-scrollbar-thumb{
+.darkmode ::-webkit-scrollbar-thumb {
 	background-color: #555;
 	border: none;
 }
@@ -56,8 +63,8 @@
 		grid-gap: 35px;
 		padding: 12px;
 	}
-	
-	.homeMenu > div {
+
+	.homeMenu>div {
 		justify-self: center;
 		box-sizing: border-box;
 	}

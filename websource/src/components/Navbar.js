@@ -6,8 +6,12 @@ import { DarkModeToggle } from 'react-dark-mode-toggle-2';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { solid, regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 
-let prev_colored;
+import author1 from '../static/igor.png';
+import author2 from '../static/neigor.gif';
+
+let prevСolored;
 let isOpened = false;
+let isAuthors = false;
 let transition;
 
 const Navbar = props => {
@@ -17,19 +21,33 @@ const Navbar = props => {
 	window.localStorage.setItem('DARKMODE_STATE', isDarkMode);
 	const currentLocation = useLocation().pathname;
 	const isMobile = (window.screen.width <= 600);
-	const navbar_btns = document.getElementsByClassName('buttons')[0];
-	const open_btn = document.getElementById('navbar-mobile-btn');
+	const navbarBtns = document.getElementsByClassName('buttons')[0];
+	const openBtn = document.getElementById('navbar-mobile-btn');
 	const root = document.querySelector(':root');
+	const authors = document.getElementsByClassName('authors')[0];
+
+
+	const showAuthors = () => {
+		if (isAuthors) {
+			authors.classList.remove('show-authors');
+			authors.classList.add('hide-authors');
+			setTimeout(() => authors.classList.remove('hide-authors'), 750);
+			isAuthors = false;
+		} else {
+			authors.classList.add('show-authors');
+			isAuthors = true;
+		}
+	}
 
 	const openNavbar = () => {
-		open_btn.classList.toggle('navbar-open');
-		setTimeout(() => open_btn.classList.toggle('navbar-btn-pressed'), 500);
-		if (isOpened){
-			navbar_btns.classList.add('hide-navbar');
-			setTimeout(()=>navbar_btns.classList.remove('hide-navbar', 'show-navbar'), 300);
+		openBtn.classList.toggle('navbar-open');
+		setTimeout(() => openBtn.classList.toggle('navbar-btn-pressed'), 500);
+		if (isOpened) {
+			navbarBtns.classList.add('hide-navbar');
+			setTimeout(() => navbarBtns.classList.remove('hide-navbar', 'show-navbar'), 300);
 			isOpened = false;
 		} else {
-			navbar_btns.classList.add('show-navbar');
+			navbarBtns.classList.add('show-navbar');
 			isOpened = true;
 		}
 	};
@@ -49,36 +67,43 @@ const Navbar = props => {
 
 			const moveTo = idx > prevIdx ? 'left' : 'right';
 			const moveToOpposite = idx < prevIdx ? 'left' : 'right';
-			
+
 			root.style.setProperty('--navbar-from-dir', moveToOpposite);
 			root.style.setProperty('--navbar-to-dir', moveTo);
-			
+
 			if (transition) clearTimeout(transition);
-			setTimeout(()=>{
+			setTimeout(() => {
 				childs[prevIdx].classList.add('anim-backwards');
 				root.style.setProperty('--back-from-dir', moveToOpposite);
 				root.style.setProperty('--back-to-dir', moveTo);
 				transition = setTimeout(() => {
-					childs[prevIdx].className = ''; 
+					childs[prevIdx].className = '';
 					transition = null;
 				}, 1000)
 			}, 0); // таймаут нужен тут потому что потому, не пытайся его убирать,
 			return;// он просто перестанет работать, проверенно. Особенности жс? можеш погуглить¯\_(ツ)_/¯
 		}
-
 		e.preventDefault();
 	};
 
 	useEffect(() => {
-		if (prev_colored) prev_colored.className = '';
+		if (prevСolored) prevСolored.className = '';
 		var els = document.querySelectorAll(`a[href='${currentLocation}']`)[0];
 		if (els !== undefined) {
-			if (isDarkMode){
+			if (isDarkMode) {
 				els.classList.add('selected-dark', 'anim-forwards');
-			} else{
+			} else {
 				els.classList.add('selected', 'anim-forwards');
 			}
-			prev_colored = els;
+			prevСolored = els;
+		}
+		window.onclick = (e) => {
+			if (isAuthors && e.target.innerHTML !== 'CServer WebAdmin'){
+				authors.classList.remove('show-authors');
+				authors.classList.add('hide-authors');
+				setTimeout(() => authors.classList.remove('hide-authors'), 750);
+				isAuthors = false;
+			}
 		}
 	});
 
@@ -89,8 +114,30 @@ const Navbar = props => {
 					<FontAwesomeIcon id='navbar-mobile-btn' icon={regular('square-caret-down')} onClick={openNavbar}>
 					</FontAwesomeIcon>
 					<div className='navbar-title'>
-						<h3 style={{ cursor: 'pointer' }}>CServer WebAdmin</h3>
+						<h3 style={{ cursor: 'pointer' }} onClick={showAuthors}>CServer WebAdmin</h3>
 						<div style={{ width: '4px', background: 'red' }} title='WebSocket connection: ' className='websocketStatus' />
+						<div className='authors'>
+							<div className='author'>
+								<div className='author-head'>
+									<img src={author1} />
+									<div>
+										<a href='https://github.com/igor725'>@igor725 github</a>
+										<p>BACKEND</p>
+									</div>
+								</div>
+								<p>CWAP protocol dev & genius</p>
+							</div>
+							<div className='author'>
+								<div className='author-head'>
+									<img src={author2} />
+									<div>
+										<a href='https://github.com/wildrun0'>@wildrun0 github</a>
+										<p>FRONTEND</p>
+									</div>
+								</div>
+								<p>UI / UX design </p>
+							</div>
+						</div>
 					</div>
 					<DarkModeToggle
 						onChange={() => { setIsDarkMode(!isDarkMode); props.setTheme() }}
@@ -102,13 +149,35 @@ const Navbar = props => {
 			)}
 			{(!isMobile) && (
 				<div className='navbar-head'>
-					<h3 style={{ cursor: 'pointer' }}>CServer WebAdmin</h3>
+					<h3 style={{ cursor: 'pointer' }} onClick={showAuthors}>CServer WebAdmin</h3>
 					<div style={{ width: '100%', background: 'red', height: '4px' }} title='WebSocket connection: ' className='websocketStatus' />
+					<div className='authors'>
+						<div className='author'>
+							<div className='author-head'>
+								<img src={author1} />
+								<div>
+									<a href='https://github.com/igor725'>@igor725 github</a>
+									<p>BACKEND</p>
+								</div>
+							</div>
+							<p>CWAP protocol dev & genius</p>
+						</div>
+						<div className='author'>
+							<div className='author-head'>
+								<img src={author2} />
+								<div>
+									<a href='https://github.com/wildrun0'>@wildrun0 github</a>
+									<p>FRONTEND</p>
+								</div>
+							</div>
+							<p>UI / UX design </p>
+						</div>
+					</div>
 				</div>
 			)}
 			<div className='buttons'>
 				<Link to='/' onClick={processLink}>
-					<FontAwesomeIcon icon={solid('house')}/> Home
+					<FontAwesomeIcon icon={solid('house')} /> Home
 				</Link>
 				<Link to='/console' onClick={processLink}>
 					<FontAwesomeIcon icon={solid('terminal')} /> Terminal

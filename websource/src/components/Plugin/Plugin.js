@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import './Plugin.css';
+import { webId } from '../CWAP/CWAP';
 import Slidebutton from '../buttons/slidebutton';
 
 let shiftPressed = false;
@@ -17,12 +18,25 @@ const Plugin = props => {
 	const extId = props.id;
 	const extType = props.type;
 	const extName = props.name;
-	const extTypeNum = extType == 'script';
+	const extTypeNum = extType === 'script';
+
+	const unloadbtn = (<Slidebutton slidecolor='#ff2b2b' bgcolor='#323232'
+		onClick={() => cwap.unloadExtension(extTypeNum, extId, shiftPressed && extType !== 'plugin')}
+	>Unload</Slidebutton>);
+
+	const disableBtn = (<Slidebutton slidecolor='#ff2b2b' bgcolor='#323232' 
+		onClick={() => cwap.reldisExtension(extTypeNum, extId, false)}
+	>Disable</Slidebutton>);
+
+	const reloadBtn = (<Slidebutton slidecolor='#ff2b2b' bgcolor='#323232' isDisabled={!props.hotReload}
+		title={props.hotReload ? '' : 'This script cannot be hot reloaded'}
+		onClick={() => cwap.reldisExtension(extTypeNum, extId, shiftPressed)}
+	>Reload</Slidebutton>);
 
 	const mouseOver = (e) => {
 		const btnObj = e.target;
-		if (btnObj.className === 'btn ') {
-			if (shiftPressed && extType != 'plugin') {
+		if (btnObj.className === 'btn ' && btnObj.innerHTML !== 'Reload') {
+			if (shiftPressed && extType !== 'plugin') {
 				const prev = btnObj.innerHTML;
 				if (btnObj !== pressedEl) {
 					pressedEl && (pressedEl.innerHTML = prevEl);
@@ -58,7 +72,6 @@ const Plugin = props => {
 			document.onkeyup = '';
 		};
 	})
-
 	return (
 		<div className='plugin' name={extName}>
 			<h4>{extName}</h4>
@@ -72,23 +85,17 @@ const Plugin = props => {
 						<tr>
 							<td>Homepage: </td>
 							<td id='link'>
-								{props.home && (<a href={props.home} target='_blank' rel='noreferrer' className='pretty-link'>Author's link</a>) || ('Not included')}</td>
+								{props.home && (
+									<Slidebutton bgcolor='transparent' slidecolor='#786de12f' href={props.home}>Author's link</Slidebutton>
+								) || ('Not included')}</td>
 						</tr>
 					</tbody>
 				</table>
 			</div>
 			<div className='plugin-buttons' onMouseOver={mouseOver}>
-				<Slidebutton slidecolor='#ff2b2b' bgcolor='#323232'
-					onClick={() => cwap.unloadExtension(extTypeNum, extId, shiftPressed && extType != 'plugin')}
-				>Unload</Slidebutton>
-				{extType === 'plugin' && (
-					<Slidebutton slidecolor='#ff2b2b' bgcolor='#323232' onClick={() => cwap.reldisExtension(extTypeNum, extId, false)}>Disable</Slidebutton>
-				) || (
-						<Slidebutton slidecolor='#ff2b2b' bgcolor='#323232' isDisabled={!props.hotReload}
-							title={props.hotReload ? '' : 'This script cannot be hot reloaded'}
-							onClick={() => cwap.reldisExtension(extTypeNum, extId, shiftPressed)}
-						>Reload</Slidebutton>)
-				}
+				{(extType === 'plugin' && extId !== webId || extType === 'script') && unloadbtn}
+				{extType === 'plugin' && extId !== webId && disableBtn}
+				{extType === 'script' && reloadBtn}
 				<Slidebutton slidecolor='#6529cd' bgcolor='#323232'>Settings</Slidebutton>
 			</div>
 		</div>

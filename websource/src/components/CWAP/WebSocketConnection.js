@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { toast } from 'react-toastify';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 import './styles/WSC.css';
-import loading_bar from '../../static/noconnection.svg';
+import loadingBar from '../../static/noconnection.svg';
 
 // Я в ахуе что можно импортировать из файла,
 // который импортирует из ЭТОГО файла
@@ -13,7 +13,7 @@ const setBlur = (state) => {
 	document.getElementsByClassName('layout-container')[0].classList[(['add', 'remove'][state ? 0 : 1])]('blurry');
 	if (state && document.getElementById('loading') === null) {
 		let loading = document.createElement('img');
-		loading.src = loading_bar;
+		loading.src = loadingBar;
 		loading.id = 'loading';
 		document.body.appendChild(loading);
 		setTimeout(() => {

@@ -3,48 +3,6 @@ html {
 	scrollbar-width: none;
 }
 
-a {
-	text-decoration: none;
-}
-
-.pretty-link:is(:visited, :link) {
-	color: #796de1;
-	position: relative;
-	overflow: hidden;
-	z-index: 1;
-	transition: all 0.5s ease;
-	border-radius: 50px;
-	padding: 3px;
-}
-
-.pretty-link::after {
-	position: absolute;
-	border-radius: 50px;
-	content: "";
-	width: 0;
-	height: 100%;
-	top: 0;
-	left: 0;
-	direction: rtl;
-	z-index: -1;
-	background: #786de12f;
-	transition: all 0.5s ease;
-}
-
-/* .pretty-link:hover {
-	color: #6057b1;
-} */
-
-.pretty-link:hover::after {
-	left: auto;
-	right: 0;
-	width: 100%;
-}
-
-.pretty-link:active {
-	top: 2px;
-}
-
 body {
 	margin: 0;
 	font-family: "NunitoRegular";

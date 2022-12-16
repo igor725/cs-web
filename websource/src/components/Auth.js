@@ -12,8 +12,9 @@ export let showAuthError = () => { };
 export let doAuthGood = () => { };
 export let doLogin = () => { };
 
-let pass_candidate;
+let passСandidate;
 const LOG_IN_MSG = 'Log in';
+
 const Auth = ({ cwap }) => {
 	const authWindow = document.getElementsByClassName('authWindowG')[0];
 	const authError = document.getElementById('status');
@@ -46,7 +47,7 @@ const Auth = ({ cwap }) => {
 		} else {
 			authWindow.style.display = 'none';
 		}
-		localStorage.setItem('USER_PASSWORD', pass_candidate);
+		localStorage.setItem('USER_PASSWORD', passСandidate);
 		cwap.switchState(window.location.pathname);
 	};
 	doLogin = (hash) => {
@@ -64,7 +65,7 @@ const Auth = ({ cwap }) => {
 			authError.innerHTML = '';
 		}
 		cwap.sendAuth(hash);
-		pass_candidate = hash;
+		passСandidate = hash;
 	};
 
 	return (

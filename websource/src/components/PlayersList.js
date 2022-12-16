@@ -3,7 +3,7 @@ import PlayerDropdown from './PlayerList/PlayerDropdown';
 import { playersList } from './CWAP/CWAP';
 import './styles/PlayersList.css';
 
-export let prev_player;
+export let prevPlayer;
 
 window.onclick = (event) => {
 	if (!event.target.matches('.dropbtn')) {
@@ -20,15 +20,15 @@ window.onclick = (event) => {
 
 export let showMenu = (e) => {
 	let playerEl = e.currentTarget.parentElement.childNodes[1];
-	if ((playerEl !== prev_player) && prev_player) {
-		prev_player.classList.remove('show');
+	if ((playerEl !== prevPlayer) && prevPlayer) {
+		prevPlayer.classList.remove('show');
 	}
 
 	playerEl.style.left = e.pageX + 'px';
 	playerEl.style.top = e.pageY + 'px';
 
 	playerEl.classList.toggle('show');
-	prev_player = playerEl;
+	prevPlayer = playerEl;
 };
 
 export let updateGlobalList = () => {}
@@ -40,7 +40,7 @@ const PlayersList = ({ cwap }) => {
 	updateGlobalList = forceUpdate;
 
 	useEffect(() => {
-		document.getElementById('plist').onscroll = (e) => prev_player && prev_player.classList.remove('show');
+		document.getElementById('plist').onscroll = (e) => prevPlayer && prevPlayer.classList.remove('show');
 	});
 
 	return (

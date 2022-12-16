@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import './styles/Statistic.css';
 import { playersList } from './CWAP/CWAP';
+import { startupTime } from './CWAP/CWAP';
 
-let maxPlayers = 0, startupTime = 0;
-export let setCounters = (_stup, _maxp) => {};
+let maxPlayers = 0;
+export let setCounters = (_maxp) => {};
 
 const Statistic = ({ cwap }) => {
-	let curp = playersList.length
+	let curp = playersList.length;
 	const [count, setCount] = useState((Date.now() - startupTime) / 1000);
 	const [maxp, setMaxp] = useState(maxPlayers);
 
@@ -15,9 +16,9 @@ const Statistic = ({ cwap }) => {
 		return () => clearInterval(id);
 	}, []);
 
-	setCounters = (_stup, _maxp) => {
-		setCount((Date.now() - _stup) / 1000); setMaxp(_maxp);
-		startupTime = _stup; maxPlayers = _maxp;
+	setCounters = (_maxp) => {
+		setCount((Date.now() - startupTime) / 1000); setMaxp(_maxp);
+		maxPlayers = _maxp;
 	};
 
 	return (

@@ -2,10 +2,11 @@ import React, { useEffect } from 'react';
 import './styles/Worlds.css';
 import { playersList, worldsList } from './CWAP/CWAP';
 import PlayerDropdown from './PlayerList/PlayerDropdown';
-import { prev_player } from './PlayersList';
+import { prevPlayer } from './PlayersList';
+import Slidebutton from './buttons/slidebutton';
 import Fancyselect from './fancyselect/fancyselect';
 
-export let updateWorlds = () => {}
+export let updateWorlds = () => { }
 
 const wTypes = {
 	0: '🌤️Sunny',
@@ -16,7 +17,7 @@ const wTypes = {
 const World = props => {
 	const cwap = props.cwap;
 	const changeWeather = (e) => {
-		Object.entries(wTypes).every(([key,value]) => {
+		Object.entries(wTypes).every(([key, value]) => {
 			if (value === e.target.value) {
 				cwap.changeWeather(props.id, key);
 				return false;
@@ -35,7 +36,7 @@ const World = props => {
 					<tbody>
 						<tr>
 							<td>Status: </td>
-							<td>{Boolean(props.status) ? 'Loaded':'Unloaded'}</td>
+							<td>{Boolean(props.status) ? 'Loaded' : 'Unloaded'}</td>
 						</tr>
 						<tr>
 							<td>Size: </td>
@@ -49,7 +50,7 @@ const World = props => {
 							<td>Textures: </td>
 							<td id='wTextureLink'>
 								{props.texturepack !== 'Default' && (
-									<a href={props.texturepack} className='pretty-link' target='_blank'>Texturepack link</a>
+									<Slidebutton bgcolor='transparent' slidecolor='#786de12f' href={props.home}>Texturepack link</Slidebutton>
 								) || ('Default')}
 							</td>
 						</tr>
@@ -58,7 +59,7 @@ const World = props => {
 							<td>
 								<Fancyselect value={wTypes[props.weather]} onChange={changeWeather}>
 									{
-										Object.entries(wTypes).map(([key,value]) => {
+										Object.entries(wTypes).map(([key, value]) => {
 											return (
 												<option key={key} value={value}>
 													{value}
@@ -75,7 +76,7 @@ const World = props => {
 			<div className='worldCart_players'>
 				<h4 id='wName'>Players</h4>
 				<ul className='plist' id='pList2'>
-					{ playersList.map((player) => {
+					{playersList.map((player) => {
 						if (player.world === props.id) {
 							return (
 								<PlayerDropdown
@@ -103,8 +104,8 @@ const Worlds = props => {
 
 	useEffect(() => {
 		const listElement = document.getElementById('pList2');
-		if (worldsList.length > 0){
-			listElement.onscroll = (e) => prev_player && prev_player.classList.remove('show');
+		if (worldsList.length > 0) {
+			listElement.onscroll = (e) => prevPlayer && prevPlayer.classList.remove('show');
 		}
 	});
 
@@ -115,7 +116,7 @@ const Worlds = props => {
 			</div>
 			<div className='worlds_list'>
 				{
-					worldsList.map((world, i) => <World cwap={cwap} {...world} key={i} pos={i+1} />)
+					worldsList.map((world, i) => <World cwap={cwap} {...world} key={i} pos={i + 1} />)
 				}
 			</div>
 		</div>

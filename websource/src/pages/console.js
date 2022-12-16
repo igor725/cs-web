@@ -27,7 +27,7 @@ const Console = ({ CWAP }) => {
 	const forceUpdate = React.useCallback(() => updateState({}), []);
 
 	let text;
-	let input_el;
+	let inputEl;
 
 	const scrollToLatest = () => {
 		setTimeout(() => text.scrollTop = text.scrollHeight, 200);
@@ -35,7 +35,7 @@ const Console = ({ CWAP }) => {
 
 	useEffect(() => {
 		text = document.getElementById('console-out');
-		input_el = document.getElementById('console-in');
+		inputEl = document.getElementById('console-in');
 		scrollToLatest();
 	});
 
@@ -78,23 +78,23 @@ const Console = ({ CWAP }) => {
 					<input name='input-mac' id='console-in' type='text' onKeyDown={(e) => {
 						switch (e.key) {
 							case 'Enter':
-								if (input_el.value.length > 0) {
-									pushMessage(<div> &gt; {CWAP.sendConsole(input_el.value)}</div>);
+								if (inputEl.value.length > 0) {
+									pushMessage(<div> &gt; {CWAP.sendConsole(inputEl.value)}</div>);
 									hispos = 0;
-									history.push(input_el.value);
-									input_el.value = '';
+									history.push(inputEl.value);
+									inputEl.value = '';
 									scrollToLatest();
 								}
 								break;
 							case 'ArrowUp':
 								if (history.length === 0) break;
 								if (--hispos < 0) hispos = history.length - 1;
-								input_el.value = history[hispos];
+								inputEl.value = history[hispos];
 								break;
 							case 'ArrowDown':
 								if (history.length === 0) break;
 								if (++hispos >= history.length) hispos = 0;
-								input_el.value = history[hispos];
+								inputEl.value = history[hispos];
 								break;
 						}
 					}} autoComplete='off' />
