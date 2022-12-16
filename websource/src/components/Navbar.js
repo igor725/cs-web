@@ -129,9 +129,9 @@ const Navbar = props => {
 						<div className='authors'>
 							<div className='author'>
 								<div className='author-head'>
-									<img src={author1} />
+									<img src={author1} alt='igor725 github pfp' />
 									<div>
-										<a href='https://github.com/igor725'>@igor725 github</a>
+										<a target="_blank" rel="noopener noreferrer" href='https://github.com/igor725'>@igor725 github</a>
 										<p>BACKEND</p>
 									</div>
 								</div>
@@ -139,9 +139,9 @@ const Navbar = props => {
 							</div>
 							<div className='author'>
 								<div className='author-head'>
-									<img src={author2} />
+									<img src={author2} alt='wildrun0 github pfp' />
 									<div>
-										<a href='https://github.com/wildrun0'>@wildrun0 github</a>
+										<a target="_blank" rel="noopener noreferrer" href='https://github.com/wildrun0'>@wildrun0 github</a>
 										<p>FRONTEND</p>
 									</div>
 								</div>
@@ -161,22 +161,22 @@ const Navbar = props => {
 				<div className='navbar-head'>
 					<h3 style={{ cursor: 'pointer' }} onClick={showAuthors}>CServer WebAdmin</h3>
 					<div style={{ width: '100%', background: 'red', height: '4px' }} title='WebSocket connection: ' className='websocketStatus' />
-					<div className='authors'>
+					<div className='authors' style={{cursor: "default"}}>
 						<div className='author'>
 							<div className='author-head'>
-								<img src={author1} />
-								<div>
-									<a href='https://github.com/igor725'>@igor725 github</a>
-									<p>BACKEND</p>
+								<img src={author1} alt='igor725 github pfp' />
+									<div>
+										<a target="_blank" rel="noopener noreferrer" href='https://github.com/igor725'>@igor725 github</a>
+										<p>BACKEND</p>
+									</div>
 								</div>
+								<p>CWAP protocol dev & genius</p>
 							</div>
-							<p>CWAP protocol dev & genius</p>
-						</div>
 						<div className='author'>
 							<div className='author-head'>
-								<img src={author2} />
+								<img src={author2} alt='wildrun0 github pfp' />
 								<div>
-									<a href='https://github.com/wildrun0'>@wildrun0 github</a>
+									<a target="_blank" rel="noopener noreferrer" href='https://github.com/wildrun0'>@wildrun0 github</a>
 									<p>FRONTEND</p>
 								</div>
 							</div>
@@ -185,14 +185,14 @@ const Navbar = props => {
 					</div>
 				</div>
 			)}
-			<div className='buttons'>
-				<Link to='/' onClick={processLink}>
+			<div className='buttons' onClick={processLink}>
+				<Link to='/'>
 					<FontAwesomeIcon icon={solid('house')} /> Home
 				</Link>
-				<Link to='/console' onClick={processLink}>
+				<Link to='/console'>
 					<FontAwesomeIcon icon={solid('terminal')} /> Terminal
 				</Link>
-				<Link to='/pluginmanager' onClick={processLink}>
+				<Link to='/pluginmanager'>
 					<FontAwesomeIcon icon={solid('bars-progress')} /> Plugin Manager
 				</Link>
 				{(!isMobile) && (

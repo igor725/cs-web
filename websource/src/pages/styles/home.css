@@ -67,6 +67,6 @@
 	.homeMenu>div {
 		justify-self: center;
 		box-sizing: border-box;
+		z-index: 998;
 	}
-
 }

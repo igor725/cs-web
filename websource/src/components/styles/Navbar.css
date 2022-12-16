@@ -62,6 +62,10 @@ body {
 	border-bottom-right-radius: 12px;
 }
 
+.author>p{
+	font-size: 13px;
+}
+
 .lightmode .author>p {
 	color: black;
 }
@@ -331,6 +335,7 @@ body {
 		font-size: 21px;
 		width: 100%;
 		margin: revert;
+		text-align: center;
 	}
 
 	.buttons {
@@ -361,7 +366,7 @@ body {
 	.navbar-head {
 		width: 100%;
 		grid-gap: 10px;
-		grid-template-columns: repeat(3, 1fr);
+		grid-template-columns: 0.25fr 1fr 0.25fr;
 		z-index: 999;
 		background: rgb(36 36 36);
 	}
@@ -383,12 +388,11 @@ body {
 		transition: 0.5s;
 		height: 50px;
 		color: #6d7264;
-		margin: 15px;
+		margin: auto;
 	}
 
 	.authors {
-		width: 280px; 
-		z-index: 0;
+		width: 262px; 
 		grid-gap: 8px;
 	}
 
@@ -397,12 +401,12 @@ body {
 		font-size: 16px;
 	}
 
-	.author>p{
-		height: 0;
+	.author-head>div>p {
+		font-size: 14px;
 	}
 
-	.author-head>div>p {
-		font-size: 12.5px;
+	.author>p{
+		font-size: 15px;
 	}
 
 	@keyframes authors-moveout {
@@ -424,4 +428,8 @@ body {
 			margin-top: -100%;
 		}
 	}
+
+	/* .author>p{
+		font-size: 16px;
+	} */
 }
