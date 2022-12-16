@@ -28,7 +28,12 @@ const Navbar = props => {
 	const authors = document.getElementsByClassName('authors')[0];
 
 	const closeAuthors = (e) => {
-		if (isAuthors && e.target.innerHTML !== 'CServer WebAdmin'){
+		const targ = e.target;
+		if (
+			isAuthors && 
+			targ.innerHTML !== 'CServer WebAdmin' &&
+			targ.parentElement.parentElement.className !== 'author-head'
+		){
 			authors.classList.remove('show-authors');
 			authors.classList.add('hide-authors');
 			setTimeout(() => authors.classList.remove('hide-authors'), 750);
