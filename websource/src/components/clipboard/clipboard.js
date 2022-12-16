@@ -17,17 +17,20 @@ const Clipboard = () => {
             copyMenu.style.visibility = 'hidden';
             copyMenu.style.opacity = '0';
         }
-    }
+    };
+
+    const hideOnClick = (event) => {
+        if (!event.target.matches('.copyboard')) {
+            showElement(false);
+            if (prevCopy) prevCopy.classList.remove('selected-text');
+        }
+    };
+
     useEffect(() => {
         copyMenu = document.getElementsByClassName('copyboard')[0];
-        window.onclick = (event) => {
-            if (!event.target.matches('.copyboard')) {
-                showElement(false);
-                if (prevCopy) prevCopy.classList.remove('selected-text');
-            }
-        };
+        document.addEventListener('mousedown', hideOnClick)
         return () => {
-            window.onclick = '';
+            document.removeEventListener('mousedown', hideOnClick)
         };
     });
     doCopy = (e) => {

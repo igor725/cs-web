@@ -389,6 +389,7 @@ body {
 	.authors {
 		width: 280px; 
 		z-index: 0;
+		grid-gap: 8px;
 	}
 
 	.author {
@@ -398,6 +399,10 @@ body {
 
 	.author>p{
 		height: 0;
+	}
+
+	.author-head>div>p {
+		font-size: 12.5px;
 	}
 
 	@keyframes authors-moveout {

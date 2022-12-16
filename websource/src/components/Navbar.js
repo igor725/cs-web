@@ -20,12 +20,21 @@ const Navbar = props => {
 
 	window.localStorage.setItem('DARKMODE_STATE', isDarkMode);
 	const currentLocation = useLocation().pathname;
+
 	const isMobile = (window.screen.width <= 600);
 	const navbarBtns = document.getElementsByClassName('buttons')[0];
 	const openBtn = document.getElementById('navbar-mobile-btn');
 	const root = document.querySelector(':root');
 	const authors = document.getElementsByClassName('authors')[0];
 
+	const closeAuthors = (e) => {
+		if (isAuthors && e.target.innerHTML !== 'CServer WebAdmin'){
+			authors.classList.remove('show-authors');
+			authors.classList.add('hide-authors');
+			setTimeout(() => authors.classList.remove('hide-authors'), 750);
+			isAuthors = false;
+		}
+	}
 
 	const showAuthors = () => {
 		if (isAuthors) {
@@ -97,14 +106,10 @@ const Navbar = props => {
 			}
 			prevСolored = els;
 		}
-		window.onclick = (e) => {
-			if (isAuthors && e.target.innerHTML !== 'CServer WebAdmin'){
-				authors.classList.remove('show-authors');
-				authors.classList.add('hide-authors');
-				setTimeout(() => authors.classList.remove('hide-authors'), 750);
-				isAuthors = false;
-			}
-		}
+		document.addEventListener('mousedown', closeAuthors);
+		return () => {
+            document.removeEventListener("mousedown", closeAuthors)
+        };
 	});
 
 	return (
