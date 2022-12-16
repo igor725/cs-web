@@ -29,14 +29,6 @@
 	height: 18px;
 }
 
-.darkmode .plugin-info>table td a:is(:visited, :link) {
-	color: white;
-}
-
-.lightmode .plugin-info>table td a:is(:visited, :link) {
-	color: black;
-}
-
 .darkmode .plugin-info>table {
 	color: white;
 }

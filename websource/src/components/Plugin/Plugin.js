@@ -72,7 +72,7 @@ const Plugin = props => {
 						<tr>
 							<td>Homepage: </td>
 							<td id='link'>
-								{props.home && (<a href={props.home} target='_blank' rel='noreferrer'>Author's link</a>) || ('Not included')}</td>
+								{props.home && (<a href={props.home} target='_blank' rel='noreferrer' className='pretty-link'>Author's link</a>) || ('Not included')}</td>
 						</tr>
 					</tbody>
 				</table>

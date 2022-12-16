@@ -80,14 +80,6 @@
 	width: auto;
 }
 
-.darkmode .worldCart_info table a {
-	color: white;
-}
-
-.lightmode .worldCart_info table a {
-	color: black;
-}
-
 .worldCart_info {
 	color: rgb(219, 219, 219);
 }
