@@ -83,7 +83,6 @@ static inline enum _WsState ustate(cs_char s) {
 	switch (s) {
 		case 'H': return WSS_HOME;
 		case 'R': return WSS_CONSOLE;
-		case 'C': return WSS_CFGEDIT;
 		case 'E': return WSS_PLUGINS;
 		default:  return WSS_INVALID;
 	}
@@ -201,6 +200,10 @@ static inline void sendinfo(NetBuffer *nb, cs_str str) {
 
 static inline void senderror(NetBuffer *nb, cs_str str) {
 	genpacket(nb, "NE^s", str);
+}
+
+static inline void sendwarn(NetBuffer *nb, cs_str str) {
+	genpacket(nb, "NW^s", str);
 }
 
 static void kickplayer(NetBuffer *nb, ClientID id) {
@@ -350,6 +353,11 @@ void handlewebsockmsg(struct _HttpClient *hc) {
 							data += 6;
 							continue;
 						}
+
+						sendwarn(&hc->nb, "Using WebAdmin without a password set is dangerous!\n"
+							"We recommend you to set a password using this command:\n"
+							"\"web set password <desiredpassword>\""
+						);
 					}
 					break;
 				case 34:
@@ -409,10 +417,6 @@ void handlewebsockmsg(struct _HttpClient *hc) {
 
 					case WSS_CONSOLE:
 						sendconsolestate(hc);
-						break;
-
-					case WSS_CFGEDIT:
-						genpacket(&hc->nb, "SC^!");
 						break;
 
 					case WSS_PLUGINS:

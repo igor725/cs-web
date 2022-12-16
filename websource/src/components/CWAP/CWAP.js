@@ -13,7 +13,7 @@ export let worldsList = [];
 export let pluginsList = [];
 export let scriptsList = [];
 
-let softwareName = 'bebra/v1337';
+let softwareName = 'loading...';
 let currentPage = null;
 
 const getObject = (arr, id) => {

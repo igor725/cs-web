@@ -15,17 +15,21 @@ IF EXIST "..\cs-lua\src\luaitf.h" (
 	CALL ..\cs-lua\vars.bat
 )
 
-IF "%PLUGIN_INSTALL%"=="1" (
-	IF "%CSWEB_BUILD_FRONTEND%"=="1" (
-		PUSHD %ROOT%\websource
-		npm install && npm run build
-		IF NOT "%ERRORLEVEL%"=="0" (
-			POPD
-			ECHO Failed to build webdata
-			EXIT /B 1
-		)
+IF "%CSWEB_BUILD_FRONTEND%"=="1" (
+	PUSHD %ROOT%\websource
+	npm install && npm run build
+	IF NOT "%ERRORLEVEL%"=="0" (
 		POPD
-
-		XCOPY /E /S /Y "%ROOT%\websource\build\" "%SERVER_OUTROOT%\webdata\"
+		ECHO Failed to build webdata
+		EXIT /B 1
 	)
+	POPD
+
+	IF "%PLUGIN_INSTALL%"=="1" (
+		XCOPY /E /S /Y "%ROOT%\websource\build\" "%SERVER_OUTROOT%\webdata\"
+	) ELSE (
+		XCOPY /E /S /Y "%ROOT%\websource\build\" "%OUTDIR%\webdata\"
+	)
+
+	RMDIR /S /Q "%ROOT%\websource\build\"
 )

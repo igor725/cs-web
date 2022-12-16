@@ -113,9 +113,6 @@ const Navbar = props => {
 				<Link to='/console' onClick={processLink}>
 					<FontAwesomeIcon icon={solid('terminal')} /> Terminal
 				</Link>
-				<Link to='/configeditor' onClick={processLink}>
-					<FontAwesomeIcon icon={solid('pen-to-square')} /> Config Editor
-				</Link>
 				<Link to='/pluginmanager' onClick={processLink}>
 					<FontAwesomeIcon icon={solid('bars-progress')} /> Plugin Manager
 				</Link>
