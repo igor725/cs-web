@@ -16,16 +16,18 @@
     width: 75%;
 }
 
-.darkmode .plugins-grid > div{
+:where(.darkmode, .lightmode) :where(.plugins-grid)>div {
     height: min-content;
     border-radius: 50px;
+}
+
+.darkmode .plugins-grid>div {
     background-color: #35313c;
     box-shadow: 10px 10px 21px #1f1f1f,
                 -10px -10px 21px #242424;
 }
-.lightmode .plugins-grid > div{
-    height: min-content;
-    border-radius: 50px;
+
+.lightmode .plugins-grid>div {
     background-color: #f0f0f3;
     box-shadow: 10px 10px 21px #d3d3d6,
                 -10px -10px 21px #fff;
@@ -45,12 +47,8 @@
     font-size: 36px;
 }
 
-:is(.darkmode) :is(.plugins, .scripts) :is(h3) {
+:is(.darkmode) :is(.plugins, .scripts) h3 {
     color: white;
-}
-
-:is(.lightmode) :is(.plugins, .scripts) :is(h3) {
-    color: black;
 }
 
 @media only screen and (max-width: 600px) {

@@ -2,6 +2,10 @@
 	display: contents;
 }
 
+.playerDropdown li {
+	margin-bottom: 8px;
+}
+
 .show {
 	margin-top:10px;
 	display: grid !important;

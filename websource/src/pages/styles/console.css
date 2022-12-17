@@ -22,8 +22,7 @@
 	grid-template-columns: 0fr 1fr;
 }
 
-.lightmode .inputting-field #console-in,
-.lightmode #console-out {
+:is(.lightmode) :is(#console-in, #console-out){
 	color: black;
 }
 
@@ -55,9 +54,7 @@
 	border: 1px solid #c7c7c7;
 }
 
-.lightmode #console-out,
-.lightmode #console-in,
-.lightmode .console-in-dot {
+:is(.lightmode) :is(#console-out, #console-in, .console-in-dot){
 	background: #ffffff;
 }
 
@@ -85,6 +82,9 @@
 
 #console-in {
 	border-bottom: 1px solid #4d4c50 !important;
+	border-bottom-right-radius: 12px;
+	border-top-left-radius: 0px;
+	border-bottom-left-radius: 0px;
 }
 
 #console-out,
@@ -114,12 +114,6 @@
 #console-out p {
 	margin: 0;
 	padding-top: 2px;
-}
-
-#console-in {
-	border-bottom-right-radius: 12px;
-	border-top-left-radius: 0px;
-	border-bottom-left-radius: 0px;
 }
 
 #console-out:hover {

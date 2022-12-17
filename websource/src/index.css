@@ -5,6 +5,8 @@ html {
 
 body {
 	margin: 0;
+	padding: 0;
+	margin: 0 auto;
 	font-family: "NunitoRegular";
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;

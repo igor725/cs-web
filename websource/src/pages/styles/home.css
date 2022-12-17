@@ -10,7 +10,7 @@
 	color: #1b3350;
 }
 
-:is(#link, #wTextureLink) :where(a) {
+:is(#link, #wTextureLink) a {
 	color: #796de1;
 	border-radius: 50px;
 	padding: 8px;

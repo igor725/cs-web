@@ -1,4 +1,4 @@
-.darkmode .playersOnline {
+:is(.darkmode) :is(.playersOnline, .playersOnline>div) {
 	background: rgb(46, 46, 46);
 }
 
@@ -10,13 +10,12 @@
 	color: rgb(194, 194, 194);
 }
 
-.lightmode .playersOnline {
-	border: 1px solid rgb(230, 230, 230);
+:is(.lightmode) :is(.playersOnline>div, .playersOnline) {
 	background: rgb(221, 221, 221);
 }
 
-.lightmode .playersOnline > div {
-	background: rgb(221, 221, 221);;
+.lightmode .playersOnline {
+	border: 1px solid rgb(230, 230, 230);
 }
 
 .playersOnline {
@@ -28,13 +27,9 @@
 	height: 410px;
 }
 
-.playersOnline > div {
+.playersOnline>div {
 	position: sticky;
 	top: 0;
-}
-
-.darkmode .playersOnline > div {
-	background: rgb(46, 46, 46);
 }
 
 .playersOnline h3 {
@@ -42,38 +37,31 @@
 	text-align: center;
 	font-size: 22px;
 }
-.plist, #plist{
+
+.plist,
+#plist {
 	scrollbar-width: thin;
 }
-.playersOnline ul, .plist {
-	overflow-x: hidden;
-    overflow-y: auto;
-	list-style: none;
-	padding: 0;
-	padding-left: 15px;
-}
 
-.playersOnline ul div li, .plist li {
-	margin-bottom: 8px;
+.playersOnline ul,
+.plist {
+	overflow-x: hidden;
+	overflow-y: auto;
+	list-style: none;
+	padding-left: 18px;
 }
 
 .lightmode ul li::before {
 	color: green !important;
 }
 
-.playersOnline ul li::before, .plist li::before {
+:where(.playersOnline ul, .plist) li::before {
 	content: "\2022";
-	/* Add content: \2022 is the CSS Code/unicode for a bullet */
 	color: greenyellow;
-	/* Change the color */
 	font-weight: bold;
-	/* If you want it to be bold */
 	display: inline-block;
-	/* Needed to add space between the bullet and the text */
 	width: 1em;
-	/* Also needed for space (tweak if needed) */
 	margin-left: -1em;
-	/* Also needed for space (tweak if needed) */
 }
 
 .playersOnline hr {
@@ -88,6 +76,7 @@
 		width: 100%;
 		grid-template-rows: 0.123fr 1fr;
 	}
+
 	.playersOnline h3 {
 		font-size: 26px;
 	}

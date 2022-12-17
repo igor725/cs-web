@@ -1,13 +1,13 @@
 .worlds {
-    border: 1px solid rgb(56, 56, 56);
-    height: 590px;
-    justify-self: center;
-    background: rgb(46, 46, 46);
+	border: 1px solid rgb(56, 56, 56);
+	height: 590px;
+	justify-self: center;
+	background: rgb(46, 46, 46);
 	overflow-x: hidden;
-    overflow-y: auto;
-    width: 60%;
-    min-width: 700px;
-	scrollbar-width: none; /* For Firefox */
+	overflow-y: auto;
+	width: 60%;
+	min-width: 700px;
+	scrollbar-width: none;
 }
 
 .worlds::-webkit-scrollbar {
@@ -29,15 +29,15 @@
 	background: rgb(46, 46, 46);
 }
 
-.lightmode .world-grid{
+.lightmode .world-grid {
 	background: #d1cbd3;
 }
 
 .world-grid {
-    background: #3a373a;
-    display: grid;
-    grid-template-columns: 0.65fr 1fr 0fr;
-    padding: 18px;
+	background: #3a373a;
+	display: grid;
+	grid-template-columns: 0.65fr 1fr 0fr;
+	padding: 18px;
 	border-radius: 50px;
 }
 
@@ -61,7 +61,7 @@
 	color: #142532;
 }
 
-.worldCart_info > table {
+.worldCart_info>table {
 	border-collapse: collapse;
 	table-layout: fixed;
 	width: 100%;
@@ -76,7 +76,7 @@
 	width: 90px
 }
 
-.worldCart_info table td + td {
+.worldCart_info table td+td {
 	width: auto;
 }
 
@@ -97,15 +97,15 @@
 }
 
 #wName {
-    width: 100%;
-    color: #dbdbdb;
-    word-wrap: break-word;
-    margin: 0;
-    text-align: center;
+	width: 100%;
+	color: #dbdbdb;
+	word-wrap: break-word;
+	margin: 0;
+	text-align: center;
 	border-radius: 50px;
 	padding: 3px;
-    font-size: 20px;
-    background: #318976;
+	font-size: 20px;
+	background: #318976;
 }
 
 .plist {
@@ -117,7 +117,6 @@
 .lightmode .plist {
 	color: black !important;
 }
-
 
 .world h2 {
 	margin: 0;
@@ -146,15 +145,16 @@
 	display: block;
 }
 
-.world, .worldBG {
+.world,
+.worldBG {
 	transition-duration: 1.2s;
 }
 
-.world h2{
+.world h2 {
 	transition: all 1.3s ease;
 }
 
-.world-grid:hover .world h2{
+.world-grid:hover .world h2 {
 	background: white;
 	color: black;
 }
@@ -189,11 +189,12 @@
 }
 
 @media only screen and (max-width: 600px) {
-	#wName{
+	#wName {
 		width: 90%;
 		margin: auto;
 		height: 30px;
 	}
+
 	.worlds {
 		min-width: 350px !important;
 		width: 100%;
@@ -233,7 +234,7 @@
 		height: 100%;
 	}
 
-	.worldCart_info > table {
+	.worldCart_info>table {
 		font-size: 18px;
 	}
 
@@ -242,8 +243,8 @@
 		width: 100%;
 	}
 
-	.worldCart_players ul{
-		padding-left:20px;
+	.worldCart_players ul {
+		padding-left: 20px;
 		height: auto;
 		max-height: 150px;
 	}
@@ -260,5 +261,4 @@
 	.worldCart_info table td {
 		width: 110px
 	}
-	
 }
