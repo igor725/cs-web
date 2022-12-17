@@ -32,10 +32,14 @@ const Console = ({ CWAP }) => {
 		setTimeout(() => text.scrollTop = text.scrollHeight, 200);
 	};
 
+	
 	useEffect(() => {
 		text = document.getElementById('console-out');
 		inputEl = document.getElementById('console-in');
 		scrollToLatest();
+		const preventUp = e => {if (e.key === "ArrowUp") e.preventDefault();}
+		document.addEventListener("keydown", preventUp);
+		return () => document.removeEventListener("keydown", preventUp);
 	});
 
 	const pushMessage = (msg) => {

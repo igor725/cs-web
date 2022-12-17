@@ -15,7 +15,7 @@ const Pages = ({ cwap }) => {
 					<Route path='/' element={<Home CWAP={cwap} />} />
 					<Route path='/console' element={<Console CWAP={cwap} />} />
 					<Route path='/pluginmanager' element={<PManager CWAP={cwap} />} />
-					<Route path='*' element={<NotFound/>} />
+					<Route path='/404' element={<NotFound/>} />
 				</Routes>
 			</Layout>
 		</BrowserRouter>

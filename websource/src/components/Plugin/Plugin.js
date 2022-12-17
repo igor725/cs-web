@@ -73,7 +73,7 @@ const Plugin = props => {
 		};
 	})
 	return (
-		<div className='plugin' name={extName}>
+		<div className='plugin' id={extId}>
 			<h4>{extName}</h4>
 			<div className='plugin-info'>
 				<table>
