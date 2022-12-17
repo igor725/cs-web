@@ -1,0 +1,32 @@
+.darkmode .notfound {
+    color: white;
+}
+
+.notfound-header>h1{
+    margin:0;
+    font-size: 15em;
+    text-align: center;
+}
+
+.lightmode .notfound-header>p{
+    color:#747474
+}
+
+.notfound-header>p{
+    color: silver;
+    text-align: center;
+}
+
+.notfound-buttons {
+    margin-top: 35px;
+    display: flex;
+    justify-content: center;
+    grid-gap: 80px;
+}
+
+.notfound-buttons .btn{
+    width: 220px;
+    border-radius: 50px;
+    border: none;
+    padding: 12px;
+}

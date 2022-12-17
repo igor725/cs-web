@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import Clipboard, { doCopy } from '../components/clipboard/clipboard';
 import './styles/console.css';
-import '../fonts/UbuntuMono-Regular.ttf'
 
 var Convert = require('ansi-to-html');
 var convert = new Convert({

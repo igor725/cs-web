@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
-import './Plugin.css';
+import { useEffect } from 'react';
 import { webId } from '../CWAP/CWAP';
 import Slidebutton from '../buttons/slidebutton';
+import './Plugin.css';
 
 let shiftPressed = false;
 let pressedEl;

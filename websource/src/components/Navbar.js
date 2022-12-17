@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './styles/Navbar.css';
 import { Link, useLocation } from 'react-router-dom';
 import { DarkModeToggle } from 'react-dark-mode-toggle-2';

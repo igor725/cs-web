@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
-import './styles/Worlds.css';
+import { useEffect, useState, useCallback } from 'react';
 import { playersList, worldsList } from './CWAP/CWAP';
-import PlayerDropdown from './PlayerList/PlayerDropdown';
 import { prevPlayer } from './PlayersList';
+import PlayerDropdown from './PlayerList/PlayerDropdown';
 import Slidebutton from './buttons/slidebutton';
 import Fancyselect from './fancyselect/fancyselect';
+import './styles/Worlds.css';
 
 export let updateWorlds = () => { }
 
@@ -97,8 +97,8 @@ const World = props => {
 };
 
 const Worlds = props => {
-	const [, updateState] = React.useState();
-	const forceUpdate = React.useCallback(() => updateState({}), []);
+	const [, updateState] = useState();
+	const forceUpdate = useCallback(() => updateState({}), []);
 	updateWorlds = forceUpdate;
 	const cwap = props.cwap;
 

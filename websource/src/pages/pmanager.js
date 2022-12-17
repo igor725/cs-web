@@ -1,13 +1,13 @@
-import React from 'react';
-import Plugin from '../components/Plugin/Plugin';
+import { useState, useCallback } from 'react';
 import { pluginsList, scriptsList } from '../components/CWAP/CWAP';
+import Plugin from '../components/Plugin/Plugin';
 import './styles/pmanager.css'
 
 export let updatePlugins = () => { }
 
 const PManager = ({ CWAP }) => {
-    const [, updateState] = React.useState();
-    const forceUpdate = React.useCallback(() => updateState({}), []);
+    const [, updateState] = useState();
+    const forceUpdate = useCallback(() => updateState({}), []);
     updatePlugins = forceUpdate;
     return (
         <div className='plugins-main'>

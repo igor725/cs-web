@@ -1,4 +1,3 @@
-import React from 'react';
 import { MD5 } from 'md5-js-tools';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

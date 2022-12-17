@@ -1,8 +1,7 @@
-import React from 'react';
-import './styles/home.css';
 import PlayersList from '../components/PlayersList';
 import Statistic from '../components/Statistic';
 import Worlds from '../components/Worlds';
+import './styles/home.css';
 
 const Home = ({ CWAP }) => {
 	return (

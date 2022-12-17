@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
-import PlayerDropdown from './PlayerList/PlayerDropdown';
+import { useEffect, useState, useCallback } from 'react';
 import { playersList } from './CWAP/CWAP';
+import PlayerDropdown from './PlayerList/PlayerDropdown';
 import './styles/PlayersList.css';
 
 export let prevPlayer;
@@ -35,8 +35,8 @@ export let updateGlobalList = () => {}
 
 
 const PlayersList = ({ cwap }) => {
-	const [, updateState] = React.useState();
-	const forceUpdate = React.useCallback(() => updateState({}), []);
+	const [, updateState] = useState();
+	const forceUpdate = useCallback(() => updateState({}), []);
 	updateGlobalList = forceUpdate;
 
 	useEffect(() => {

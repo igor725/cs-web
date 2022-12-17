@@ -1,12 +1,9 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { toast } from 'react-toastify';
-import useWebSocket, { ReadyState } from 'react-use-websocket';
-import './styles/WSC.css';
-import loadingBar from '../../static/noconnection.svg';
-
-// Я в ахуе что можно импортировать из файла,
-// который импортирует из ЭТОГО файла
 import { processCommand } from './CWAP';
+import useWebSocket, { ReadyState } from 'react-use-websocket';
+import loadingBar from '../../static/noconnection.svg';
+import './styles/WSC.css';
 
 const setBlur = (state) => {
 	document.getElementById('main').classList[(['add', 'remove'][state ? 0 : 1])]('blurry');
@@ -64,7 +61,6 @@ let WebSocket = () => {
 		},
 		onError: (err) => {
 			toast.error(err);
-			// setBlur(true);
 		},
 		onMessage: (msg) => {
 			msg.data.text().then((data) => {
@@ -81,7 +77,6 @@ let WebSocket = () => {
 			});
 		},
 		share: true,
-		// retryOnError: true,
 		protocols: 'cserver-cpl',
 		reconnectInterval: 3,
 		reconnectAttempts: 15,
@@ -122,7 +117,7 @@ let WebSocket = () => {
 					message += arg;
 					break;
 				default:
-					message += (arg).toString();
+					arg && (message += (arg).toString());
 					break;
 			}
 

@@ -1,6 +1,5 @@
-import React from 'react';
-import './PlayerDropdown.css';
 import { showMenu } from '../PlayersList';
+import './PlayerDropdown.css';
 
 const PlayerDropdown = props => {
 	const playerId = props.id
