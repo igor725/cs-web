@@ -16,6 +16,7 @@ export let scriptsList = [];
 export let webId;
 export let startupTime = 0;
 export let ramSize = -1;
+export let ramUsage = -1;
 
 let softwareName = 'loading...';
 let currentPage = null;
@@ -251,6 +252,10 @@ export let processCommand = (data) => {
 				}
 				updateAll();
 				break;
+			case 'R':
+				spcnt = 1;
+				ramUsage = parseInt(data_splitted[0].substring(1));
+				break;
 			case 'S':
 				const state = data_splitted[0].charAt(1);
 				console.log('State switched to:', state);
@@ -279,6 +284,7 @@ export let processCommand = (data) => {
 						}
 
 						spcnt += 2;
+						ramUsage = parseInt(data_splitted[spcnt++]);
 						updateAll();
 						break;
 

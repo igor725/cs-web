@@ -29,9 +29,9 @@ if [ $BUILD_FRONTEND -eq 1 ]; then
 	popd;
 
 	if [ $PLUGIN_INSTALL -eq 1 ]; then
-		cp -rv "$ROOT/websource/build/" "$SERVER_OUTROOT/webdata/";
+		mv "$ROOT/websource/build" "$SERVER_OUTROOT/webdata";
 	else
-		cp -rv "$ROOT/websource/build/" "$OUTDIR/webdata/";
+		mv "$ROOT/websource/build" "$OUTDIR/webdata";
 	fi
 fi
 

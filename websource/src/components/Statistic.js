@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { playersList } from './CWAP/CWAP';
-import { startupTime, ramSize } from './CWAP/CWAP';
+import { startupTime, ramSize, ramUsage } from './CWAP/CWAP';
 import './styles/Statistic.css';
 
 let maxPlayers = 0;
@@ -44,7 +44,7 @@ const Statistic = ({ cwap }) => {
 						</tr>
 						<tr>
 							<td>RAM: </td>
-							<td>228MB / {ramSize}MB</td>
+							<td>{ramUsage}MB / {ramSize}MB</td>
 						</tr>
 					</tbody>
 				</table>

@@ -3,7 +3,9 @@
 #include <list.h>
 #include <websock.h>
 #include <str.h>
-
+#ifdef CORE_USE_WINDOWS
+#include <psapi.h>
+#endif
 #include "defines.h"
 
 static inline cs_str getcodestr(cs_uint32 code) {
@@ -154,9 +156,11 @@ THREAD_PUBFUNC(WebThread) {(void)param;
 					while (WebSock_Tick(hc->wsh, &hc->nb))
 						if (hc->wsh->paylen > 0)
 							handlewebsockmsg(hc);
+
 					if (WebSock_GetErrorCode(hc->wsh) != WEBSOCK_ERROR_CONTINUE) {
 						WL(Error, "WebSocket error: %s", WebSock_GetError(hc->wsh));
 						hc->state = CHS_CLOSING;
+						break;
 					}
 					break;
 				case CHS_REQUEST:
@@ -239,6 +243,45 @@ THREAD_PUBFUNC(WebThread) {(void)param;
 				case CHS_CLOSED:
 					break;
 			}
+		}
+
+		static cs_uint64 lastupd = 0, prevmem = 0;
+		cs_uint64 ctime = Time_GetMSec();
+		if (lastupd < ctime) {
+			prevmem = WebState.usagemem;
+#			if defined(CORE_USE_WINDOWS)
+				PROCESS_MEMORY_COUNTERS_EX pmc;
+
+				if (GetProcessMemoryInfo(GetCurrentProcess(), (void *)&pmc, sizeof(pmc)))
+					WebState.usagemem = pmc.PrivateUsage / (1024 * 1024);
+#			elif defined(CORE_USE_DARWIN)
+					WebState.usagemem = -1;
+#			elif defined(CORE_USE_UNIX)
+				cs_char line[1024];
+				cs_file stat = File_Open("/proc/self/status", "r");
+				if (stat) {
+					while (File_ReadLine(stat, line, sizeof(line)) > 0) {
+						if (Memory_Compare((void *)line, (void *)"VmRSS:", 6)) {
+							for (cs_size i = 7; i < sizeof(line); i++) {
+								if (line[i] == '\x20') continue;
+								WebState.usagemem = (cs_size)String_ToInt(&line[i]) / 1024;
+								break;
+							}
+						}
+					}
+					File_Close(stat);
+				}
+#			endif
+
+			if (prevmem != WebState.usagemem) {
+				List_Iter(tmp, WebState.clients) {
+					struct _HttpClient *hc = AList_GetValue(tmp).ptr;
+					if (!hc->cpls || hc->cpls->wsstate != WSS_HOME) continue;
+					genpacket(&hc->nb, "R6", WebState.usagemem);
+				}
+			}
+
+			lastupd = ctime + 5000;
 		}
 
 		Mutex_Unlock(WebState.mutex);
