@@ -25,6 +25,10 @@ struct _WebState WebState = {
 	}
 };
 
+#ifdef CORE_USE_LINUX
+#include <sys/sysinfo.h>
+#endif
+
 cs_bool Plugin_LoadEx(cs_uint32 id) {
 	if (!Server_GetInfo(&ServInf, sizeof(ServInf))) {
 		WL(Warn, "Failed to get server version info");
@@ -35,6 +39,18 @@ cs_bool Plugin_LoadEx(cs_uint32 id) {
 
 	WebState.self = id;
 	WebState.cfg = Config_NewStore("web");
+#if defined(CORE_USE_WINDOWS)
+	if (GetPhysicallyInstalledSystemMemory(&WebState.totalmem))
+		WebState.totalmem /= 1024;
+	else
+		WebState.totalmem = (cs_uint64)-1;
+#elif defined(CORE_USE_LINUX)
+	struct sysinfo si;
+	if (sysinfo(&si) == 0)
+		WebState.totalmem = (si.totalram * si.mem_unit) / 1024 * 1024;
+	else
+		WebState.totalmem = -1;
+#endif
 
 	CEntry *ent;
 	ent = Config_NewEntry(WebState.cfg, "enabled", CONFIG_TYPE_BOOL);

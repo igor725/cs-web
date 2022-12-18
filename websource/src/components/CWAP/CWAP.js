@@ -15,6 +15,7 @@ export let scriptsList = [];
 
 export let webId;
 export let startupTime = 0;
+export let ramSize = -1;
 
 let softwareName = 'loading...';
 let currentPage = null;
@@ -171,9 +172,10 @@ export let processCommand = (data) => {
 						break;
 
 					case 'OK':
-						spcnt = 6;
+						spcnt = 7;
 						softwareName = `${data_splitted[1]}/${data_splitted[2]}`;
 						webId = parseInt(data_splitted[5]);
+						ramSize = parseInt(data_splitted[6]);
 						(user_pass ? doAuthGood(true) : doAuthGood(false));
 						startupTime = parseInt(data_splitted[3]);
 						setCounters(parseInt(data_splitted[4]));

@@ -83,6 +83,7 @@ struct _WebState {
 	Thread thread;
 	Socket fd;
 	AListField *clients;
+	cs_uint64 totalmem;
 
 	struct _LogList {
 		cs_uint32 pos, cnt;

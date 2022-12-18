@@ -331,9 +331,10 @@ static void sendauthok(NetBuffer *nb) {
 	if ((ent = Config_GetEntry(Server_Config, CFG_MAXPLAYERS_KEY)) != NULL)
 		maxplayers = (cs_int16)Config_GetInt(ent);
 
-	genpacket(nb, "AOK^ss6ii",
+	genpacket(nb, "AOK^ss6ii6",
 		ServInf.coreName, ServInf.coreGitTag,
-		Server_StartTime, maxplayers, WebState.self
+		Server_StartTime, maxplayers, WebState.self,
+		WebState.totalmem
 	);
 }
 

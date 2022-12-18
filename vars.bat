@@ -18,7 +18,7 @@ IF EXIST "..\cs-lua\src\luaitf.h" (
 IF "%CSWEB_BUILD_FRONTEND%"=="1" (
 	PUSHD %ROOT%\websource
 	npm install && npm run build
-	IF NOT "%ERRORLEVEL%"=="0" (
+	IF NOT "!ERRORLEVEL!"=="0" (
 		POPD
 		ECHO Failed to build webdata
 		EXIT /B 1
