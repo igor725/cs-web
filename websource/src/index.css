@@ -13,22 +13,14 @@ body {
 }
 
 code {
-	font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-		monospace;
+	font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
-h1,
-h2,
-h3,
-a {
+:is(h1, h2, h3, a) {
 	-webkit-user-select: none;
-	/* Safari */
 	-ms-user-select: none;
-	/* IE 10 and IE 11 */
 	user-select: none;
-	/* Standard syntax */
 	font-family: "NunitoExtraBold";
-	;
 }
 
 @font-face {

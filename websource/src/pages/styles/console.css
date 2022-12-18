@@ -87,12 +87,11 @@
 	border-bottom-left-radius: 0px;
 }
 
-#console-out,
-#console-in {
+:is(#console-out, #console-in){
 	font-family: "UbuntuMono";
 	scrollbar-width: none;
-	-webkit-user-select: none; /* Safari */
-	-ms-user-select: none; /* IE 10+ */
+	-webkit-user-select: none;
+	-ms-user-select: none;
 	user-select: none;
 	overflow: auto;
 	border: 1px solid #4d4c50;

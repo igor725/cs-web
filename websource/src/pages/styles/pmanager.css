@@ -9,8 +9,7 @@
     justify-items: center;
 }
 
-.plugins,
-.scripts {
+:is(.plugins, .scripts) {
     display: grid;
     grid-template-rows: 0fr 1fr;
     width: 75%;
@@ -24,13 +23,13 @@
 .darkmode .plugins-grid>div {
     background-color: #35313c;
     box-shadow: 10px 10px 21px #1f1f1f,
-                -10px -10px 21px #242424;
+        -10px -10px 21px #242424;
 }
 
 .lightmode .plugins-grid>div {
     background-color: #f0f0f3;
     box-shadow: 10px 10px 21px #d3d3d6,
-                -10px -10px 21px #fff;
+        -10px -10px 21px #fff;
 }
 
 .plugins-list {
@@ -52,8 +51,7 @@
 }
 
 @media only screen and (max-width: 600px) {
-    .plugins,
-    .scripts {
+    :is(.plugins, .scripts) {
         width: 100%;
     }
 

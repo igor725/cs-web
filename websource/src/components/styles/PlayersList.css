@@ -38,13 +38,11 @@
 	font-size: 22px;
 }
 
-.plist,
-#plist {
+:is(.plist, #plist){
 	scrollbar-width: thin;
 }
 
-.playersOnline ul,
-.plist {
+:is(.playersOnline ul, .plist){
 	overflow-x: hidden;
 	overflow-y: auto;
 	list-style: none;
@@ -55,7 +53,7 @@
 	color: green !important;
 }
 
-:where(.playersOnline ul, .plist) li::before {
+:is(.playersOnline ul, .plist) li::before {
 	content: "\2022";
 	color: greenyellow;
 	font-weight: bold;

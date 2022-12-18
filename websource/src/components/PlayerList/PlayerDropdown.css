@@ -7,7 +7,7 @@
 }
 
 .show {
-	margin-top:10px;
+	margin-top: 10px;
 	display: grid !important;
 	grid-template-columns: repeat(3, 1fr);
 	position: absolute;
@@ -27,13 +27,13 @@
 
 @keyframes animate-pop {
 	0% {
-	  opacity: 0;
-	  transform: scale(0.5, 0.5);
+		opacity: 0;
+		transform: scale(0.5, 0.5);
 	}
-  
+
 	100% {
-	  opacity: 1;
-	  transform: scale(1, 1);
+		opacity: 1;
+		transform: scale(1, 1);
 	}
 }
 
@@ -43,20 +43,20 @@
 	animation-timing-function: cubic-bezier(.26, .53, .74, 1.48);
 }
 
-.playerMenu > button {
-    color: white;
+.playerMenu>button {
+	color: white;
 	padding: 0px;
-    border: none;
-    cursor: pointer;
-    font-size: 14px;
-    background: transparent;
+	border: none;
+	cursor: pointer;
+	font-size: 14px;
+	background: transparent;
 	font-family: "NunitoExtraBold";
-    transition: all 0.35s ease-in 0s;
+	transition: all 0.35s ease-in 0s;
 	justify-self: center;
 }
 
-.playerMenu button:hover{
-	color:rgb(37, 37, 37);
+.playerMenu button:hover {
+	color: rgb(37, 37, 37);
 }
 
 .playerMenu {
@@ -76,7 +76,7 @@
 		width: 240px;
 	}
 
-	.playerMenu > button {
+	.playerMenu>button {
 		font-size: 16px;
 	}
 }
