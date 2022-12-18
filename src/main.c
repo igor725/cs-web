@@ -17,6 +17,7 @@ Plugin_SetURL("https://github.com/igor725/cs-web");
 ServerInfo ServInf = {0};
 
 struct _WebState WebState = {
+	.totalmem = (cs_uint64)-1,
 	.stopped = false,
 	.alive = false,
 	.clients = NULL,
@@ -25,7 +26,7 @@ struct _WebState WebState = {
 	}
 };
 
-#ifdef CORE_USE_LINUX
+#if defined(CORE_USE_UNIX) && !defined(CORE_USE_DARWIN)
 #include <sys/sysinfo.h>
 #endif
 
@@ -42,14 +43,15 @@ cs_bool Plugin_LoadEx(cs_uint32 id) {
 #if defined(CORE_USE_WINDOWS)
 	if (GetPhysicallyInstalledSystemMemory(&WebState.totalmem))
 		WebState.totalmem /= 1024;
-	else
-		WebState.totalmem = (cs_uint64)-1;
-#elif defined(CORE_USE_LINUX)
+#elif defined(CORE_USE_DARWIN)
+	cs_int32 si[] = {CTL_HW, HW_MEMSIZE};
+	cs_size len = sizeof(WebState.totalmem);
+	if (sysctl(si, 2, &WebState.totalmem, &len, NULL, 0) == 0)
+		WebState.totalmem /= 1024 * 1024;
+#elif defined(CORE_USE_UNIX)
 	struct sysinfo si;
 	if (sysinfo(&si) == 0)
-		WebState.totalmem = (si.totalram * si.mem_unit) / 1024 * 1024;
-	else
-		WebState.totalmem = -1;
+		WebState.totalmem = (si.totalram * si.mem_unit) / (1024 * 1024);
 #endif
 
 	CEntry *ent;
