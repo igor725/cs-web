@@ -6,13 +6,13 @@ import Slidebutton from './buttons/slidebutton';
 import Fancyselect from './fancyselect/fancyselect';
 import './styles/Worlds.css';
 
-export let updateWorlds = () => { }
+export let updateWorlds = () => { };
 
 const wTypes = {
 	0: '🌤️Sunny',
 	1: '🌧️Raining',
 	2: '🌨️Snowing'
-}
+};
 
 const World = props => {
 	const cwap = props.cwap;
@@ -24,7 +24,8 @@ const World = props => {
 			}
 			return true;
 		});
-	}
+	};
+
 	return (
 		<div className='world-grid'>
 			<div className='world' name={props.id} style={{ zIndex: props.pos }}>
@@ -49,9 +50,9 @@ const World = props => {
 						<tr>
 							<td>Textures: </td>
 							<td id='wTextureLink'>
-								{props.texturepack !== 'Default' && (
+								{props.texturepack !== 'Default' ? (
 									<Slidebutton bgcolor='transparent' slidecolor='#786de12f' href={props.home}>Texturepack link</Slidebutton>
-								) || ('Default')}
+								) : ('Default')}
 							</td>
 						</tr>
 						<tr>
@@ -121,6 +122,6 @@ const Worlds = props => {
 			</div>
 		</div>
 	);
-}
+};
 
 export default Worlds;

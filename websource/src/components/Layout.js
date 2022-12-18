@@ -10,7 +10,7 @@ export let setTheme = () => {};
 
 const Layout = ({ CWAP, children }) => {
 	const root = document.getElementsByTagName('body')[0];
-	
+
 	const switchNavBtnColor = (isDarkMode) =>{
 		root.style.setProperty('--navbar-select-color', isDarkMode ? '#664682':'#bf78fd')
 	}

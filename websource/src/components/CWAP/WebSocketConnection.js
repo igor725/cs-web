@@ -90,7 +90,7 @@ let WebSocket = () => {
 				pauseOnHover: true,
 				draggable: true,
 				progress: undefined,
-				theme: ((window.localStorage.getItem('DARKMODE_STATE') === 'true') || false ? 'dark' : 'light'),
+				theme: (window.localStorage.getItem('DARKMODE_STATE') === 'true') ? 'dark' : 'light'
 			});
 		},
 		shouldReconnect: () => true
@@ -125,7 +125,6 @@ let WebSocket = () => {
 		}
 
 		sendMessage(message, false);
-		console.log(`<< ${message}`);
 	};
 
 	const connectionStatus = {

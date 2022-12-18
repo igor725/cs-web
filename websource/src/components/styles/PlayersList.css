@@ -38,11 +38,11 @@
 	font-size: 22px;
 }
 
-:is(.plist, #plist){
+:is(.plist, #plist) {
 	scrollbar-width: thin;
 }
 
-:is(.playersOnline ul, .plist){
+:is(.playersOnline ul, .plist) {
 	overflow-x: hidden;
 	overflow-y: auto;
 	list-style: none;

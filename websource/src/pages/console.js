@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect, useRef, useState, useCallback, cloneElement } from 'react';
 import Clipboard, { doCopy } from '../components/clipboard/clipboard';
 import './styles/console.css';
 
@@ -22,19 +22,17 @@ let messages = [], history = [], hispos = 0;
 export let writeInConsole = () => { };
 
 const Console = ({ CWAP }) => {
-	const [, updateState] = React.useState();
-	const forceUpdate = React.useCallback(() => updateState({}), []);
-
-	let text;
-	let inputEl;
+	const [, updateState] = useState();
+	const forceUpdate = useCallback(() => updateState({}), []);
+	const elRef = useRef([null, null]);
 
 	const scrollToLatest = () => {
-		setTimeout(() => text.scrollTop = text.scrollHeight, 200);
+		setTimeout(() => elRef.current[0].scrollTop = elRef.current[0].scrollHeight, 200);
 	};
 
 	useEffect(() => {
-		text = document.getElementById('console-out');
-		inputEl = document.getElementById('console-in');
+		elRef.current[0] = document.getElementById('console-out');
+		elRef.current[1] = document.getElementById('console-in');
 		scrollToLatest();
 		const preventUp = e => {if (e.key === "ArrowUp") e.preventDefault();}
 		document.addEventListener("keydown", preventUp);
@@ -72,7 +70,7 @@ const Console = ({ CWAP }) => {
 			<div className='console-main'>
 				<div id='console-out' readOnly={true} onContextMenu={doCopy}>
 					{messages.map((msg, i) => {
-						return React.cloneElement(msg, { key: i });
+						return cloneElement(msg, { key: i });
 					})}
 				</div>
 				<div className='inputting-field'>
@@ -80,30 +78,31 @@ const Console = ({ CWAP }) => {
 					<input name='input-mac' id='console-in' type='text' onKeyDown={(e) => {
 						switch (e.key) {
 							case 'Enter':
-								if (inputEl.value.length > 0) {
-									pushMessage(<div> &gt; {CWAP.sendConsole(inputEl.value)}</div>);
-									hispos = 0;
-									history.push(inputEl.value);
-									inputEl.value = '';
+								if (elRef.current[1].value.length > 0) {
+									pushMessage(<div> &gt; {CWAP.sendConsole(elRef.current[1].value)}</div>);
+									history.push(elRef.current[1].value);
+									elRef.current[1].value = '';
 									scrollToLatest();
+									hispos = 0;
 								}
 								break;
 							case 'ArrowUp':
 								if (history.length === 0) break;
 								if (--hispos < 0) hispos = history.length - 1;
-								inputEl.value = history[hispos];
+								elRef.current[1].value = history[hispos];
 								break;
 							case 'ArrowDown':
 								if (history.length === 0) break;
 								if (++hispos >= history.length) hispos = 0;
-								inputEl.value = history[hispos];
+								elRef.current[1].value = history[hispos];
 								break;
+							default: break;
 						}
 					}} autoComplete='off' />
 				</div>
 			</div>
 		</div>
 	);
-}
+};
 
 export default Console;

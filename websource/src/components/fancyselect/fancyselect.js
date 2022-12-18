@@ -6,6 +6,6 @@ const Fancyselect = props => {
             {props.children}
         </select>
     )
-}
+};
 
 export default Fancyselect;

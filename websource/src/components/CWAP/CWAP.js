@@ -13,7 +13,7 @@ export let worldsList = [];
 export let pluginsList = [];
 export let scriptsList = [];
 
-export let webId;
+export let webId = -1;
 export let startupTime = 0;
 export let ramSize = -1;
 export let ramUsage = -1;
@@ -149,8 +149,34 @@ const notyType = {
 	'W': toast.warn
 };
 
+class Error {
+	static INVALID_PLAYER_EVENT = 0;
+	static INVALID_WORLD_EVENT = 1;
+	static INVALID_EXTENSION_EVENT = 2;
+	static INVALID_STATE_CODE = 3;
+	static INVALID_PACKET_ID = 4;
+	static INVALID_PACKET_SIZE = 5;
+
+	static descr = [
+		'INVALID_PLAYER_EVENT',
+		'INVALID_WORLD_EVENT',
+		'INVALID_EXTENSION_EVENT',
+		'INVALID_STATE_CODE',
+		'INVALID_PACKET_ID',
+		'INVALID_PACKET_SIZE',
+	];
+
+	constructor(code, additional) {
+		this.code = code;
+		this.additional = additional;
+	};
+
+	static print() {
+		return 'Error ' + (this.descr[this.code] || 'UNKOWN_ERROR') + (this.additional ? ' additional: ' + this.additional : '');
+	};
+};
+
 export let processCommand = (data) => {
-	console.log(`>> ${data}`);
 	let data_splitted = data.split('\x00');
 
 	while (data_splitted.length > 1) {
@@ -214,7 +240,7 @@ export let processCommand = (data) => {
 							return true;
 						});
 						break;
-					default: throw { message: 'Invalid extension event received', eventCode: extEventType };
+					default: throw Error(Error.INVALID_EXTENSION_EVENT, extEventType);
 				}
 
 				updatePlugins();
@@ -248,7 +274,8 @@ export let processCommand = (data) => {
 					case 'O':
 						if (player) player.isAdmin = parseInt(data_splitted[2]);
 						break;
-					default: throw { message: 'Invalid player event received', eventCode: playerEventType };
+
+					default: throw Error(Error.INVALID_PLAYER_EVENT, playerEventType);
 				}
 				updateAll();
 				break;
@@ -258,7 +285,6 @@ export let processCommand = (data) => {
 				break;
 			case 'S':
 				const state = data_splitted[0].charAt(1);
-				console.log('State switched to:', state);
 
 				switch (state) {
 					case 'H':
@@ -324,7 +350,7 @@ export let processCommand = (data) => {
 						spcnt = 1;
 						break;
 
-					default: throw { message: 'Invalid state packet received', stateCode: state };
+					default: throw Error(Error.INVALID_STATE_CODE, state);
 				}
 				break;
 			case 'W':
@@ -357,17 +383,18 @@ export let processCommand = (data) => {
 						if (world) world.texturepack = data_splitted[2] || 'Default';
 						break;
 
-					default: throw { message: 'Invalid world event received', eventCode: worldEventType };
+					default: throw Error(Error.INVALID_WORLD_EVENT, worldEventType);
 				}
+
 				updateWorlds();
 				break;
 
-			default: throw { message: 'Unknown packet received', packetId: packetId };
+			default: throw Error(Error.INVALID_PACKET_ID, packetId);
 		}
 
 		spcnt = Math.max(1, spcnt);
 		if (data_splitted.length <= spcnt)
-			throw { message: 'Гроб гроб кладбище пидор!!!' };
+			throw Error(Error.INVALID_PACKET_SIZE, null);
 		data_splitted.splice(0, spcnt);
 	}
 };
@@ -396,6 +423,6 @@ let CWAP = () => {
 		},
 		sendConsole: (value) => { sendPacket('C', value); return value; }
 	});
-}
+};
 
 export default CWAP;

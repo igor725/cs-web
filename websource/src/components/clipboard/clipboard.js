@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { toast } from 'react-toastify';
-import './clipboard.css'
+import './clipboard.css';
 
 
 let copyMenu, prevCopy, selectedCopy;
@@ -55,6 +55,6 @@ const Clipboard = () => {
             <FontAwesomeIcon icon={regular('clipboard')} />
         </div>
     )
-}
+};
 
 export default Clipboard;

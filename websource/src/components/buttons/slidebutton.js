@@ -1,4 +1,4 @@
-import './styles/slidebutton.css'
+import './styles/slidebutton.css';
 
 const Slidebutton = props => {
     const children = props.children;
@@ -15,6 +15,7 @@ const Slidebutton = props => {
         <a href={href} className={'btn ' + (disabled ? 'disabled' : '')} onClick={onclick} title={title} style={{ '--bgcolor': bgcolor, '--slidecolor': slidecolor, '--slidetextcolor': slidetextcolor }}>
             {children}
         </a>
-    )
-}
+    );
+};
+
 export default Slidebutton;

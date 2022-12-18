@@ -31,7 +31,7 @@ export let showMenu = (e) => {
 	prevPlayer = playerEl;
 };
 
-export let updateGlobalList = () => {}
+export let updateGlobalList = () => {};
 
 
 const PlayersList = ({ cwap }) => {

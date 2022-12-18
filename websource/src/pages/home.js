@@ -11,6 +11,6 @@ const Home = ({ CWAP }) => {
 			<PlayersList cwap={CWAP} />
 		</div>
 	);
-}
+};
 
 export default Home;

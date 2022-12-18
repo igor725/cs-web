@@ -93,6 +93,6 @@ const Auth = ({ cwap }) => {
 			</div>
 		</div>
 	);
-}
+};
 
 export default Auth;

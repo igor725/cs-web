@@ -162,6 +162,7 @@ static void sendhomestate(struct _HttpClient *hc) {
 			World_GetWeather(world), World_IsReadyToPlay(world)
 		);
 	}
+
 	genpacket(&hc->nb, "6", WebState.usagemem);
 }
 

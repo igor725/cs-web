@@ -3,7 +3,7 @@ import { pluginsList, scriptsList } from '../components/CWAP/CWAP';
 import Plugin from '../components/Plugin/Plugin';
 import './styles/pmanager.css';
 
-export let updatePlugins = () => { }
+export let updatePlugins = () => { };
 
 const PManager = ({ CWAP }) => {
     const [, updateState] = useState();
@@ -27,6 +27,6 @@ const PManager = ({ CWAP }) => {
             </div>
         </div>
     )
-}
+};
 
 export default PManager;

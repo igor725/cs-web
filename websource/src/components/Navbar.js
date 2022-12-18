@@ -15,7 +15,7 @@ let isAuthors = false;
 let transition;
 
 const Navbar = props => {
-	const DARKMODE_STATE = (window.localStorage.getItem('DARKMODE_STATE') === 'true') || false;
+	const DARKMODE_STATE = window.localStorage.getItem('DARKMODE_STATE') === 'true';
 	const [isDarkMode, setIsDarkMode] = useState(DARKMODE_STATE);
 
 	window.localStorage.setItem('DARKMODE_STATE', isDarkMode);
@@ -30,10 +30,10 @@ const Navbar = props => {
 	const closeAuthors = (e) => {
 		const targ = e.target;
 		if (
-			isAuthors && 
+			isAuthors &&
 			targ.innerHTML !== 'CServer WebAdmin' &&
 			targ.parentElement.parentElement.className !== 'author-head'
-		){
+		) {
 			authors.classList.remove('show-authors');
 			authors.classList.add('hide-authors');
 			setTimeout(() => authors.classList.remove('hide-authors'), 750);
@@ -118,7 +118,7 @@ const Navbar = props => {
 	});
 
 	return (
-		<div className={((window.localStorage.getItem('DARKMODE_STATE') === 'true') || false) ? 'navbar' : 'navbar light'}>
+		<div className={(window.localStorage.getItem('DARKMODE_STATE') === 'true') ? 'navbar' : 'navbar light'}>
 			{(isMobile) && (
 				<div className='navbar-head'>
 					<FontAwesomeIcon id='navbar-mobile-btn' icon={regular('square-caret-down')} onClick={openNavbar}>

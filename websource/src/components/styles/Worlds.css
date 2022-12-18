@@ -144,7 +144,8 @@
 	z-index: 1;
 	display: block;
 }
-:is(.worldBG, .world){
+
+:is(.worldBG, .world) {
 	transition-duration: 1.2s;
 }
 

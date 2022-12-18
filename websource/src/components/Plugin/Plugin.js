@@ -13,7 +13,6 @@ const states = {
 }
 
 const Plugin = props => {
-	let unTimer = null;
 	const cwap = props.cwap;
 	const extId = props.id;
 	const extType = props.type;
@@ -24,7 +23,7 @@ const Plugin = props => {
 		onClick={() => cwap.unloadExtension(extTypeNum, extId, shiftPressed && extType !== 'plugin')}
 	>Unload</Slidebutton>);
 
-	const disableBtn = (<Slidebutton slidecolor='#ff2b2b' bgcolor='#323232' 
+	const disableBtn = (<Slidebutton slidecolor='#ff2b2b' bgcolor='#323232'
 		onClick={() => cwap.reldisExtension(extTypeNum, extId, false)}
 	>Disable</Slidebutton>);
 
@@ -58,20 +57,17 @@ const Plugin = props => {
 		document.onkeyup = (e) => {
 			if (!e.shiftkey) {
 				shiftPressed = false;
-				pressedEl && (pressedEl.innerHTML = prevEl);
+				if (pressedEl)
+					pressedEl.innerHTML = prevEl;
 			}
 		};
-
-		if (unTimer && !extName.startsWith('web.')) {
-			clearTimeout(unTimer);
-			unTimer = null;
-		}
 
 		return () => {
 			document.onkeydown = '';
 			document.onkeyup = '';
 		};
-	})
+	});
+
 	return (
 		<div className='plugin' id={extId}>
 			<h4>{extName}</h4>
@@ -85,21 +81,21 @@ const Plugin = props => {
 						<tr>
 							<td>Homepage: </td>
 							<td id='link'>
-								{props.home && (
+								{props.home ? (
 									<Slidebutton bgcolor='transparent' slidecolor='#786de12f' href={props.home}>Author's link</Slidebutton>
-								) || ('Not included')}</td>
+								) : ('Not included')}</td>
 						</tr>
 					</tbody>
 				</table>
 			</div>
 			<div className='plugin-buttons' onMouseOver={mouseOver}>
-				{(extType === 'plugin' && extId !== webId || extType === 'script') && unloadbtn}
+				{((extType === 'plugin' && extId !== webId) || extType === 'script') && unloadbtn}
 				{extType === 'plugin' && extId !== webId && disableBtn}
 				{extType === 'script' && reloadBtn}
 				<Slidebutton slidecolor='#6529cd' bgcolor='#323232'>Settings</Slidebutton>
 			</div>
 		</div>
-	)
-}
+	);
+};
 
 export default Plugin;
