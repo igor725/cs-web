@@ -1,5 +1,5 @@
 import Slidebutton from '../components/buttons/slidebutton';
-import './styles/notfound.css'
+import './styles/notfound.css';
 
 const NotFound = () => {
     return (

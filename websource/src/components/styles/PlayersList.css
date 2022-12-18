@@ -1,4 +1,4 @@
-:is(.darkmode) :is(.playersOnline, .playersOnline>div) {
+.darkmode :is(.playersOnline, .playersOnline>div) {
 	background: rgb(46, 46, 46);
 }
 
@@ -10,7 +10,7 @@
 	color: rgb(194, 194, 194);
 }
 
-:is(.lightmode) :is(.playersOnline>div, .playersOnline) {
+.lightmode :is(.playersOnline>div, .playersOnline) {
 	background: rgb(221, 221, 221);
 }
 

@@ -12,10 +12,6 @@ body {
 	-moz-osx-font-smoothing: grayscale;
 }
 
-code {
-	font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
-}
-
 :is(h1, h2, h3, a) {
 	-webkit-user-select: none;
 	-ms-user-select: none;

@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import { pluginsList, scriptsList } from '../components/CWAP/CWAP';
 import Plugin from '../components/Plugin/Plugin';
-import './styles/pmanager.css'
+import './styles/pmanager.css';
 
 export let updatePlugins = () => { }
 

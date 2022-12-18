@@ -15,7 +15,7 @@
     width: 75%;
 }
 
-:where(.darkmode, .lightmode) :where(.plugins-grid)>div {
+.plugins-grid>div {
     height: min-content;
     border-radius: 50px;
 }
@@ -46,7 +46,7 @@
     font-size: 36px;
 }
 
-:is(.darkmode) :is(.plugins, .scripts) h3 {
+.darkmode :is(.plugins, .scripts) h3 {
     color: white;
 }
 

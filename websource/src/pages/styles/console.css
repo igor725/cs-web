@@ -22,11 +22,7 @@
 	grid-template-columns: 0fr 1fr;
 }
 
-:is(.lightmode) :is(#console-in, #console-out){
-	color: black;
-}
-
-.lightmode .inputting-field:hover .console-in-dot {
+.lightmode :is(#console-in, #console-out, .inputting-field:hover, .console-in-dot){
 	color: black;
 }
 
@@ -54,7 +50,7 @@
 	border: 1px solid #c7c7c7;
 }
 
-:is(.lightmode) :is(#console-out, #console-in, .console-in-dot){
+.lightmode :is(#console-out, #console-in, .console-in-dot){
 	background: #ffffff;
 }
 
@@ -194,9 +190,7 @@
 	#console-in {
 		margin: 0;
 	}
-
-	#console-out,
-	#console-in {
+	:is(#console-out, #console-in){
 		font-size: 18px;
 	}
 
