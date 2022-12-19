@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { processCommand } from './CWAP';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
@@ -39,7 +39,8 @@ const toBeResponded = {
 	}
 };
 
-const socketUrl = `ws://${window.location.hostname}:8887/ws`;
+const socketUrl = ('_self' in React.createElement('div')) ? `ws://${window.location.hostname}:8887/ws` : `ws://${window.location.host}/ws`;
+
 let WebSocket = () => {
 	const reconnectBtn = ({ closeToast }) => (
 		<button

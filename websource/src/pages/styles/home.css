@@ -18,7 +18,6 @@
 }
 
 .homeMenu>div {
-	transition: box-shadow 1s;
 	border-radius: 50px;
 }
 

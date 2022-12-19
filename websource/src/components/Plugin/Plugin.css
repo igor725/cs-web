@@ -5,7 +5,6 @@
 	border-radius: 50px;
 	padding: 16px;
 	box-sizing: border-box;
-	transition: box-shadow 0.75s;
 	grid-template-rows: 0fr 1fr 0fr;
 }
 
