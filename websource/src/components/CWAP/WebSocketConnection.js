@@ -5,7 +5,7 @@ import useWebSocket, { ReadyState } from 'react-use-websocket';
 import loadingBar from '../../static/noconnection.svg';
 import './styles/WSC.css';
 
-const setBlur = (state) => {
+const setBlur = (state, message = 'Trying to get a response from server...') => {
 	document.getElementById('main').classList[(['add', 'remove'][state ? 0 : 1])]('blurry');
 	document.getElementsByClassName('layout-container')[0].classList[(['add', 'remove'][state ? 0 : 1])]('blurry');
 	if (state && document.getElementById('loading') === null) {
@@ -14,14 +14,13 @@ const setBlur = (state) => {
 		loading.id = 'loading';
 		document.body.appendChild(loading);
 		setTimeout(() => {
-			toast.warn('Trying to get a response from server...', {
+			toast.warn(message, {
 				position: 'top-center',
+				closeButton: false,
 				autoClose: false,
-				hideProgressBar: false,
 				closeOnClick: false,
 				pauseOnHover: false,
 				draggable: false,
-				progress: undefined,
 				theme: 'colored',
 			});
 		}, 750);
@@ -60,9 +59,8 @@ let WebSocket = () => {
 			sendPacket('A', 'TEST');
 			setBlur(false);
 		},
-		onError: (err) => {
-			toast.error(err);
-		},
+		onClose: () => setBlur(true, 'Server closed the connection, we\'re trying to fix it...'),
+		onError: (err) => toast.error(err),
 		onMessage: (msg) => {
 			msg.data.text().then((data) => {
 				let tbr = undefined;
@@ -79,18 +77,16 @@ let WebSocket = () => {
 		},
 		share: true,
 		protocols: 'cserver-cpl',
-		reconnectInterval: 3,
+		reconnectInterval: 6,
 		reconnectAttempts: 15,
 		onReconnectStop: (attempts) => {
 			toast.error(`Unable to reconnect to a WebSocket.\nSeems like your server is down.\nRetiring after ${attempts} attempts`, {
 				position: 'top-center',
 				autoClose: false,
 				closeButton: reconnectBtn,
-				hideProgressBar: false,
-				closeOnClick: true,
+				closeOnClick: false,
 				pauseOnHover: true,
 				draggable: true,
-				progress: undefined,
 				theme: (window.localStorage.getItem('DARKMODE_STATE') === 'true') ? 'dark' : 'light'
 			});
 		},

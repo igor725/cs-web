@@ -216,9 +216,8 @@ export let processCommand = (data) => {
 
 				break;
 			case 'C':
-				const msg = data_splitted[0].substring(1);
-				writeInConsole(msg);
 				spcnt = 1;
+				writeInConsole(data_splitted[0].substring(1));
 				break;
 			case 'E':
 				spcnt = 3;
