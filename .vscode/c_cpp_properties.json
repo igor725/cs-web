@@ -5,7 +5,7 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/../core/src",
-                "${workspaceFolder}/../**"
+                "${workspaceFolder}/.."
             ],
             "defines": [
                 "CORE_BUILD_PLUGIN",
@@ -21,7 +21,7 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/../core/src",
-                "${workspaceFolder}/../**"
+                "${workspaceFolder}/.."
             ],
             "defines": [
                 "_DEBUG",
@@ -38,7 +38,7 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/../core/src",
-                "${workspaceFolder}/../**"
+                "${workspaceFolder}/.."
             ],
             "defines": [
                 "_DEBUG",

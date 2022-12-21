@@ -17,8 +17,6 @@ if [ -f "../cs-base/src/base_itf.h" ]; then
 fi
 
 if [ $BUILD_FRONTEND -eq 1 ]; then
-	USE_ZIP=0
-
 	if ! command -v 7z; then
 		echo "Failed to find 7z archiver";
 		return 1;
@@ -40,6 +38,6 @@ if [ $BUILD_FRONTEND -eq 1 ]; then
 		PLUGIN_INSTALL_PATH="$SERVER_OUTROOT/webdata.zip";
 	fi
 
-	7z a -tzip $PLUGIN_INSTALL_PATH $ROOT/websource/build
+	7z a -tzip $PLUGIN_INSTALL_PATH $ROOT/websource/build;
 fi
 
