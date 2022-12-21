@@ -41,7 +41,7 @@ static inline cs_str guessmime(cs_str path) {
 		"text/plain", "txt", NULL,
 		"application/json", "json", NULL,
 		"image/png", "png", NULL,
-		"image/svg+xml", "svg", NULL,
+		"image/gif", "gif", NULL,
 		"image/ico", "ico"
 	};
 
@@ -72,21 +72,21 @@ static inline cs_bool checkhttp(cs_char *buffer) {
 	return false;
 }
 
-static inline void applyheaders(NetBuffer *nb, cs_uint32 code, cs_int32 len, cs_str type) {
+static inline void applyheaders(NetBuffer *nb, cs_uint32 code, cs_int32 len, cs_str type, cs_str add) {
 	static cs_str const http = "HTTP/1.1 %d %s\r\nServer: cserver-cpl\r\n"
-	"Content-Type: %s\r\nContent-Length: %lu\r\n\r\n%s";
+	"Content-Type: %s\r\nContent-Length: %lu\r\n%s\r\n%s";
 
 	if (!type) type = "application/octet-stream";
 	cs_str codestr = getcodestr(code);
 	if (code != 200) len = (cs_int32)String_Length(codestr);
 	cs_int32 sz = String_FormatBuf(
 		NULL, 0, http, code, codestr, type,
-		len, code == 200 ? "" : codestr
+		len, add ? add : "", code == 200 ? "" : codestr
 	) + 1;
 	NetBuffer_EndWrite(nb, String_FormatBuf(
 		NetBuffer_StartWrite(nb, sz),
 		sz, http, code, codestr, type,
-		len, code == 200 ? "" : codestr
+		len, add ? add : "", code == 200 ? "" : codestr
 	));
 }
 
@@ -118,7 +118,7 @@ THREAD_PUBFUNC(WebThread) {(void)param;
 			if (hc->state == CHS_CLOSED) {
 				NetBuffer_ForceClose(&hc->nb);
 				AList_Remove(&WebState.clients, tmp);
-				if (hc->file) File_Close(hc->file);
+				// if (hc->file) File_Close(hc->file);
 				if (hc->wsh) {
 					if (hc->cpls) WebState.ustates[hc->cpls->wsstate]--;
 					Memory_Free(hc->wsh);
@@ -134,7 +134,7 @@ THREAD_PUBFUNC(WebThread) {(void)param;
 			if (WebState.stopped)
 				hc->state = CHS_CLOSING;
 
-			cs_char buffer[512] = {0}, path[128] = "webdata/.";
+			cs_char buffer[512] = {0}, path[128] = "build";
 			switch (hc->state) {
 				case CHS_INITIAL:
 					if (NetBuffer_AvailRead(&hc->nb) >= 8) {
@@ -187,34 +187,42 @@ THREAD_PUBFUNC(WebThread) {(void)param;
 										hc->state = CHS_CLOSING;
 										break;
 									}
-									hc->file = File_Open(path, "rb");
-									if (hc->file == NULL) {
-										hc->state = CHS_ERROR;
-										hc->code = 404;
+									if (zip_scanfor(WebState.archive, path, &hc->zi)) {
+										hc->type = guessmime(path);
+										hc->state = CHS_HEADERS;
 										break;
 									}
-									hc->type = guessmime(path);
-									hc->state = CHS_HEADERS;
-								} else
-									hc->state = CHS_CLOSING;
+
+									hc->state = CHS_ERROR;
+									hc->code = 404;
+									break;
+								}
+
+								hc->state = CHS_CLOSING;
 								break;
 						}
 					break;
 				case CHS_HEADERS:
 					while (hc->state == CHS_HEADERS) {
+						static cs_bool stop = false;
+						if (stop) break;
+
 						switch (NetBuffer_ReadLine(&hc->nb, buffer, 512)) {
-							case -2: break;
+							case -2:
+								stop = true;
+								break;
 
 							case -1:
 								hc->state = CHS_CLOSING;
 								break;
 
 							case 0:
-								hc->state = CHS_SENDFILE;
+								hc->state = (hc->deflate && hc->zi.compressed) ? CHS_SENDZFILE : CHS_SENDFILE;
 								break;
 
 							default:
-								// WL(Debug, "Header: %s", buffer);
+								if (String_CaselessCompare2(buffer, "accept-encoding: ", 17))
+									hc->deflate = String_FindSubstr(buffer + 17, "deflate") != NULL;
 								break;
 						}
 
@@ -224,17 +232,20 @@ THREAD_PUBFUNC(WebThread) {(void)param;
 
 					break;
 				case CHS_SENDFILE:
-					applyheaders(&hc->nb, hc->code, File_Seek(hc->file, 0, SEEK_END), hc->type);
-					File_Seek(hc->file, 0, SEEK_SET);
-					while (!File_IsEnd(hc->file)) {
-						NetBuffer_EndWrite(&hc->nb, (cs_uint32)File_Read(
-							NetBuffer_StartWrite(&hc->nb, 256), 1, 256, hc->file
-						));
-					}
+					applyheaders(&hc->nb, hc->code, hc->zi.usize, hc->type, NULL);
+					if (File_Read(NetBuffer_StartWrite(&hc->nb, hc->zi.usize), hc->zi.usize, 1, WebState.archive) == 1)
+						NetBuffer_EndWrite(&hc->nb, hc->zi.usize);
+					hc->state = CHS_CLOSING;
+					break;
+				case CHS_SENDZFILE:
+					applyheaders(&hc->nb, hc->code, hc->zi.csize, hc->type, "Content-Encoding: deflate\r\n");
+					File_Seek(WebState.archive, hc->zi.offset, SEEK_SET);
+					if (File_Read(NetBuffer_StartWrite(&hc->nb, hc->zi.csize), hc->zi.csize, 1, WebState.archive) == 1)
+						NetBuffer_EndWrite(&hc->nb, hc->zi.csize);
 					hc->state = CHS_CLOSING;
 					break;
 				case CHS_ERROR:
-					applyheaders(&hc->nb, hc->code, 0, "text/html");
+					applyheaders(&hc->nb, hc->code, 0, "text/html", NULL);
 					hc->state = CHS_CLOSING;
 					break;
 				case CHS_CLOSING:
@@ -285,7 +296,7 @@ THREAD_PUBFUNC(WebThread) {(void)param;
 		}
 
 		Mutex_Unlock(WebState.mutex);
-		Thread_Sleep(60);
+		Thread_Sleep(16);
 	}
 
 	return 0;

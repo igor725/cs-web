@@ -13,6 +13,11 @@ static enum _SerResponse serr_start(void) {
 		return SERR_OFF;
 	}
 
+	if ((WebState.archive = File_Open("./webdata.zip", "rb")) == NULL) {
+		WL(Error, "Failed to open WebAdmin frontend archive: %X", Thread_GetError());
+		return SERR_FAIL;
+	}
+
 	cs_str ip = Config_GetStrByKey(WebState.cfg, "ip");
 	cs_uint16 port = (cs_uint16)Config_GetIntByKey(WebState.cfg, "port");
 	cs_str password = Config_GetStrByKey(WebState.cfg, "password");
@@ -66,6 +71,7 @@ static enum _SerResponse serr_stop(void) {
 	if (WebState.alive) {
 		WebState.stopped = true;
 		Thread_Join(WebState.thread);
+		File_Close(WebState.archive);
 		Socket_Close(WebState.fd);
 		Mutex_Free(WebState.mutex);
 		WebState.alive = false;

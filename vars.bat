@@ -16,6 +16,17 @@ IF EXIST "..\cs-lua\src\luaitf.h" (
 )
 
 IF "%CSWEB_BUILD_FRONTEND%"=="1" (
+	WHERE npm >nul 2>nul
+	IF NOT "!ERRORLEVEL!"=="0" (
+		SET NF_NAME=NodeJS
+		GOTO notfound
+	)
+	WHERE 7z >nul 2>nul
+	IF NOT "!ERRORLEVEL!"=="0" (
+		SET NF_NAME=7Z
+		GOTO notfound
+	)
+
 	PUSHD %ROOT%\websource
 	CALL npm install && CALL npm run build
 	IF NOT "!ERRORLEVEL!"=="0" (
@@ -23,12 +34,17 @@ IF "%CSWEB_BUILD_FRONTEND%"=="1" (
 		ECHO Failed to build webdata
 		EXIT /B 1
 	)
-
 	POPD
 	IF "%PLUGIN_INSTALL%"=="1" (
-		XCOPY /E /S /Y "%ROOT%\websource\build\" "%SERVER_OUTROOT%\webdata\"
+		SET PLUGIN_INSTALL_PATH=%SERVER_OUTROOT%\webdata.zip
 	) ELSE (
-		XCOPY /E /S /Y "%ROOT%\websource\build\" "%OUTDIR%\webdata\"
+		SET PLUGIN_INSTALL_PATH=%OUTDIR%\webdata.zip
 	)
-	RMDIR /S /Q "%ROOT%\websource\build\"
+	7z a -tzip !PLUGIN_INSTALL_PATH! %ROOT%\websource\build
 )
+
+EXIT /B 0
+
+:notfound
+ECHO Failed to find %NF_NAME% binaries 
+EXIT /B 1

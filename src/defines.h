@@ -9,6 +9,7 @@
 #include <log.h>
 #include <server.h>
 
+#include "zipread.h"
 #ifdef CSWEB_USE_BASE
 #	include "cs-base/src/base_itf.h"
 #endif
@@ -25,6 +26,7 @@ enum _HttpStatus {
 	CHS_UPGRADING,
 	CHS_HEADERS,
 	CHS_SENDFILE,
+	CHS_SENDZFILE,
 	CHS_ERROR,
 	CHS_CLOSING,
 	CHS_CLOSED
@@ -67,10 +69,11 @@ struct _HttpClient {
 	struct sockaddr_in ssa;
 	cs_uint16 code;
 	cs_str type;
-	cs_file file;
+	ZipInfo zi;
 	NetBuffer nb;
 	WebSock *wsh;
 	struct _CplState *cpls;
+	cs_bool deflate;
 };
 
 #define LOGLIST_SIZE 40
@@ -78,6 +81,7 @@ struct _HttpClient {
 struct _WebState {
 	cs_uint32 self;
 	cs_bool stopped, alive;
+	cs_file archive;
 	Mutex *mutex;
 	CStore *cfg;
 	Thread thread;

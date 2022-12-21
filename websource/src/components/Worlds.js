@@ -51,7 +51,7 @@ const World = props => {
 							<td>Textures: </td>
 							<td id='wTextureLink'>
 								{props.texturepack !== 'Default' ? (
-									<Slidebutton bgcolor='transparent' slidecolor='#786de12f' href={props.home}>Texturepack link</Slidebutton>
+									<Slidebutton bgcolor='transparent' slidecolor='#786de12f' href={props.texturepack}>Texturepack link</Slidebutton>
 								) : ('Default')}
 							</td>
 						</tr>

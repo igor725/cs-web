@@ -6,11 +6,11 @@ WebAdmin allows you to manage your server via browser.
 There are three tabs:
 * Home - here you can get basic information about your server (such as software version, RAM usage, online players, uptime, list of the loaded worlds, kick/ban/op/de-op any player)
 * Terminal - on this tab you can execute any server commands and read the latest logs
-* Plugin manager - allows you to control loaded plugins or scripts (with cs-lua installed).
+* Plugin manager - allows you to control loaded plugins or scripts (with cs-lua installed)
 
 # Installation
 
-Since [cserver v0.7.0](https://github.com/igor725/cserver/releases/tag/v0.7.0) (not yet released), this plugin is the part of default plugins set. All you need to do is download this release, run the server, and configure WebAdmin as you need.
+Since [cserver v0.7.0](https://github.com/igor725/cserver/releases/tag/v0.7.0), this plugin is the part of default plugins set. All you need to do is download this release, run the server, and configure WebAdmin as you need.
 
 # Dependicies
 

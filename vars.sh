@@ -17,6 +17,13 @@ if [ -f "../cs-base/src/base_itf.h" ]; then
 fi
 
 if [ $BUILD_FRONTEND -eq 1 ]; then
+	USE_ZIP=0
+
+	if ! command -v 7z; then
+		echo "Failed to find 7z archiver";
+		return 1;
+	fi
+
 	pushd "$ROOT/websource/";
 	if ! npm install; then
 		echo "Failed to install dependencies";
@@ -28,10 +35,11 @@ if [ $BUILD_FRONTEND -eq 1 ]; then
 	fi
 	popd;
 
+	PLUGIN_INSTALL_PATH="$OUTDIR/webdata.zip";
 	if [ $PLUGIN_INSTALL -eq 1 ]; then
-		mv "$ROOT/websource/build" "$SERVER_OUTROOT/webdata";
-	else
-		mv "$ROOT/websource/build" "$OUTDIR/webdata";
+		PLUGIN_INSTALL_PATH="$SERVER_OUTROOT/webdata.zip";
 	fi
+
+	7z a -tzip $PLUGIN_INSTALL_PATH $ROOT/websource/build
 fi
 
