@@ -10,17 +10,10 @@
 
 .lightmode .plugin {
 	background: #dddddd12;
-	box-shadow: 10px 10px 21px #d3d3d6,
-		-10px -10px 21px #fff;
 }
 
 .darkmode .plugin {
 	background: #464050;
-}
-
-.darkmode .plugin:hover {
-	box-shadow: 10px 10px 21px #272727,
-		-10px -10px 21px #2e2e2e;
 }
 
 .plugin .btn {

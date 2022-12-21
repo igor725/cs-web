@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './styles/Navbar.css';
 import { Link, useLocation } from 'react-router-dom';
 import { DarkModeToggle } from 'react-dark-mode-toggle-2';
@@ -22,10 +22,11 @@ const Navbar = props => {
 	const currentLocation = useLocation().pathname;
 
 	const isMobile = (window.screen.width <= 600);
-	const navbarBtns = document.getElementsByClassName('buttons')[0];
-	const openBtn = document.getElementById('navbar-mobile-btn');
+
+	const navbarBtns = useRef(null);
+	const openBtn = useRef(null);
+	const authors = useRef(null);
 	const root = document.querySelector(':root');
-	const authors = document.getElementsByClassName('authors')[0];
 
 	const closeAuthors = (e) => {
 		const targ = e.target;
@@ -34,34 +35,34 @@ const Navbar = props => {
 			targ.innerHTML !== 'CServer WebAdmin' &&
 			targ.parentElement.parentElement.className !== 'author-head'
 		) {
-			authors.classList.remove('show-authors');
-			authors.classList.add('hide-authors');
-			setTimeout(() => authors.classList.remove('hide-authors'), 750);
+			authors.current.classList.remove('show-authors');
+			authors.current.classList.add('hide-authors');
+			setTimeout(() => authors.current.classList.remove('hide-authors'), 750);
 			isAuthors = false;
 		}
 	}
 
 	const showAuthors = () => {
 		if (isAuthors) {
-			authors.classList.remove('show-authors');
-			authors.classList.add('hide-authors');
-			setTimeout(() => authors.classList.remove('hide-authors'), 750);
+			authors.current.classList.remove('show-authors');
+			authors.current.classList.add('hide-authors');
+			setTimeout(() => authors.current.classList.remove('hide-authors'), 750);
 			isAuthors = false;
 		} else {
-			authors.classList.add('show-authors');
+			authors.current.classList.add('show-authors');
 			isAuthors = true;
 		}
 	}
 
 	const openNavbar = () => {
-		openBtn.classList.toggle('navbar-open');
-		setTimeout(() => openBtn.classList.toggle('navbar-btn-pressed'), 500);
+		openBtn.current.classList.toggle('navbar-open');
+		setTimeout(() => openBtn.current.classList.toggle('navbar-btn-pressed'), 500);
 		if (isOpened) {
-			navbarBtns.classList.add('hide-navbar');
-			setTimeout(() => navbarBtns.classList.remove('hide-navbar', 'show-navbar'), 300);
+			navbarBtns.current.classList.add('hide-navbar');
+			setTimeout(() => navbarBtns.current.classList.remove('hide-navbar', 'show-navbar'), 300);
 			isOpened = false;
 		} else {
-			navbarBtns.classList.add('show-navbar');
+			navbarBtns.current.classList.add('show-navbar');
 			isOpened = true;
 		}
 	};
@@ -121,12 +122,12 @@ const Navbar = props => {
 		<div className={(window.localStorage.getItem('DARKMODE_STATE') === 'true') ? 'navbar' : 'navbar light'}>
 			{(isMobile) && (
 				<div className='navbar-head'>
-					<FontAwesomeIcon id='navbar-mobile-btn' icon={regular('square-caret-down')} onClick={openNavbar}>
+					<FontAwesomeIcon id='navbar-mobile-btn' ref={openBtn} icon={regular('square-caret-down')} onClick={openNavbar}>
 					</FontAwesomeIcon>
 					<div className='navbar-title'>
 						<h3 style={{ cursor: 'pointer' }} onClick={showAuthors}>CServer WebAdmin</h3>
 						<div style={{ width: '4px', background: 'red' }} title='WebSocket connection: ' className='websocketStatus' />
-						<div className='authors'>
+						<div className='authors' ref={authors}>
 							<div className='author'>
 								<div className='author-head'>
 									<img src={author1} alt='igor725 github pfp' />
@@ -161,7 +162,7 @@ const Navbar = props => {
 				<div className='navbar-head'>
 					<h3 style={{ cursor: 'pointer' }} onClick={showAuthors}>CServer WebAdmin</h3>
 					<div style={{ width: '100%', background: 'red', height: '4px' }} title='WebSocket connection: ' className='websocketStatus' />
-					<div className='authors' style={{cursor: "default"}}>
+					<div className='authors' ref={authors} style={{cursor: "default"}}>
 						<div className='author'>
 							<div className='author-head'>
 								<img src={author1} alt='igor725 github pfp' />
@@ -185,7 +186,7 @@ const Navbar = props => {
 					</div>
 				</div>
 			)}
-			<div className='buttons' onClick={processLink}>
+			<div className='buttons' onClick={processLink} ref={navbarBtns}>
 				<Link to='/'>
 					<FontAwesomeIcon icon={solid('house')} /> Home
 				</Link>

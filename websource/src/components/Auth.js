@@ -5,6 +5,7 @@ import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 
 import './styles/Auth.css';
 import Slidebutton from './buttons/slidebutton.js';
+import { useRef } from 'react';
 
 export let showAuth = () => { };
 export let showAuthError = () => { };
@@ -15,60 +16,61 @@ let passСandidate;
 const LOG_IN_MSG = 'Log in';
 
 const Auth = ({ cwap }) => {
-	const authWindow = document.getElementsByClassName('authWindowG')[0];
-	const authError = document.getElementById('status');
-	const password = document.getElementById('authPassword');
-	const loginBtn = document.getElementsByClassName('btn')[0];
+	const authWindow = useRef(null);
+	const authError = useRef(null);
+	const password = useRef(null);
+	const loginBtn = useRef(null);
 
-	showAuth = () => authWindow.style.display = 'block';
+	showAuth = () => authWindow.current.style.display = 'block';
 
 	showAuthError = () => {
 		showAuth();
 		setTimeout(() => {
-			loginBtn.classList.add('fancyLoginFailed');
+			loginBtn.current.classList.add('fancyLoginFailed');
 		}, 500);
 		setTimeout(() => {
-			authError.innerHTML = 'Wrong password';
-			authError.classList.add('badPassAnimation');
-			setTimeout(() => authError.classList.remove('badPassAnimation'), 260);
-			loginBtn.classList.remove('fancyLoginFailed', 'fancyLoginAnim');
+			authError.current.innerHTML = 'Wrong password';
+			authError.current.classList.add('badPassAnimation');
+			setTimeout(() => authError.current.classList.remove('badPassAnimation'), 260);
+			loginBtn.current.classList.remove('fancyLoginFailed', 'fancyLoginAnim');
 		}, 1000);
 	};
 
 	doAuthGood = (localPass) => {
 		if (!localPass) {
 			setTimeout(() => {
-				authWindow.classList.add('fancyLoginSuccess');
+				authWindow.current.classList.add('fancyLoginSuccess');
 			}, 500);
 			setTimeout(() => {
-				authWindow.style.display = 'none';
+				authWindow.current.style.display = 'none';
 			}, 1500);
 		} else {
-			authWindow.style.display = 'none';
+			authWindow.current.style.display = 'none';
 		}
 		localStorage.setItem('USER_PASSWORD', passСandidate);
 		cwap.switchState(window.location.pathname);
 	};
 	doLogin = (hash) => {
 		if (!hash) {
-			loginBtn.classList.add('fancyLoginAnim');
-			loginBtn.innerHTML = 'Logging in...';
-			setTimeout(() => loginBtn.innerHTML = LOG_IN_MSG, 1000);
-			let pass = password.value;
-			if ((pass = password.value).length > 1) {
+			loginBtn.current.classList.add('fancyLoginAnim');
+			loginBtn.current.innerHTML = 'Logging in...';
+			setTimeout(() => loginBtn.current.innerHTML = LOG_IN_MSG, 1000);
+			console.log(loginBtn);
+			let pass;
+			if ((pass = password.current.value).length > 1) {
 				hash = MD5.generate(pass);
 			} else {
 				return;
 			}
-			password.value = '';
-			authError.innerHTML = '';
+			password.current.value = '';
+			authError.current.innerHTML = '';
 		}
 		cwap.sendAuth(hash);
 		passСandidate = hash;
 	};
 
 	return (
-		<div className='authWindowG'>
+		<div className='authWindowG' ref={authWindow}>
 			<div className='authWindow'>
 				<div>
 					<div className='auth-text'>
@@ -77,13 +79,13 @@ const Auth = ({ cwap }) => {
 					<div className='authWindowMain'>
 						<h2>WebAdmin Password</h2>
 						<FontAwesomeIcon id='userlogo' icon={regular('user')} />
-						<input type='password' id='authPassword' placeholder='password' onKeyDown={(e) => {
+						<input type='password' id='authPassword' ref={password} placeholder='password' onKeyDown={(e) => {
 							if (e.key === 'Enter') doLogin();
 						}} />
-						<p id='status'></p>
+						<p id='status' ref={authError}></p>
 						<div className='loginBtn'>
-							<Slidebutton slidetextcolor='black' onClick={() => {
-								if (password.value.length > 1) doLogin();
+							<Slidebutton slidetextcolor='black' inputRef={loginBtn} onClick={() => {
+								if (password.current.value.length > 1) doLogin();
 							}}>
 								{LOG_IN_MSG}
 							</Slidebutton>

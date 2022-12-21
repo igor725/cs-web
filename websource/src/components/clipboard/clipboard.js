@@ -1,21 +1,22 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { regular } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { toast } from 'react-toastify';
 import './clipboard.css';
 
 
-let copyMenu, prevCopy, selectedCopy;
+let prevCopy, selectedCopy;
 export let doCopy = (e) => { };
 
 const Clipboard = () => {
+    const copyMenu = useRef(null);
     const showElement = (show) => {
         if (show) {
-            copyMenu.style.visibility = 'visible';
-            copyMenu.style.opacity = '1'
+            copyMenu.current.style.visibility = 'visible';
+            copyMenu.current.style.opacity = '1'
         } else {
-            copyMenu.style.visibility = 'hidden';
-            copyMenu.style.opacity = '0';
+            copyMenu.current.style.visibility = 'hidden';
+            copyMenu.current.style.opacity = '0';
         }
     };
 
@@ -27,7 +28,6 @@ const Clipboard = () => {
     };
 
     useEffect(() => {
-        copyMenu = document.getElementsByClassName('copyboard')[0];
         document.addEventListener('mousedown', hideOnClick)
         return () => {
             document.removeEventListener('mousedown', hideOnClick)
@@ -39,8 +39,8 @@ const Clipboard = () => {
         e.target.classList.add('selected-text');
         selectedCopy = e.target.innerText;
         showElement(true);
-        copyMenu.style.left = e.pageX + 10 + 'px';
-        copyMenu.style.top = e.pageY + 5 + 'px';
+        copyMenu.current.style.left = e.pageX + 10 + 'px';
+        copyMenu.current.style.top = e.pageY + 5 + 'px';
         prevCopy = e.target;
     };
 
@@ -51,7 +51,7 @@ const Clipboard = () => {
         toast.success('Copied to clipboard!');
     }
     return (
-        <div className='copyboard' onClick={hideCopy}>
+        <div className='copyboard' ref={copyMenu} onClick={hideCopy}>
             <FontAwesomeIcon icon={regular('clipboard')} />
         </div>
     )

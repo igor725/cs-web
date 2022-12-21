@@ -24,15 +24,15 @@ export let writeInConsole = () => { };
 const Console = ({ CWAP }) => {
 	const [, updateState] = useState();
 	const forceUpdate = useCallback(() => updateState({}), []);
-	const elRef = useRef([null, null]);
+
+	const console_out = useRef(null);
+	const console_in = useRef(null);
 
 	const scrollToLatest = () => {
-		setTimeout(() => elRef.current[0].scrollTop = elRef.current[0].scrollHeight, 200);
+		setTimeout(() => console_out.current.scrollTop = console_out.current.scrollHeight, 200);
 	};
 
 	useEffect(() => {
-		elRef.current[0] = document.getElementById('console-out');
-		elRef.current[1] = document.getElementById('console-in');
 		scrollToLatest();
 		const preventUp = e => {if (e.key === "ArrowUp") e.preventDefault();}
 		document.addEventListener("keydown", preventUp);
@@ -68,20 +68,20 @@ const Console = ({ CWAP }) => {
 				</div>
 			</div>
 			<div className='console-main'>
-				<div id='console-out' readOnly={true} onContextMenu={doCopy}>
+				<div id='console-out' ref={console_out} readOnly={true} onContextMenu={doCopy}>
 					{messages.map((msg, i) => {
 						return cloneElement(msg, { key: i });
 					})}
 				</div>
 				<div className='inputting-field'>
 					<p className='console-in-dot'> &gt; </p>
-					<input name='input-mac' id='console-in' type='text' onKeyDown={(e) => {
+					<input name='input-mac' id='console-in' ref={console_in} type='text' onKeyDown={(e) => {
 						switch (e.key) {
 							case 'Enter':
-								if (elRef.current[1].value.length > 0) {
-									pushMessage(<div> &gt; {CWAP.sendConsole(elRef.current[1].value)}</div>);
-									history.push(elRef.current[1].value);
-									elRef.current[1].value = '';
+								if (console_in.current.value.length > 0) {
+									pushMessage(<div> &gt; {CWAP.sendConsole(console_in.current.value)}</div>);
+									history.push(console_in.current.value);
+									console_in.current.value = '';
 									scrollToLatest();
 									hispos = 0;
 								}
@@ -89,12 +89,12 @@ const Console = ({ CWAP }) => {
 							case 'ArrowUp':
 								if (history.length === 0) break;
 								if (--hispos < 0) hispos = history.length - 1;
-								elRef.current[1].value = history[hispos];
+								console_in.current.value = history[hispos];
 								break;
 							case 'ArrowDown':
 								if (history.length === 0) break;
 								if (++hispos >= history.length) hispos = 0;
-								elRef.current[1].value = history[hispos];
+								console_in.current.value = history[hispos];
 								break;
 							default: break;
 						}

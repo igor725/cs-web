@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { playersList, worldsList } from './CWAP/CWAP';
 import { prevPlayer } from './PlayersList';
 import PlayerDropdown from './PlayerList/PlayerDropdown';
@@ -16,6 +16,8 @@ const wTypes = {
 
 const World = props => {
 	const cwap = props.cwap;
+	const plist2 = useRef(null);
+
 	const changeWeather = (e) => {
 		Object.entries(wTypes).every(([key, value]) => {
 			if (value === e.target.value) {
@@ -25,6 +27,10 @@ const World = props => {
 			return true;
 		});
 	};
+
+	useEffect(() => {
+		plist2.onscroll = () => prevPlayer && prevPlayer.classList.remove('show');
+	});
 
 	return (
 		<div className='world-grid'>
@@ -76,7 +82,7 @@ const World = props => {
 			</div>
 			<div className='worldCart_players'>
 				<h4 id='wName'>Players</h4>
-				<ul className='plist' id='pList2'>
+				<ul className='plist' id='pList2' ref={plist2}>
 					{playersList.map((player) => {
 						if (player.world === props.id) {
 							return (
@@ -100,15 +106,8 @@ const World = props => {
 const Worlds = props => {
 	const [, updateState] = useState();
 	const forceUpdate = useCallback(() => updateState({}), []);
-	updateWorlds = forceUpdate;
 	const cwap = props.cwap;
-
-	useEffect(() => {
-		const listElement = document.getElementById('pList2');
-		if (worldsList.length > 0) {
-			listElement.onscroll = (e) => prevPlayer && prevPlayer.classList.remove('show');
-		}
-	});
+	updateWorlds = forceUpdate;
 
 	return (
 		<div className='worlds'>

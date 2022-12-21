@@ -25,6 +25,7 @@
 	-webkit-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.6);
 	-moz-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.6);
 	box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.6);
+	transition: box-shadow 0.6s ease;
 }
 
 ::-webkit-scrollbar {
