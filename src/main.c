@@ -26,8 +26,11 @@ struct _WebState WebState = {
 	}
 };
 
-#if defined(CORE_USE_UNIX) && !defined(CORE_USE_DARWIN)
-#include <sys/sysinfo.h>
+#if defined(CORE_USE_DARWIN)
+#	include <sys/types.h>
+#	include <sys/sysctl.h>
+#elif defined(CORE_USE_UNIX)
+#	include <sys/sysinfo.h>
 #endif
 
 cs_bool Plugin_LoadEx(cs_uint32 id) {
