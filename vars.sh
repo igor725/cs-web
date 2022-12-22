@@ -17,7 +17,7 @@ if [ -f "../cs-base/src/base_itf.h" ]; then
 fi
 
 if [ $BUILD_FRONTEND -eq 1 ]; then
-	if ! command -v 7z; then
+	if ! command -v 7z 2>&1 > /dev/null; then
 		echo "Failed to find 7z archiver";
 		return 1;
 	fi
