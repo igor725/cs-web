@@ -38,6 +38,7 @@ if [ $BUILD_FRONTEND -eq 1 ]; then
 		PLUGIN_INSTALL_PATH="$SERVER_OUTROOT/webdata.zip";
 	fi
 
+	rm $PLUGIN_INSTALL_PATH 2> /dev/null;
 	7z a -tzip -sdel $PLUGIN_INSTALL_PATH $ROOT/websource/build;
 fi
 
