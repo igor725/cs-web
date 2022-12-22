@@ -4,18 +4,25 @@
 #include <hash.h>
 
 #include "defines.h"
+#include "zipread.h"
 
 static enum _SerResponse serr_start(void) {
 	if (WebState.alive) return SERR_ON;
 
 	if (!Config_GetBoolByKey(WebState.cfg, "enabled")) {
-		WL(Warn, "You have an WebAdmin plugin installed, but it is disabled. Use \"web enable\" command to run it.");
+		WL(Warn, "You have an WebAdmin plugin installed, but it is disabled. Use \"web enable\" command to run it");
 		return SERR_OFF;
 	}
 
 	if ((WebState.archive = File_Open("./webdata.zip", "rb")) == NULL) {
 		WL(Error, "Failed to open WebAdmin frontend archive: %X", Thread_GetError());
 		return SERR_FAIL;
+	}
+
+	ZipInfo zi;
+	if (!zip_scanfor(WebState.archive, "build/index.html", &zi)) {
+		WL(Error, "Index page was not found in the frontent archive");
+		goto serrfail;
 	}
 
 	cs_str ip = Config_GetStrByKey(WebState.cfg, "ip");
@@ -27,10 +34,16 @@ static enum _SerResponse serr_start(void) {
 		cs_byte final[16];
 		if (!MD5_Start(&hash)) {
 			WL(Error, "Failed to initialize MD5_CTX struct");
-			return SERR_FAIL;
+			goto serrfail;
 		}
-		MD5_PushData(&hash, password, (cs_ulong)String_Length(password));
-		MD5_End((void *)&final, &hash);
+		if (!MD5_PushData(&hash, password, (cs_ulong)String_Length(password))) {
+			WL(Error, "Failed to generate password hash");
+			goto serrfail;
+		}
+		if (!MD5_End((void *)&final, &hash)) {
+			WL(Error, "Failed to generate password hash");
+			goto serrfail;
+		}
 		static cs_byte hex[] = "0123456789abcdef";
 		WebState.pwhash[32] = '\0';
 		for (cs_int32 i = 0; i < 16; i++) {
@@ -44,27 +57,39 @@ static enum _SerResponse serr_start(void) {
 
 	struct sockaddr_in ssa;
 	if (Socket_SetAddr(&ssa, ip, port) < 0) {
-		Socket_Close(WebState.fd);
 		WL(Error, "Failed to set socket address");
-		return SERR_FAIL;
+		goto serrfail;
 	}
 
 	if (!Socket_SetNonBlocking(WebState.fd, true)) {
-		Socket_Close(WebState.fd);
 		WL(Error, "Failed to set non-blocking socket option");
-		return SERR_FAIL;
+		goto serrfail;
 	}
 
 	if (!Socket_Bind(WebState.fd, &ssa)) {
-		Socket_Close(WebState.fd);
 		WL(Error, "Failed to bind %s:%d", ip, port);
-		return SERR_FAIL;
+		goto serrfail;
 	}
 
 	WebState.alive = true;
 	WebState.thread = Thread_Create(WebThread, NULL, false);
 	WL(Info, "Listener started on %s:%d", ip, port);
 	return SERR_OK;
+
+	serrfail:
+	if (WebState.archive) {
+		File_Close(WebState.archive);
+		WebState.archive = NULL;
+	}
+	if (WebState.mutex) {
+		Mutex_Free(WebState.mutex);
+		WebState.mutex = NULL;
+	}
+	if (WebState.fd != INVALID_SOCKET) {
+		Socket_Close(WebState.fd);
+		WebState.fd = INVALID_SOCKET;
+	}
+	return SERR_FAIL;
 }
 
 static enum _SerResponse serr_stop(void) {
@@ -96,8 +121,7 @@ static enum _SerResponse serr_enable(cs_bool status) {
 }
 
 static enum _SerResponse serr_reload(void) {
-	if (!WebState.alive) return SERR_OFF;
-	if (serr_stop() != SERR_OK) return SERR_OFF;
+	if (WebState.alive && serr_stop() != SERR_OK) return SERR_FAIL;
 	return serr_start();
 }
 

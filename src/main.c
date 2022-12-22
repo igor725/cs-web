@@ -18,6 +18,7 @@ ServerInfo ServInf = {0};
 
 struct _WebState WebState = {
 	.totalmem = (cs_uint64)-1,
+	.fd = INVALID_SOCKET,
 	.stopped = false,
 	.alive = false,
 	.clients = NULL,
