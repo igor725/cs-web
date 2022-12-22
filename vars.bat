@@ -40,7 +40,7 @@ IF "%CSWEB_BUILD_FRONTEND%"=="1" (
 	) ELSE (
 		SET PLUGIN_INSTALL_PATH=%OUTDIR%\webdata.zip
 	)
-	7z a -tzip !PLUGIN_INSTALL_PATH! %ROOT%\websource\build
+	7z a -tzip -sdel !PLUGIN_INSTALL_PATH! %ROOT%\websource\build
 )
 
 EXIT /B 0
