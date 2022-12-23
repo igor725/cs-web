@@ -1,4 +1,4 @@
-BUILD_FRONTEND=0
+BUILD_FRONTEND=0;
 CFLAGS="$CFLAGS -I..";
 
 for a in $PLUGIN_ARGS; do
@@ -6,14 +6,17 @@ for a in $PLUGIN_ARGS; do
 done
 
 if [ -f "../cs-lua/src/luaitf.h" ]; then
-	echo "Lua interface connected";
-	CFLAGS="$CFLAGS -DCSWEB_USE_LUA";
-	. ../cs-lua/vars.sh;
+	if . ../cs-lua/vars.sh; then
+		CFLAGS="$CFLAGS -DCSWEB_USE_LUA";
+		echo "Lua interface connected";
+	else
+		echo "Failed to bind Lua interface";
+	fi
 fi
 
 if [ -f "../cs-base/src/base_itf.h" ]; then
-	echo "Base interface connected";
 	CFLAGS="$CFLAGS -DCSWEB_USE_BASE";
+	echo "Base interface connected";
 fi
 
 if [ $BUILD_FRONTEND -eq 1 ]; then
@@ -33,12 +36,11 @@ if [ $BUILD_FRONTEND -eq 1 ]; then
 	fi
 	popd;
 
-	PLUGIN_INSTALL_PATH="$OUTDIR/webdata.zip";
+	PLUGIN_INSTALL_PATH="$OUTDIR/webdata";
 	if [ $PLUGIN_INSTALL -eq 1 ]; then
-		PLUGIN_INSTALL_PATH="$SERVER_OUTROOT/webdata.zip";
+		PLUGIN_INSTALL_PATH="$SERVER_OUTROOT/webdata";
 	fi
 
-	rm $PLUGIN_INSTALL_PATH 2> /dev/null;
-	7z a -tzip -sdel $PLUGIN_INSTALL_PATH $ROOT/websource/build;
+	mv "$ROOT/websource/build" "$PLUGIN_INSTALL_PATH";
 fi
 

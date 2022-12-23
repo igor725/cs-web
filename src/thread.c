@@ -109,7 +109,6 @@ THREAD_PUBFUNC(WebThread) {(void)param;
 			hc->ssa = ssa;
 			hc->code = 200;
 			AList_AddField(&WebState.clients, hc);
-			WL(Debug, "New client! %d:%d", ssa.sin_addr, ssa.sin_port);
 		}
 
 		AListField *tmp;
@@ -118,13 +117,12 @@ THREAD_PUBFUNC(WebThread) {(void)param;
 			if (hc->state == CHS_CLOSED) {
 				NetBuffer_ForceClose(&hc->nb);
 				AList_Remove(&WebState.clients, tmp);
-				// if (hc->file) File_Close(hc->file);
+				if (hc->file) File_Close(hc->file);
 				if (hc->wsh) {
 					if (hc->cpls) WebState.ustates[hc->cpls->wsstate]--;
 					Memory_Free(hc->wsh);
 				}
 				Memory_Free(hc);
-				WL(Debug, "Client closed!");
 				break;
 			}
 
@@ -134,7 +132,7 @@ THREAD_PUBFUNC(WebThread) {(void)param;
 			if (WebState.stopped)
 				hc->state = CHS_CLOSING;
 
-			cs_char buffer[512] = {0}, path[128] = "build";
+			cs_char buffer[512] = {0}, path[128] = "./webdata";
 			switch (hc->state) {
 				case CHS_INITIAL:
 					if (NetBuffer_AvailRead(&hc->nb) >= 8) {
@@ -187,7 +185,7 @@ THREAD_PUBFUNC(WebThread) {(void)param;
 										hc->state = CHS_CLOSING;
 										break;
 									}
-									if (zip_scanfor(WebState.archive, path, &hc->zi)) {
+									if ((hc->file = File_Open(path, "rb")) != NULL) {
 										hc->type = guessmime(path);
 										hc->state = CHS_HEADERS;
 										break;
@@ -217,12 +215,7 @@ THREAD_PUBFUNC(WebThread) {(void)param;
 								break;
 
 							case 0:
-								hc->state = (hc->deflate && hc->zi.compressed) ? CHS_SENDZFILE : CHS_SENDFILE;
-								break;
-
-							default:
-								if (String_CaselessCompare2(buffer, "accept-encoding: ", 17))
-									hc->deflate = String_FindSubstr(buffer + 17, "deflate") != NULL;
+								hc->state = CHS_SENDFILE;
 								break;
 						}
 
@@ -231,19 +224,15 @@ THREAD_PUBFUNC(WebThread) {(void)param;
 					}
 
 					break;
-				case CHS_SENDFILE:
-					applyheaders(&hc->nb, hc->code, hc->zi.usize, hc->type, NULL);
-					if (File_Read(NetBuffer_StartWrite(&hc->nb, hc->zi.usize), hc->zi.usize, 1, WebState.archive) == 1)
-						NetBuffer_EndWrite(&hc->nb, hc->zi.usize);
+				case CHS_SENDFILE: {
+					cs_ulong size = File_Seek(hc->file, 0, SEEK_END);
+					File_Seek(hc->file, 0, SEEK_SET);
+					applyheaders(&hc->nb, hc->code, size, hc->type, NULL);
+					if (File_Read(NetBuffer_StartWrite(&hc->nb, size), size, 1, hc->file) == 1)
+						NetBuffer_EndWrite(&hc->nb, size);
 					hc->state = CHS_CLOSING;
 					break;
-				case CHS_SENDZFILE:
-					applyheaders(&hc->nb, hc->code, hc->zi.csize, hc->type, "Content-Encoding: deflate\r\n");
-					File_Seek(WebState.archive, hc->zi.offset, SEEK_SET);
-					if (File_Read(NetBuffer_StartWrite(&hc->nb, hc->zi.csize), hc->zi.csize, 1, WebState.archive) == 1)
-						NetBuffer_EndWrite(&hc->nb, hc->zi.csize);
-					hc->state = CHS_CLOSING;
-					break;
+				}
 				case CHS_ERROR:
 					applyheaders(&hc->nb, hc->code, 0, "text/html", NULL);
 					hc->state = CHS_CLOSING;

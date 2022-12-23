@@ -4,7 +4,6 @@
 #include <hash.h>
 
 #include "defines.h"
-#include "zipread.h"
 
 static enum _SerResponse serr_start(void) {
 	if (WebState.alive) return SERR_ON;
@@ -14,14 +13,8 @@ static enum _SerResponse serr_start(void) {
 		return SERR_OFF;
 	}
 
-	if ((WebState.archive = File_Open("./webdata.zip", "rb")) == NULL) {
-		WL(Error, "Failed to open WebAdmin frontend archive: %X", Thread_GetError());
-		return SERR_FAIL;
-	}
-
-	ZipInfo zi;
-	if (!zip_scanfor(WebState.archive, "build/index.html", &zi)) {
-		WL(Error, "Index page was not found in the frontent archive");
+	if (File_Access("./webdata/index.html", 04)) {
+		WL(Error, "Index page was not found in the \"webdata\" folder");
 		goto serrfail;
 	}
 
@@ -77,10 +70,6 @@ static enum _SerResponse serr_start(void) {
 	return SERR_OK;
 
 	serrfail:
-	if (WebState.archive) {
-		File_Close(WebState.archive);
-		WebState.archive = NULL;
-	}
 	if (WebState.mutex) {
 		Mutex_Free(WebState.mutex);
 		WebState.mutex = NULL;
@@ -96,9 +85,10 @@ static enum _SerResponse serr_stop(void) {
 	if (WebState.alive) {
 		WebState.stopped = true;
 		Thread_Join(WebState.thread);
-		File_Close(WebState.archive);
 		Socket_Close(WebState.fd);
 		Mutex_Free(WebState.mutex);
+		WebState.fd = INVALID_SOCKET;
+		WebState.mutex = NULL;
 		WebState.alive = false;
 		return SERR_OK;
 	}
