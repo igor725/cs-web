@@ -11,7 +11,7 @@ IF EXIST "..\cs-base\src\base_itf.h" (
 
 IF EXIST "..\cs-lua\src\luaitf.h" (
 	SET CFLAGS=!CFLAGS! /DCSWEB_USE_LUA
-	SET CSLUA_ONLY_INCLUDES=1
+	SET CSSCRIPTS_ONLY_INCLUDES=1
 	CALL ..\cs-lua\vars.bat
 )
 

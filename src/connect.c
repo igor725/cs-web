@@ -25,7 +25,7 @@ void Plugin_RecvInterface(cs_str name, void *ptr, cs_size size) {
 #	endif
 
 #	ifdef CSWEB_USE_LUA
-		if (String_Compare(name, CSLUA_ITF_NAME)) {
+		if (String_Compare(name, CSSCRIPTS_ITF_NAME)) {
 			switch (size) {
 				case sizeof(LuaItf):
 					WebState.iface_lua = ptr;
@@ -55,6 +55,6 @@ void RequestIntefaces(void) {
 #	endif
 
 #	ifdef CSWEB_USE_LUA
-	Plugin_RequestInterface(Plugin_RecvInterface, CSLUA_ITF_NAME);
+	Plugin_RequestInterface(Plugin_RecvInterface, CSSCRIPTS_ITF_NAME);
 #endif
 }
