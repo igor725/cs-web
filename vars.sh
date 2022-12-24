@@ -20,11 +20,10 @@ if [ -f "../cs-base/src/base_itf.h" ]; then
 fi
 
 if [ $BUILD_FRONTEND -eq 1 ]; then
-	if ! command -v 7z 2>&1 > /dev/null; then
-		echo "Failed to find 7z archiver";
+	if ! command -v npm 2>&1 > /dev/null; then
+		echo "NodeJS is not installed!"
 		return 1;
 	fi
-
 	pushd "$ROOT/websource/";
 	if ! npm install; then
 		echo "Failed to install dependencies";

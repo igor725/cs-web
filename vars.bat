@@ -24,15 +24,9 @@ IF EXIST "..\cs-lua\src\luaitf.h" (
 IF "%CSWEB_BUILD_FRONTEND%"=="1" (
 	WHERE npm >nul 2>nul
 	IF NOT "!ERRORLEVEL!"=="0" (
-		SET NF_NAME=NodeJS
-		GOTO notfound
+		ECHO NodeJS is not installed!
+		EXIT /B 1
 	)
-	WHERE 7z >nul 2>nul
-	IF NOT "!ERRORLEVEL!"=="0" (
-		SET NF_NAME=7Z archiver
-		GOTO notfound
-	)
-
 	PUSHD !ROOT!\websource
 	CALL npm install && CALL npm run build
 	IF NOT "!ERRORLEVEL!"=="0" (
@@ -52,7 +46,3 @@ IF "%CSWEB_BUILD_FRONTEND%"=="1" (
 )
 
 EXIT /B 0
-
-:notfound
-ECHO Failed to find %NF_NAME%
-EXIT /B 1
