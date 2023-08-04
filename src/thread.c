@@ -62,7 +62,7 @@ static inline cs_str guessmime(cs_str path) {
 static inline cs_bool checkhttp(cs_char *buffer) {
 	if (!Memory_Compare((void *)buffer, (void *)"GET /", 5)) return false;
 	cs_char *fs = String_LastChar(buffer, ' ');
-	if (!fs) return false; *fs++ = '\0';
+	if (fs == NULL || (*fs++ = '\0')) return false;
 	if (String_Compare(fs, "HTTP/1.1")) {
 		fs = String_FirstChar(buffer, '?');
 		if (fs) *fs = '\0';

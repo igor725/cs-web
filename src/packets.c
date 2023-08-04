@@ -317,9 +317,11 @@ static inline void handleextcommand(NetBuffer *nb, cs_byte **data) {
 				case 'U' /*Unload*/:
 					if (unloadluascript(id, force))
 						return;
+					break;
 				case 'D' /*Reload*/:
 					if (reloadluascript(id))
 						return;
+					break;
 			}
 			break;
 #endif
